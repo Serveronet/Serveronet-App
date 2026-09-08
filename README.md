@@ -1,4 +1,4 @@
-<p align="center"><a href="https://serveronet.org/" target="_blank"><img src="https://serveronet.org/img/logo.png" width="40"></a></p>
+<p align="center"><a href="https://serveronet.org/" target="_blank"><img src="https://serveronet.org/sn_client_resources/img/logo.png" width="40"></a></p>
 
 ## About Serveronet
 
