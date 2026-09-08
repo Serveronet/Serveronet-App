@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
+class CsrfCookieController extends Controller
+{
+    /**
+     * CSRF cookie
+     * 
+     * Return an empty response simply to trigger the storage of the CSRF cookie in the browser.
+     * 
+     * @authenticated
+     * @group Helper APIs
+     * @response status=204 No Content
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     */
+    public function show(Request $request)
+    {
+        if ($request->expectsJson()) {
+            return new JsonResponse(null, 204);
+        }
+
+        return new Response('', 204);
+    }
+}

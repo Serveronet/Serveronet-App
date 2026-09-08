@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node Connectivity Visualization</title>
+    <script src="d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        #visualization {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .legend {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 30px;
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        .legend-label {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .node-label {
+            font-size: 11px;
+            fill: #333;
+            pointer-events: none;
+            text-anchor: middle;
+        }
+
+        .edge-label {
+            font-size: 10px;
+            fill: #666;
+            pointer-events: none;
+            text-anchor: middle;
+            font-weight: bold;
+        }
+
+        .edge-label-bg {
+            fill: white;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #2196F3;"></div>
+            <span class="legend-label">Remote Connectable (Blue)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #EF9A9A;"></div>
+            <span class="legend-label">Not Remote Connectable (Light Red)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #9C27B0;"></div>
+            <span class="legend-label">Return Self Connectable (Purple)</span>
+        </div>
+    </div>
+
+    <div id="visualization"></div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Fetch data from endpoint
+        async function loadData() {
+            try {
+                const response = await fetch('/dev/serve_peer_edges_reporting');
+                const connectivityData = await response.json();
+                
+                // Extract unique nodes
+                const nodes = [];
+                const nodeSet = new Set();
+
+                connectivityData.forEach(d => {
+                    if (!nodeSet.has(d.self_client_address)) {
+                        nodes.push({ id: d.self_client_address });
+                        nodeSet.add(d.self_client_address);
+                    }
+                    if (!nodeSet.has(d.remote_client_address)) {
+                        nodes.push({ id: d.remote_client_address });
+                        nodeSet.add(d.remote_client_address);
+                    }
+                });
+
+                // Create links
+                const links = connectivityData.map(d => ({
+                    source: d.self_client_address,
+                    target: d.remote_client_address,
+                    reputation: d.reputation,
+                    is_remote_connectable: d.is_remote_connectable,
+                    is_return_self_connectable: d.is_return_self_connectable
+                }));
+
+                // Setup visualization dimensions
+                const width = 900;
+                const height = 600;
+                const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+
+                // Create SVG
+                const svg = d3.select("#visualization")
+                    .append("svg")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .call(d3.zoom()
+                        .scaleExtent([0.1, 4])
+                        .on("zoom", (event) => {
+                            g.attr("transform", event.transform);
+                        }))
+                    .on("dblclick.zoom", null);
+
+                // Create a group for zoomable content
+                const g = svg.append("g");
+
+                // Create arrow markers
+                const defs = g.append("defs");
+
+                // Blue arrow (remote connectable)
+                defs.append("marker")
+                    .attr("id", "arrow-blue")
+                    .attr("viewBox", "0 -5 10 10")
+                    .attr("refX", 20)
+                    .attr("refY", 0)
+                    .attr("markerWidth", 6)
+                    .attr("markerHeight", 6)
+                    .attr("orient", "auto")
+                    .append("path")
+                    .attr("d", "M0,-5L10,0L0,5")
+                    .attr("fill", "#2196F3");
+
+                // Light red arrow (not remote connectable)
+                defs.append("marker")
+                    .attr("id", "arrow-red")
+                    .attr("viewBox", "0 -5 10 10")
+                    .attr("refX", 20)
+                    .attr("refY", 0)
+                    .attr("markerWidth", 6)
+                    .attr("markerHeight", 6)
+                    .attr("orient", "auto")
+                    .append("path")
+                    .attr("d", "M0,-5L10,0L0,5")
+                    .attr("fill", "#EF9A9A");
+
+                // Purple arrow (return self connectable)
+                defs.append("marker")
+                    .attr("id", "arrow-purple")
+                    .attr("viewBox", "0 -5 10 10")
+                    .attr("refX", 20)
+                    .attr("refY", 0)
+                    .attr("markerWidth", 6)
+                    .attr("markerHeight", 6)
+                    .attr("orient", "auto")
+                    .append("path")
+                    .attr("d", "M0,-5L10,0L0,5")
+                    .attr("fill", "#9C27B0");
+
+                // Create force simulation
+                const simulation = d3.forceSimulation(nodes)
+                    .force("link", d3.forceLink(links).id(d => d.id).distance(200))
+                    .force("charge", d3.forceManyBody().strength(-1000))
+                    .force("center", d3.forceCenter(width / 2, height / 2))
+                    .force("collision", d3.forceCollide().radius(80))
+                    .force("bounds", forceBounds);
+                
+                // Boundary force to keep nodes within view
+                function forceBounds() {
+                    const padding = 50;
+                    nodes.forEach(node => {
+                        node.x = Math.max(padding, Math.min(width - padding, node.x));
+                        node.y = Math.max(padding, Math.min(height - padding, node.y));
+                    });
+                }
+
+                // Draw edges (layer 1 - bottom)
+                const edge = g.append("g")
+                    .selectAll("line")
+                    .data(links)
+                    .join("line")
+                    .attr("stroke-width", d => Math.max(2, d.reputation / 3))
+                    .attr("marker-end", d => {
+                        if (d.is_return_self_connectable === 1) {
+                            return "url(#arrow-purple)";
+                        } else if (d.is_remote_connectable === 1) {
+                            return "url(#arrow-blue)";
+                        } else {
+                            return "url(#arrow-red)";
+                        }
+                    });
+
+                // Update edge colors
+                function updateEdgeColors() {
+                    edge.attr("stroke", d => {
+                        if (d.is_return_self_connectable === 1) {
+                            return "#9C27B0"; // Purple
+                        } else if (d.is_remote_connectable === 1) {
+                            return "#2196F3"; // Blue
+                        } else {
+                            return "#EF9A9A"; // Light red
+                        }
+                    });
+                }
+                updateEdgeColors();
+
+                // Draw nodes (layer 2 - middle)
+                const node = g.append("g")
+                    .selectAll("circle")
+                    .data(nodes)
+                    .join("circle")
+                    .attr("r", 25)
+                    .attr("fill", "#4CAF50")
+                    .attr("stroke", "#2E7D32")
+                    .attr("stroke-width", 3)
+                    .call(d3.drag()
+                        .on("start", dragstarted)
+                        .on("drag", dragged)
+                        .on("end", dragended));
+
+                // Add node labels (layer 3 - above nodes)
+                const nodeLabels = g.append("g")
+                    .selectAll("text")
+                    .data(nodes)
+                    .join("text")
+                    .attr("class", "node-label")
+                    .text(d => d.id);
+
+                // Edge labels (reputation) - backgrounds (layer 4 - above nodes)
+                const edgeLabelBackgrounds = g.append("g")
+                    .selectAll("rect")
+                    .data(links)
+                    .join("rect")
+                    .attr("class", "edge-label-bg")
+                    .attr("rx", 3)
+                    .attr("ry", 3);
+
+                // Edge labels (reputation) - text (layer 5 - topmost)
+                const edgeLabels = g.append("g")
+                    .selectAll("text")
+                    .data(links)
+                    .join("text")
+                    .attr("class", "edge-label")
+                    .text(d => d.reputation);
+
+                // Tooltip setup
+                const tooltip = d3.select("#tooltip");
+
+                // Add interactivity to nodes
+                node.on("mouseover", function(event, d) {
+                    const connectedLinks = links.filter(l => l.source.id === d.id || l.target.id === d.id);
+                    let tooltipContent = `<strong>${d.id}</strong><br><br>`;
+                    tooltipContent += `<strong>Connections:</strong><br>`;
+                    connectedLinks.forEach(l => {
+                        const otherNode = l.source.id === d.id ? l.target.id : l.source.id;
+                        const direction = l.source.id === d.id ? "→" : "←";
+                        const status = l.is_remote_connectable === 1 ? "Connectable" : "Not Connectable";
+                        const returnStatus = l.is_return_self_connectable === 1 ? " (Return OK)" : " (Return N/A)";
+                        tooltipContent += `${direction} ${otherNode}<br>`;
+                        tooltipContent += `&nbsp;&nbsp;Reputation: ${l.reputation}<br>`;
+                        tooltipContent += `&nbsp;&nbsp;Status: ${status}${returnStatus}<br>`;
+                    });
+                    
+                    tooltip
+                        .style("opacity", 1)
+                        .html(tooltipContent);
+                })
+                .on("mousemove", function(event) {
+                    tooltip
+                        .style("left", (event.pageX + 15) + "px")
+                        .style("top", (event.pageY - 10) + "px");
+                })
+                .on("mouseout", function() {
+                    tooltip.style("opacity", 0);
+                });
+
+                // Fit all nodes in view after simulation stabilizes
+                function fitToView() {
+                    // Get bounds of all nodes
+                    const xValues = nodes.map(d => d.x);
+                    const yValues = nodes.map(d => d.y);
+                    const minX = Math.min(...xValues) - 50;
+                    const maxX = Math.max(...xValues) + 50;
+                    const minY = Math.min(...yValues) - 50;
+                    const maxY = Math.max(...yValues) + 50;
+                    
+                    const contentWidth = maxX - minX;
+                    const contentHeight = maxY - minY;
+                    
+                    // Calculate scale to fit content with padding
+                    const padding = 40;
+                    const scaleX = (width - padding * 2) / contentWidth;
+                    const scaleY = (height - padding * 2) / contentHeight;
+                    const scale = Math.min(scaleX, scaleY, 1); // Don't zoom in more than 1x
+                    
+                    // Calculate translation to center content
+                    const midX = (minX + maxX) / 2;
+                    const midY = (minY + maxY) / 2;
+                    const tx = (width / 2) - midX * scale;
+                    const ty = (height / 2) - midY * scale;
+                    
+                    // Apply transform
+                    svg.transition()
+                        .duration(750)
+                        .call(d3.zoom().transform, d3.zoomIdentity.translate(tx, ty).scale(scale));
+                }
+
+                // Update positions on simulation tick
+                simulation.on("tick", () => {
+                    edge
+                        .attr("x1", d => d.source.x)
+                        .attr("y1", d => d.source.y)
+                        .attr("x2", d => d.target.x)
+                        .attr("y2", d => d.target.y);
+
+                    // Update edge label positions and backgrounds
+                    edgeLabels
+                        .attr("x", d => (d.source.x + d.target.x) / 2)
+                        .attr("y", d => (d.source.y + d.target.y) / 2);
+
+                    edgeLabelBackgrounds
+                        .attr("x", d => (d.source.x + d.target.x) / 2 - 15)
+                        .attr("y", d => (d.source.y + d.target.y) / 2 - 10)
+                        .attr("width", 30)
+                        .attr("height", 20);
+
+                    node
+                        .attr("cx", d => d.x)
+                        .attr("cy", d => d.y);
+
+                    nodeLabels
+                        .attr("x", d => d.x)
+                        .attr("y", d => d.y + 40);
+                });
+
+                // Fit to view when simulation ends
+                simulation.on("end", fitToView);
+
+                // Drag functions
+                function dragstarted(event, d) {
+                    if (!event.active) simulation.alphaTarget(0.3).restart();
+                    d.fx = d.x;
+                    d.fy = d.y;
+                }
+
+                function dragged(event, d) {
+                    d.fx = event.x;
+                    d.fy = event.y;
+                }
+
+                function dragended(event, d) {
+                    if (!event.active) simulation.alphaTarget(0);
+                    d.fx = null;
+                    d.fy = null;
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                const svg = d3.select("#visualization")
+                    .append("svg")
+                    .attr("width", 900)
+                    .attr("height", 600);
+                svg.append("text")
+                    .attr("x", 450)
+                    .attr("y", 300)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "red")
+                    .text("Error loading data from endpoint. Please ensure the server is running.");
+            }
+        }
+
+        // Load data when page loads
+        loadData();
+
+    </script>
+</body>
+</html>

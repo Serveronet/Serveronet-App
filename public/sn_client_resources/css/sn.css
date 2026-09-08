@@ -1,0 +1,122 @@
+/* nunito-regular - latin */
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 500;
+    src: local(''),
+        url('/sn_client_resources/fonts/nunito-v25-latin-regular.woff2') format('woff2'),
+        /* Chrome 26+, Opera 23+, Firefox 39+ */
+        url('/sn_client_resources/fonts/nunito-v25-latin-regular.woff') format('woff');
+    /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+}
+      
+div {
+    color: #0f121ac7;
+}
+
+.nav-listing {
+    padding: 0px;
+}
+
+.website {
+    font-family: 'Nunito', sans-serif;
+}
+
+.sn-action-min {
+    min-width: 7em;
+}
+
+.sn-button-min {
+    min-width: 14em;
+}
+
+.sn-action-min-height {
+    min-height: 3em;
+}
+
+.custom-shape-divider-top-1671200640 {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.custom-shape-divider-top-1671200640 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 30px;
+}
+
+.custom-shape-divider-top-1671200640 .shape-fill {
+    fill: #f8f9fa;
+}
+
+.custom-shape-divider-top-1674125611 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.custom-shape-divider-top-1674125611 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 70px;
+}
+
+.custom-shape-divider-top-1674125611 .shape-fill {
+    fill: rgb(59, 155, 155);
+}
+
+/* Landing */
+.custom-shape-divider-top-1680879340 {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.custom-shape-divider-top-1680879340 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 96px;
+}
+
+.custom-shape-divider-top-1680879340 .shape-fill {
+    fill: lightgrey;
+}
+
+.toast-message {
+    color: white;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.spinning {
+    animation: spin 4s linear infinite;
+}
+
+.text-shadow {
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+}
+
+.opacity-5 {
+  opacity: 0.05;
+}
