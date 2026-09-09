@@ -21,7 +21,7 @@ By publishing your site directly to participating peers, Serveronet creates an i
 ## Decentralized
 `PQ Module-Lattice cryptography, BitTorrent Trackers, IPFS`
 
-Serveronet adopts a multi-layered decentralized approach to ensure maximum reliability and robustness. It leverages sophisticated technologies including Post-Quantum (PQ) Crystal cryptography for security, integrates reliable BitTorrent trackers for content location, and optionally utilizes the InterPlanetary File System (IPFS) as an advanced layer of file storage. This combination provides a resilient, distributed backbone for all site data transmission.
+Serveronet adopts a multi-layered decentralized approach to ensure maximum reliability and robustness. It leverages sophisticated technologies including Post-Quantum (PQ) Module-Lattice cryptography for security, integrates reliable BitTorrent trackers for content location, and optionally utilizes the InterPlanetary File System (IPFS) as an advanced layer of file storage. This combination provides a resilient, distributed backbone for all site data transmission.
 
 ## Anonymity
 `Tor and public keys`
