@@ -19,12 +19,12 @@
     <div class="m-1">
 
         <a class="btn btn-outline-success" href="{{ domainRoute('linux_and_mac_client_bundle.zip') }}">
-            Linux Bundle
+            Linux and Mac Bundle
             <br>
             <img style="width:10em;" src="{{ asset('sn_client_resources/img/ubuntu.png', request()->isSecure()) }}" alt=""
                 srcset="">
         </a>
-        <div>For Linux (Ubuntu, Debian, Raspbian)</div>
+        <div>For Linux (Ubuntu, Debian, Raspbian) and Mac</div>
     </div>
 
 </div>
