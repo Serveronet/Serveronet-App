@@ -35,7 +35,7 @@ See site development documentation on how to configure.
 
 
 
-### Dot Serveronet domains
+### Dot Snet domains
 Serveronet supports also .snet domains.
 Enter .snet domain in the Go field and your client will retrieve proper Site ID. 
 

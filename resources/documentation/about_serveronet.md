@@ -19,14 +19,14 @@ The platform’s core strength lies in its lack of mandatory centralized infrast
 By publishing your site directly to participating peers, Serveronet creates an intrinsically resilient hosting model. Your content remains online indefinitely as long as the network finds interested hosts. Furthermore, the entire framework is built with a commitment to open standards; it exclusively utilizes scripting languages, avoiding proprietary "black box" binary blobs. This ensures that every building block is transparently auditable and accessible for community contribution.
 
 ## Decentralized
-`PQ Crystals cryptography, BitTorrent Trackers, IPFS`
+`PQ Module-Lattice cryptography, BitTorrent Trackers, IPFS`
 
 Serveronet adopts a multi-layered decentralized approach to ensure maximum reliability and robustness. It leverages sophisticated technologies including Post-Quantum (PQ) Crystal cryptography for security, integrates reliable BitTorrent trackers for content location, and optionally utilizes the InterPlanetary File System (IPFS) as an advanced layer of file storage. This combination provides a resilient, distributed backbone for all site data transmission.
 
 ## Anonymity
 `Tor and public keys`
 
-User identity and communication on Serveronet are secured through cutting-edge cryptography. The platform relies on PQ Crystals cryptography to generate unique digital identities without requiring traditional personal identifiers like email addresses. For enhanced privacy, users also have the option to route all their network communications through the Tor anonymity network, maximizing both security and user discretion.
+User identity and communication on Serveronet are secured through cutting-edge cryptography. The platform relies on PQ Module-Lattice cryptography to generate unique digital identities without requiring traditional personal identifiers like email addresses. For enhanced privacy, users also have the option to route all their network communications through the Tor anonymity network, maximizing both security and user discretion.
 
 ## SEO Friendly
 `Lives in clearnet`

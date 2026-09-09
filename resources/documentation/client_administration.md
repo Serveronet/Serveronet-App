@@ -27,7 +27,8 @@ Older Site Definitions are deleted and related resouces will be purged.
 
 ## Serving Single Site
 Your client can also work as a traditional web server and serve your serveronet site through your domain.  
-Configure it in single_site_mode.php file.
+Configure it in single_site_mode.php file.  
+Change requires config clear: php artisan config:clear
 
 ## Client Bundle
 Client Bundle is bundle consisting of frankenphp instance and a serveronet client. You can adjust ports, addresses using Caddyfile from frankenphp directory.  

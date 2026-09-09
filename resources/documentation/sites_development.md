@@ -47,7 +47,7 @@ Site Config is a set of key value pairs. Values can be strings, booleans, arrays
 #### trusted_Site_Peers
 This setting is used when quering peers for database records. When trusted peer responds no quorum will be required. Usually this should list a server which is in control by the Site Owner and has Serveronet Client installed.
 #### prefered_Trackers
-Prefered Bittorrent trackers specified by site owner. Clients will use those trackers when announcing or getting peers. If not specified, then axlgorithm will assign prefered tracker for Site.
+Prefered Bittorrent trackers specified by site owner. Clients will use those trackers when announcing or getting peers. If not specified, then algorithm will assign prefered tracker for Site.
 #### site_Admin_Signers
 Admins/Moderators can edit all records. List their identities in a string. Site Owner is an admin by default so doesn't need to be listed.
 #### site_Requires_Authentication
@@ -60,9 +60,10 @@ Site can allow to upload Visitor's file. Site Owner can set it as false to speed
 Site optionally can have it's own database. Configure the schema in db_Schema_Versions. Boolean.
 #### db_Schema_Versions
 DB Schema Versions definition that will result in SQL DDLs. They will bring site database to the most recent version. It will be executed on each client hosting this site. Several systemic fields will be added automatically.  
-Each version should be indicated by a comparable string value of `version_number` key. These will work: "0", "v0", "2026-05...".
+Each version should be indicated by a comparable string value of `version_number` key. These will work: "0", "v0", "2026-05...".  
 On upgrade changes to the database will applied on all the peers.
-Start with `version_number` "0", `tableCreates` and `indexCreates`. See `Tech Demo` site and example Site Config on how to manage database versions. With next version you can add `columnAlters`. 
+Start with `version_number` "0", `tableCreates` and `indexCreates`. See `Tech Demo` site and example Site Config on how to manage database versions.  
+With the next version you can add `columnAlters`. 
 
 You can define following database schema manipulations:
 - tableCreates

@@ -31,7 +31,7 @@ class LandingText
             'title' => 'Decentralized',
             'image' => './sn_client_resources/img/Ipfs-logo-1024-ice-text.png',
             'image2' => '',
-            'subtitle' => 'PQ Crystals cryptography, BitTorrent Trackers, IPFS',
+            'subtitle' => 'PQ Module-Lattice cryptography, BitTorrent Trackers, IPFS',
             'description' => 'Serveronet works Peer 2 Peer, uses Bittorrent trackers and optionally IPFS as a file storage.',
         ],
         [
@@ -39,7 +39,7 @@ class LandingText
             'color' => 'card-back-gradient',
             'image' => './sn_client_resources/img/Tor-logo-2011-flat.svg',
             'subtitle' => 'Tor and public keys',
-            'description' => 'Serveronet relies on PQ Crystals cryptography to create identitities. No emails or alike required.
+            'description' => 'Serveronet relies on PQ Module-Lattice cryptography to create identitities. No emails or alike required.
             Tor can be used to route all the comunication.',
         ],
         [
