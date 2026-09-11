@@ -207,7 +207,7 @@ class SettingsController extends Controller
                 '5', 'type' => SettingDataTypes::integer, 'is_advanced' => true];
             break;
             case SettingIds::secret_key_internal_calls: return ['value' => 
-                Str::random(12), 'type' => SettingDataTypes::string, 'is_advanced' => true];
+                Str::random(64), 'type' => SettingDataTypes::string, 'is_advanced' => true];
             break; 
             case SettingIds::client_automatic_update_channel: return ['value' => 
                 PublishedVersionsChannels::prod, 'type' => SettingDataTypes::string, 'is_advanced' => true];
