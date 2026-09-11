@@ -106,7 +106,7 @@ Route::post('internal/execute_client_action_wrapper', [BackgroundProcessingContr
     ->name('execute_client_action_wrapper')->middleware('throttle:medium_rate');
 
 Route::post('internal/handle_internal_call_verification', [AdminController::class, 'handleInternalCallVerification'])
-    ->name('handle_internal_call_verification')->middleware('throttle:medium_rate');
+    ->name('handle_internal_call_verification')->middleware('throttle:low_rate');
 
 Route::post('internal/handle_internal_closure', [InternalCallService::class, 'handleInternalClosure'])
     ->name('handle_internal_closure')->middleware('throttle:medium_rate');

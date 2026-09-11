@@ -32,13 +32,20 @@ class InternalCallService extends Controller
     function handleInternalClosure(Request $request): void 
     {
         $requestConfigSet = H::unwrapRequestConfigSet();
+        $internalClosureExecutionId = $requestConfigSet['internalClosureExecutionId'];
+        if (! Cache::has(CachePrefixes::internal_closure_.$internalClosureExecutionId)) {
+            info('handleInternalClosure missing internal_closure_ cache key');
+            return;
+        } else {
+            Cache::forget(CachePrefixes::internal_closure_.$internalClosureExecutionId);
+        }
 
         if (! H::isInternalCallCurrent($requestConfigSet)) {
             info('Outdated or spoofed internal request');
             return;
         }
         $internalRequestId = H::startInteralRequestReporting(__FUNCTION__);
-
+        
         $serialized = $requestConfigSet['serialized_closure'];
 
         $secret_key_internal_calls = H::getSettVal(SettingIds::secret_key_internal_calls);

@@ -120,7 +120,7 @@ class H
 
         $ts = Carbon::parse($ts);
 
-        if ($ts->diffInMinutes(now()) > 1) {
+        if ($ts->diffInSeconds(now()) > 10) {
             return false;
         }
 
@@ -135,8 +135,11 @@ class H
         SerializableClosure::setSecretKey($secret_key_internal_calls);
 
         $serialized_closure = serialize(new SerializableClosure($closure));
+        $internalClosureExecutionId = Str::random(40);
+        Cache::put(CachePrefixes::internal_closure_.$internalClosureExecutionId, "", 10);
         $requestConfigSet = [];
         $requestConfigSet['serialized_closure'] = $serialized_closure;
+        $requestConfigSet['internalClosureExecutionId'] = $internalClosureExecutionId;
         H::dispatchInternalAsync('handle_internal_closure', $requestConfigSet);
     }
 

@@ -197,7 +197,6 @@ class AdminUiService extends Controller
             $resultMessage = 'Tested: ' . ($success ? 'Successfully connected internally' : 'Failure');
         } catch (\Throwable $th) {
             $resultMessage = 'Tested: Failure. '. $th->getMessage();
-
         }
 
         return redirect()->back()->withFragment('app-url')
