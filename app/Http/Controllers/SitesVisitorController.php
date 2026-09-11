@@ -365,10 +365,10 @@ class SitesVisitorController extends Controller
         return redirect()->back();
     }
 
-    public function setAdultsOnlyAccessCookie()
+    public function setAdultsOnlyAccessCookie(Request $request)
     {
         $adultsOnlyAccessCookie = cookie('adults_only_accepted', true, 2147483647, null, null, false, false);
 
-        return redirect()->back()->withCookie($adultsOnlyAccessCookie);
+        return redirect()->intended(H::siteUrl($request->site_id))->withCookie($adultsOnlyAccessCookie);        
     }
 }
