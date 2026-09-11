@@ -195,7 +195,7 @@ Route::post('site_api/v1/visitor_record_create', [UpsertController::class, 'crea
     ->middleware('single_site_id');
 
 if ($api_token_backend_enabled) {
-    Route::post('site_api/v1/api_token_visitor_record_update', [QueryController::class, 'updateEndpointApi'])
+    Route::post('site_api/v1/api_token_visitor_record_update', [UpsertController::class, 'updateEndpointApi'])
         ->name($routePrefix.'api_token_visitor_record_update')->middleware('throttle:high_rate')->middleware('auth_visitor:visitor_api')
         ->middleware('single_site_id');
 }

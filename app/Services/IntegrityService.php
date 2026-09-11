@@ -34,8 +34,21 @@ class IntegrityService extends Controller
 
             if ($isVisitors) {
 
+                /* Entity Id missing */
+                if (! property_exists($incomingRecord, SysProps::_sn_entity_id)) {
+                    /* Entity Id in incorrect format */
+                    info('isRecordConsistent _sn_entity_id missing');
+
+                    return false;
+                }
+
+                $entity_id_array = explode('_', $incomingRecord->{SysProps::_sn_entity_id});
+
+                $createdFromEntityId = $entity_id_array[0];
+                // $createdFromEntityId = explode('_', $incomingRecord->{SysProps::_sn_entity_id})[0];
+
                 /* Visitor ID exists */
-                $visitor_id = explode('_', $incomingRecord->{SysProps::_sn_entity_id})[1];
+                $visitor_id = $entity_id_array[1];
 
                 if (! $visitor_id) {
                     info('isRecordConsistent No visitor_id');
@@ -49,18 +62,13 @@ class IntegrityService extends Controller
                     return false;
                 }
 
-                $createdFromEntityId = null;
-
-                /* Entity Id missing */
-                if (property_exists($incomingRecord, SysProps::_sn_entity_id)) {
-                    /* Entity Id in incorrect format */
-                    $createdFromEntityId = explode('_', $incomingRecord->{SysProps::_sn_entity_id})[0];
-
-                } else {
-                    info('isRecordConsistent _sn_entity_id missing');
+                /* Created matches createdFromEntityId */
+                if ($createdFromEntityId === $incomingRecord->{SysProps::_sn_entity_created}) {
+                    info('isRecordConsistent Created matches createdFromEntityId');
 
                     return false;
                 }
+
 
                 /* Created String not a correct date */
                 try {
@@ -77,6 +85,8 @@ class IntegrityService extends Controller
 
                     return false;
                 }
+
+
 
                 /* Created after updated */
                 if ($createdFromEntityId > $incomingRecord->{SysProps::_sn_entity_updated} - 1000) {

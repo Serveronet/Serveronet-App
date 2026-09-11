@@ -164,7 +164,11 @@ Steps:
    -X POST -H 'Content-Type: application/json' \
    --data-raw '{"api_token":"your_visitor_api_token","_sn_record_json":"{\"title\":\"My title\", \"_sn_table\":\"posts\"}"}'
    ```
-   > Please note that HTTPS or running client locally is highly recommeded in such a case. 
+   > Please note that HTTPS or running client locally is highly recommeded in such a case.
+
+Header and query parameters authentications are supported as well
+   ```Authorization: Bearer your_visitor_api_token```  
+   ```?api_token=your_visitor_api_token```
 
 ## Vanity Address
 Generation steps:

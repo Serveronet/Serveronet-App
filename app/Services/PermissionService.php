@@ -200,7 +200,9 @@ class PermissionService
             $isGrantOld = $grantVisitorRecordCachedTS->diffInMinutes(now()) > 60;
 
             if ($isGrantOld && ! $is_to_be_hosted) {
-                $builder->first()->delete();
+                $g = $builder->first();
+                if ($g)
+                $g->delete();
             }
         }
 
