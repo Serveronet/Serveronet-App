@@ -40,6 +40,7 @@ class Visitor extends Authenticatable
         'encrypted_seed',
         'password',
         'remember_token',
+        'api_token',
     ];
 
     /**

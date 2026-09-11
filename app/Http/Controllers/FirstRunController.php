@@ -313,8 +313,8 @@ class FirstRunController extends Controller
             'name' => 'owner',
             'auth_token' => $auth_token,
         ]);
-        $ownerAuthCookie = cookie('owner_auth_token', Crypt::encryptString($auth_token),
-            2147483647, '/', '.'.getDomain(), false, false);
+        $ownerAuthCookie = cookie(name: 'owner_auth_token', value: Crypt::encryptString($auth_token),
+            minutes: 2147483647, path: '/', domain: '.'.getDomain(), secure: false, httpOnly: false);
         Cookie::queue($ownerAuthCookie);
 
         H::pfm('Creating Initial trackers', log: true);
@@ -533,7 +533,7 @@ class FirstRunController extends Controller
                 'DB_DATABASE' => ['string', 'max:2048'],
                 'DB_USERNAME' => ['string', 'max:2048'],
                 'DB_PASSWORD' => ['nullable', 'string', 'max:2048'],
-                'DB_TABLE_PREFIX' => ['nullable', 'string', 'max:2048'],
+                'DB_TABLE_PREFIX' => ['nullable', 'string', 'max:2048', 'regex:/^[a-zA-Z_][a-zA-Z0-9_]*$/'],
                 'siteDatabasesInMySql' => ['nullable', 'boolean'],
             ]);
         } catch (Throwable $th) {

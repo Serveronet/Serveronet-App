@@ -39,14 +39,17 @@ Route::get('site_assets/img/logo.png', [UtilsController::class, 'getSnLogo'])
     ->name($routePrefix.'logo')->middleware('throttle:high_rate');
 
 Route::get('register', [RegisteredVisitorController::class, 'create'])->name($routePrefix.'register')
-    ->middleware($owner_only_capable)->middleware('single_site_id');
+    ->middleware($owner_only_capable)->middleware('single_site_id')
+    ->middleware('throttle:medium_rate');
 
 Route::post('register', [RegisteredVisitorController::class, 'store'])->middleware($owner_only_capable)->middleware('single_site_id');
 
 Route::get('login', [AuthenticatedVisitorSessionController::class, 'create'])->name($routePrefix.'login')
-    ->middleware($owner_only_capable)->middleware('single_site_id');
+    ->middleware($owner_only_capable)->middleware('single_site_id')
+    ->middleware('throttle:medium_rate');
 
 Route::post('login', [AuthenticatedVisitorSessionController::class, 'store'])
+    ->middleware('throttle:medium_rate')
     ->middleware($owner_only_capable)
     ->middleware('single_site_id');
 

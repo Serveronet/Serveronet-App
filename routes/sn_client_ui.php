@@ -32,13 +32,16 @@ if (! H::isServeronetWelcomeSite()) {
             $owner_only_capable = $SERVE_OWNER_ONLY ? ['auth_owner:owner'] : [];
 
             Route::get('admin/admin_login', [AuthenticatedAdminSessionController::class, 'create'])
-                ->name($domainRouteNamePrefix.'admin_login');
+                ->name($domainRouteNamePrefix.'admin_login')
+                ->middleware('throttle:medium_rate');
 
-            Route::post('admin/admin_login', [AuthenticatedAdminSessionController::class, 'store']);
+            Route::post('admin/admin_login', [AuthenticatedAdminSessionController::class, 'store'])
+                ->middleware('throttle:medium_rate');
 
             Route::any('admin/admin_logout', [AuthenticatedAdminSessionController::class, 'destroy'])
                 ->middleware($owner_only_capable)
                 ->middleware('auth_admin:admin')
+                ->middleware('throttle:medium_rate')
                 ->name($domainRouteNamePrefix.'admin_logout');
 
             if (! H::inSingleSiteMode(request())) {
@@ -96,7 +99,7 @@ if (! H::isServeronetWelcomeSite()) {
                     ->name($domainRouteNamePrefix.'debug_download_log')
                     ->middleware('throttle:high_rate');
 
-                Route::get('admin/scheduleOnDemandBackgroundAction', [BackgroundProcessingController::class, 'scheduleOnDemandBackgroundAction'])
+                Route::post('admin/scheduleOnDemandBackgroundAction', [BackgroundProcessingController::class, 'scheduleOnDemandBackgroundAction'])
                     ->name($domainRouteNamePrefix.'scheduleOnDemandBackgroundAction')->middleware('throttle:high_rate');
 
                 Route::get('admin/add_manually', [AdminController::class, 'AddManuallyIndex'])->name($domainRouteNamePrefix.'add_manually')

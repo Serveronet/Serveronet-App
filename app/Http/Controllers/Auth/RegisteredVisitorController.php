@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\H;
 use App\Models\Visitor;
 use App\Services\PQCryptoService;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -131,9 +132,6 @@ class RegisteredVisitorController extends Controller
         $identity_createdRoute = domainRoute('identity_created', [
             'site_id' => $site_id,
             'target_site_id' => $target_site_id,
-            'visitor_id' => $visitor_id,
-            'base64_seed' => $request->base64_seed,
-            'alias' => $request->alias,
         ]);
 
         return redirect($identity_createdRoute);
@@ -156,6 +154,13 @@ class RegisteredVisitorController extends Controller
 
         $target_site_id = $request->target_site_id;
         $visitor = Auth::guard('visitor')->user();
+
+        if (Carbon::parse($visitor->created_at)->diffInMinutes(now()) > 60) {
+            $message = 'Identity details are now hidden. Only client admin can recover. See the documentation for help.';
+            $status_code = 403;
+            return response(view('conditionalXXX', compact('message', 'status_code')), status: $status_code);
+        }
+
         $visitor_id = $visitor->visitor_id;
         $alias = $visitor->alias;
         $base64_seed = base64_encode(decrypt($visitor->encrypted_seed));
@@ -178,6 +183,12 @@ class RegisteredVisitorController extends Controller
         }
 
         $visitor = Auth::guard('visitor')->user();
+
+        if (Carbon::parse($visitor->created_at)->diffInMinutes(now()) > 60) {
+            $message = 'Identity details are now hidden. Only client admin can recover. See the documentation for help.';
+            $status_code = 403;
+            return response(view('conditionalXXX', compact('message', 'status_code')), status: $status_code);
+        }
 
         $contents = collect([
             'visitor_id' => $visitor->visitor_id,
