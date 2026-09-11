@@ -870,6 +870,7 @@ class BackendController extends Controller
         $incomingRecord = new stdClass;
         $visitor = Auth::guard('visitor')->user() ?? Auth::guard('visitor_api')->user();
         $authenticated_visitor_id = $visitor->visitor_id;
+        $signer = $authenticated_visitor_id;
         $authenticated_visitor_verification_key_base64 = $visitor->verification_key_base64;
 
         $signer_verification_key_base64 = $authenticated_visitor_verification_key_base64;
@@ -881,6 +882,17 @@ class BackendController extends Controller
 
         $site = Site::whereSiteId($site_id)->with('most_recent_site_definition')->first();
         $siteConfig = (new SiteConfigService)->getSiteConfig($site);
+
+        $canUploadRC = (new BackendController($request))->hasVisitorRightsToUpload(
+            $signer, $siteConfig);
+
+        if (! $canUploadRC->operation_successful) {
+            return $this->return_failure($canUploadRC->error_message);
+        }
+
+        if (! $canUploadRC->can_upload_files) {
+            return $this->return_failure($canUploadRC->upload_files_reason);
+        }
 
         $signerRightsRC = PermissionService::hasSignerRightsToVisitorResource($incomingRecord, $siteConfig);
 

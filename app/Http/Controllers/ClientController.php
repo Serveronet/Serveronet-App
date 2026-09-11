@@ -12,6 +12,7 @@ use App\Http\Consts;
 use App\Http\H;
 use App\Models\CachedResource;
 use App\Models\ContentRetrieval;
+use App\Models\CrowdQuery;
 use App\Models\CrowdQueryResult;
 use App\Models\ListProviderEntry;
 use App\Models\P2pMessage;
@@ -273,6 +274,11 @@ class ClientController extends Controller
         $crowdQueryResult = json_decode($request->data);
 
         $query_id = $crowdQueryResult->query_id;
+
+        $crowdQuery = CrowdQuery::where('query_id', $query_id)->first();
+        if (! $crowdQuery)
+            return $this->return_failure('No such a Crowd Query');
+
         $fulfiller_id = $crowdQueryResult->fulfiller_id;
         $remote_peer_id = $crowdQueryResult->remote_peer_id ?? 'remote_peer_id fallback';
         $trusted_site_peer_token = $crowdQueryResult->trusted_site_peer_token ?? null;
@@ -309,17 +315,6 @@ class ClientController extends Controller
 
             return;
         }
-
-        // $debugRequestInputs = [
-        //     'payload' => $crowdQueryResult->payload,
-        //     'fulfiller_id' => $fulfiller_id,
-        //     'remote_peer_id' => $remote_peer_id,
-        //     'trusted_site_peer_token' => $trusted_site_peer_token,
-        //     'query_id' => $query_id,
-        // ];
-
-        // info('$debugRequestInputs');
-        // info($debugRequestInputs);
 
         $crowdQueryResults = new CrowdQueryResult;
         $crowdQueryResults->query_id = $query_id;
@@ -646,7 +641,6 @@ class ClientController extends Controller
                 'site_id' => Consts::notRequiredSiteIdValidationRule,
             ]);
         } catch (Throwable $th) {
-            dd('handlePeerRequestingData');
             info($th->getMessage().' '.$th->getFile().' '.$th->getLine());
 
             return $this->return_failure($th->getMessage());

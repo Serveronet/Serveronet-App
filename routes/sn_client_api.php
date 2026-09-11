@@ -85,7 +85,7 @@ Route::post('p2p_api/v1/request_modified_between_dates', [ClientController::clas
     ->middleware('throttle:high_rate');
 
 Route::post('p2p_api/v1/receive_fulfilled_crowd_query', [ClientController::class, 'handleReceiveFulfilledCrowdQuery'])
-    ->middleware('throttle:high_rate');
+    ->middleware('throttle:medium_rate');
 
 /* Client Automation section */
 if ($api_token_backend_enabled) {
