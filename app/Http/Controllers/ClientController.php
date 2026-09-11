@@ -1391,9 +1391,4 @@ class ClientController extends Controller
 
         return true;
     }
-
-    public function debug()
-    {
-        dd('end');
-    }
 }

@@ -129,5 +129,3 @@ Route::post('internal/loop_maintainer', [ClientManagerController::class, 'loopMa
 Route::post('internal/passive_session_worker', [PassiveClientController::class, 'passiveSessionWorker'])
     ->name('passive_session_worker')->middleware('throttle:medium_rate');
 
-Route::get('debug', [ClientController::class, 'debug'])
-    ->name('debug')->middleware('throttle:medium_rate');

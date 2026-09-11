@@ -632,9 +632,6 @@ class BackendController extends Controller
             return $invalidResult;
         }
 
-        info(json_encode(Auth::guard('visitor')->user()));
-        info(json_encode(Auth::guard('visitor_api')->user()));
-
         $visitor = Auth::guard('visitor')->user() ?? Auth::guard('visitor_api')->user();
         $authenticated_visitor_id = $visitor->visitor_id;
         $authenticated_visitor_verification_key_base64 = $visitor->verification_key_base64;
@@ -1123,7 +1120,7 @@ class BackendController extends Controller
             $site_id,
             $domain,
             $cr->sha256,
-            $siteConfig,
+            $siteConfig
         );
     }
 
