@@ -38,9 +38,16 @@ class SitesVisitorController extends Controller
         }
 
         $target = $request->target;
+
         $missing = $request->missing;
         $site_id = $request->site_id;
         $siteRoot = H::siteUrl($site_id);
+
+        $intendedUrl = Url::fromString($target);
+        $tagetUrl = Url::fromString($siteRoot);
+        $tagetUrl = $tagetUrl->withPath($intendedUrl->getPath());
+        $tagetUrl = $tagetUrl->withQueryParameters($intendedUrl->getAllQueryParameters());
+        $target = $tagetUrl->__toString();
 
         switch ($missing) {
             case DataTypes::site_definitions:

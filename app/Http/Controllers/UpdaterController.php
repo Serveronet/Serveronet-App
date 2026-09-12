@@ -177,8 +177,7 @@ class UpdaterController extends Controller
                     $dev_api_token = null;
                 }
 
-                $url = $centralServerAddress.'download/'.$mostRecentVersion->file_name
-                .'?api_token='.$dev_api_token;
+                $url = $centralServerAddress.'download/'.$mostRecentVersion->file_name;
 
                 H::pfm('Url: '.$url, pfm: $pfm);
                 $newVersionFilePath = base_path().'/new_version.zip';
@@ -187,7 +186,7 @@ class UpdaterController extends Controller
                 ini_set('max_execution_time', 600);
                 H::pfm('Downloading', pfm: $pfm);
 
-                $this->downloadFile($url, $newVersionFilePath);
+                $this->downloadFile($url, $newVersionFilePath, api_token: $dev_api_token);
 
                 H::pfm('Downloaded', pfm: $pfm);
 
@@ -559,13 +558,16 @@ class UpdaterController extends Controller
         (new UpdaterController)->checkBundleUpdateFromCentral(request: $request);
     }
 
-    public function downloadFile($url, $filepath)
+    public function downloadFile($url, $filepath, $api_token = '')
     {
         $client = H::setupClient(is_tor_address: false);
         $options = [
             'sink' => $filepath,
             'timeout' => H::timeoutAdjust(false, 60),
             'prepare_ip' => true,
+            'headers' => [
+                'Authorization' => 'Bearer '.$api_token,
+            ]
         ];
         H::prepareOptions($options, $url);
         

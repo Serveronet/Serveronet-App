@@ -70,7 +70,7 @@ Route::post('p2p_api/v1/handle_passive_client_initiating_session', [ActiveClient
     ->middleware('throttle:medium_rate');
 
 Route::post('p2p_api/v1/handle_passive_awaiting_requests', [ActiveClientController::class, 'handlePassiveAwaitingRequests'])
-    ->middleware('throttle:high_rate');
+    ->middleware('throttle:medium_rate');
 
 Route::post('p2p_api/v1/p2p_query_endpoint', [QueryController::class, 'p2pQueryEndpoint'])
     ->middleware('throttle:high_rate');

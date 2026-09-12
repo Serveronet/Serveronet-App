@@ -253,7 +253,7 @@ class ActiveClientController extends Controller
         }
 
         $totalPassiveSessions = PassiveSession::get();
-        if ($totalPassiveSessions->count() > 20)
+        if ($totalPassiveSessions->count() > 10)
         return $this->return_failure('Too many sessions already');
 
         $passive_client_address = $request->client_address;

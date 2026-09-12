@@ -16,11 +16,12 @@ use Base32\Base32;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
+use Spatie\Url\Url;
 
 class PlaygroundController extends Controller
 {
     public function test(Request $request) 
     {
-
+        
     }
 }
