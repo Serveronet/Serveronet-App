@@ -19,6 +19,9 @@ class DevPublicController extends Controller
 {
     public function refreshConfig()
     {
+        if (! Storage::disk('local')->exists('refresh_config_allowed.php'))
+        return response('Refresh config not allowed - refresh_config_allowed.php missing');
+
         Artisan::call('config:clear');
         Artisan::call('cache:clear');
         Artisan::call('route:clear');

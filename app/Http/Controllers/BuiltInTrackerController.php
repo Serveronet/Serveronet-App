@@ -53,7 +53,37 @@ class BuiltInTrackerController extends Controller
                     ->header('Content-Type', 'text/plain');
             }
         }
-        // info('Raw: '.$request->input('peer_id').' '.$request->input('port'));
+
+        try {
+            $request->validate([
+                'info_hash' => [
+                    'required',
+                    'string',
+                    'size:20',
+                ],
+
+                'peer_id' => [
+                    'required',
+                    'string',
+                    'size:20',
+                ],
+
+                'port' => [
+                    'required',
+                    'integer',
+                    'between:1,65535',
+                ],
+
+                'peer_url' => [
+                    'required',
+                    'string',
+                    'max:2048',
+                ],
+            ]);
+        } catch (\Throwable $th) {
+            Log::debug($th->getMessage().' '.$th->getFile().' '.$th->getLine());
+            return $this->return_failure($th->getMessage());
+        }
 
         $info_hash = bin2hex($request->input('info_hash'));
         $peerId = $request->input('peer_id');

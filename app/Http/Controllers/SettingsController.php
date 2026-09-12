@@ -192,7 +192,7 @@ class SettingsController extends Controller
                 false, 'type' => SettingDataTypes::boolean, 'is_advanced' => true];
             break;
             case SettingIds::automatic_update_enabled: return ['value' => 
-                false, 'type' => SettingDataTypes::boolean, 'is_advanced' => true];
+                true, 'type' => SettingDataTypes::boolean, 'is_advanced' => true];
             break;
             case SettingIds::last_external_port_updated_ts: return ['value' => 
                 Consts::startOfServeronet, 'type' => SettingDataTypes::datetime, 'is_advanced' => true];
