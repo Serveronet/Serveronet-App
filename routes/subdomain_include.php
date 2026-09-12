@@ -28,7 +28,7 @@ $domain = $subdomainLevel.$domain;
 $routePrefix = $domain;
 
 Route::get('site_api/v1/sse_stream', [SiteSSEController::class, 'streamSSE'])
-    ->middleware('throttle:high_rate')
+    ->middleware('throttle:low_rate')
     ->middleware($owner_only_capable)
     ->middleware('single_site_id');
 

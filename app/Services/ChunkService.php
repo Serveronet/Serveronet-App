@@ -240,6 +240,12 @@ class ChunkService extends Controller
         }
         fclose($fullFileHandle);
 
+        $fullFileSha256 = hash_file('sha256', $fullFilePath);
+        if ($fullFileSha256 !== $sha256) {
+            Storage::disk('cached_resources')->delete($fullFilePath);
+            throw new Exception('Expected hash and declared hash mismatch');
+        }
+
         $fileJoinedInOtherThread = CachedResource::whereSha256($sha256)->first();
         if ($fileJoinedInOtherThread) {
             unlink($fullFileHandle);
