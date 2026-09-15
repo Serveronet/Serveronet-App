@@ -122,7 +122,7 @@ class ActiveClientController extends Controller
         return false;
     }
 
-    protected static function echoActionRequests($site_id, &$seenRetrievalIds, &$seenCrowdQueryIds, &$seenMessageIds, $passive_token): void 
+    public static function echoActionRequests($site_id, &$seenRetrievalIds, &$seenCrowdQueryIds, &$seenMessageIds, $passive_token): void 
     {
         $contentRetrievals = ContentRetrieval::where('site_id', $site_id)
         ->whereNotIn('retrieval_id', $seenRetrievalIds)

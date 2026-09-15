@@ -62,13 +62,13 @@ class BuiltInTrackerController extends Controller
                 'info_hash' => [
                     'required',
                     'string',
-                    'max:40',
+                    'max:60',
                 ],
 
                 'peer_id' => [
                     'required',
                     'string',
-                    'size:20',
+                    'max:60',
                 ],
 
                 'port' => [
