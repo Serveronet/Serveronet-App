@@ -62,8 +62,8 @@ class IntegrityService extends Controller
                     return false;
                 }
 
-                /* Created matches createdFromEntityId */
-                if ($createdFromEntityId === $incomingRecord->{SysProps::_sn_entity_created}) {
+                /* Created not matches createdFromEntityId */
+                if ($createdFromEntityId !== $incomingRecord->{SysProps::_sn_entity_created}) {
                     info('isRecordConsistent Created matches createdFromEntityId');
 
                     return false;

@@ -5,6 +5,7 @@ use App\Http\Controllers\FirstRunController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
+use Livewire\Mechanisms\FrontendAssets\FrontendAssets;
 
 require __DIR__.'/subdomain_site.php';
 require __DIR__.'/sn_client_ui.php';
@@ -29,6 +30,9 @@ Route::get('/on_demand_tls_allow', function (Request $request) {
 
     return Response::make('Forbidden', 403);
 });
+
+Route::get('livewire/livewire.js', [FrontendAssets::class, 'returnJavaScriptAsFile']);
+Route::get('livewire/livewire.min.js', [FrontendAssets::class, 'returnJavaScriptAsFile']);
 
 Route::get('first_run_setup', [FirstRunController::class, 'onFirstRunNotCompleted'])
     ->name('first_run_setup');
