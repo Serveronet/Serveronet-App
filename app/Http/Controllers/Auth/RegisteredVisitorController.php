@@ -102,6 +102,7 @@ class RegisteredVisitorController extends Controller
 
             $visitor->password = Hash::make($request->password);
             $visitor->alias = $alias;
+            $visitor->created_at = now();
             $visitor->save();
 
         } else {

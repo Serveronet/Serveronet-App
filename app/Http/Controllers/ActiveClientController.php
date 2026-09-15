@@ -253,7 +253,7 @@ class ActiveClientController extends Controller
         }
 
         $totalPassiveSessions = PassiveSession::get();
-        if ($totalPassiveSessions->count() > 10)
+        if ($totalPassiveSessions->count() > 6)
         return $this->return_failure('Too many sessions already');
 
         $passive_client_address = $request->client_address;
@@ -262,15 +262,23 @@ class ActiveClientController extends Controller
 
         $site_ids = json_decode($request->site_ids_json) ?? [];
 
-        $passive_token = $request->passive_token ?? Str::random();
+        $tokenFromPassive = $request->passive_token;
+
+        $passiveSession = PassiveSession::where([
+            ['passive_token', $tokenFromPassive],
+            ['passive_client_address', $passive_client_address]
+        ])->first();
+
+        if (! $passiveSession) {
+            $passiveSession = new PassiveSession();
+            $passive_token = Str::random();
+        } else {
+            $passive_token = $tokenFromPassive;
+        }
+
         Log::debug('passive_token '.json_encode($passive_token));
         Log::debug('handlePassiveClientInitiatingSession passive_token: '.$passive_token.' '.$passive_remote_addr.' '.$passive_client_address);
 
-        $passiveSession = PassiveSession::where('passive_token', $passive_token)->first();
-        
-        if (! $passiveSession)
-        $passiveSession = new PassiveSession();
-        
         $passiveSession->passive_token = $passive_token;
         $passiveSession->remote_ip = $passive_remote_addr;
         $passiveSession->passive_client_address = $passive_client_address;

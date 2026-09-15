@@ -1126,13 +1126,16 @@ class BackendController extends Controller
         $mime_type = H::getMimeTypeByExtension(pathinfo($visitorResource->original_file_name, PATHINFO_EXTENSION));
 
         return (new SiteServerController($request))->serveResourceFile(
-            $request,
-            $cr->file_name,
-            $mime_type,
-            $site_id,
-            $domain,
-            $cr->sha256,
-            $siteConfig
+            request: $request,
+            fileName: $cr->file_name,
+            mime_type: $mime_type,
+            site_id: $site_id,
+            domain: $domain,
+            etag: $cr->sha256,
+            siteConfig: $siteConfig,
+            debug_data: 'N/A',
+            isVisitors: true,
+            originalFileName: $visitorResource->original_file_name ?? ''
         );
     }
 

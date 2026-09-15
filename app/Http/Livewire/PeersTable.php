@@ -209,7 +209,10 @@ final class PeersTable extends PowerGridComponent
             . ' <br> Inbound Connection attempt successful: ' . tfyn($rc->data['inbound_connectivity_successful'] ?? false);
 
         if ($rc->error_message)
-            $html_content .= ' <br> Error Message, if any: <br>' . $rc->error_message;
+            $html_content .= ' <br> Error Message: <br>' . e($rc->error_message);
+
+        if ($rc->debug_data)
+            $html_content .= ' <br> Debug data: <br>' . e(json_encode($rc->debug_data));
 
         $this->dispatch(
             'show-popup',

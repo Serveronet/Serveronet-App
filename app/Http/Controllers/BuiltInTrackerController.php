@@ -17,9 +17,12 @@ class BuiltInTrackerController extends Controller
     public function builtInTracker(Request $request)
     {
         $info_hashes = Cache::get('info_hashes', []);
-        $sites = Site::with('most_recent_site_definition')->get();
+        // $info_hashes = LocalTrackerInfoHashPeer::query()->get();
+        $allSites = Site::with('most_recent_site_definition')->get();
+
+        
         $sitesWithHashes = [];
-        foreach ($sites as $key => $site) {
+        foreach ($allSites as $key => $site) {
             $site->site_info_hash = sha1($site->site_id);
             array_push($sitesWithHashes, [
                 'site_info_hash' => $site->site_info_hash,
@@ -37,14 +40,14 @@ class BuiltInTrackerController extends Controller
                     continue;
                 }
             }
-        }
+        }        
 
         return view('built_in_tracker', compact('info_hashes'));
     }
 
     public function handleAnnounceByUrl(Request $request)
     {
-        info('handleAnnounceByUrl Begin');
+        info('handleAnnounceByUrl Begin '.$request->info_hash);
         /* Required parameters */
         $requiredParams = ['info_hash', 'peer_id', 'port', 'uploaded', 'downloaded', 'left'];
         foreach ($requiredParams as $param) {
@@ -59,7 +62,7 @@ class BuiltInTrackerController extends Controller
                 'info_hash' => [
                     'required',
                     'string',
-                    'size:20',
+                    'max:40',
                 ],
 
                 'peer_id' => [

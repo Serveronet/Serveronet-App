@@ -6,6 +6,233 @@ namespace App\Dicts;
 
 final class MimeType
 {
+
+    public const INSECURE_MIME_TYPES = [
+        // HTML and browser documents
+        'text/html',
+        'application/xhtml+xml',
+        'application/xml',
+        'text/xml',
+        'image/svg+xml',
+
+        // JavaScript
+        'application/javascript',
+        'text/javascript',
+        'application/x-javascript',
+
+        // Flash and other legacy active content
+        'application/x-shockwave-flash',
+        'application/x-silverlight-app',
+
+        // Executable and installer formats
+        'application/x-msdownload',
+        'application/x-msdos-program',
+        'application/vnd.microsoft.portable-executable',
+        'application/x-dosexec',
+        'application/x-executable',
+        'application/x-elf',
+
+        // Shell scripts and command files
+        'application/x-sh',
+        'application/x-shellscript',
+        'application/x-csh',
+        'application/x-bat',
+        'application/x-msdos-program',
+
+        // PHP and server-side scripts
+        'application/x-httpd-php',
+        'application/x-httpd-php-source',
+
+        // Web archives and potentially active document formats
+        'application/x-ms-application',
+        'application/x-bzip-compressed-tar',
+        'application/x-tar',
+
+        // Office documents that may contain macros
+        'application/vnd.ms-word',
+        'application/vnd.ms-excel',
+        'application/vnd.ms-powerpoint',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+
+        // Java archives and class files
+        'application/java-archive',
+        'application/java-vm',
+        'application/x-java-archive',
+        'application/x-java-class',
+
+        // Other potentially executable formats
+        'application/x-shar',
+        'application/x-cpio',
+        'application/x-rar-compressed',
+        'application/zip',
+        'application/x-7z-compressed',
+    ];
+
+    public const INSECURE_EXTENSIONS = [
+        // HTML and browser-rendered documents
+        'htm',
+        'html',
+        'xhtml',
+        'shtml',
+        'svg',
+        'svgz',
+        'mht',
+        'mhtml',
+
+        // JavaScript and browser scripts
+        'js',
+        'mjs',
+        'cjs',
+        'jsx',
+        'ts',
+        'tsx',
+        'map',
+
+        // Stylesheets
+        'css',
+        'scss',
+        'sass',
+        'less',
+
+        // Server-side scripts
+        'php',
+        'php3',
+        'php4',
+        'php5',
+        'php7',
+        'php8',
+        'phtml',
+        'phar',
+        'inc',
+        'asp',
+        'aspx',
+        'ashx',
+        'asmx',
+        'jsp',
+        'jspx',
+        'cfm',
+        'cgi',
+        'pl',
+        'py',
+        'rb',
+        'sh',
+        'bash',
+        'zsh',
+        'fish',
+        'ksh',
+        'csh',
+        'bat',
+        'cmd',
+        'ps1',
+        'psm1',
+        'vbs',
+        'vbe',
+        'wsf',
+        'wsh',
+
+        // Executable and binary files
+        'exe',
+        'com',
+        'scr',
+        'msi',
+        'msp',
+        'mst',
+        'dll',
+        'ocx',
+        'sys',
+        'cpl',
+        'app',
+        'dmg',
+        'pkg',
+        'deb',
+        'rpm',
+        'run',
+        'bin',
+        'elf',
+        'so',
+        'dylib',
+
+        // Java and .NET
+        'jar',
+        'war',
+        'ear',
+        'class',
+        'java',
+        'cs',
+        'vb',
+        'dll',
+
+        // Office documents with potential macros
+        'doc',
+        'docm',
+        'dot',
+        'dotm',
+        'xls',
+        'xlsm',
+        'xlt',
+        'xltm',
+        'ppt',
+        'pptm',
+        'pot',
+        'potm',
+        'ppam',
+        'ppsm',
+        'sldm',
+
+        // Archives and compressed files
+        'zip',
+        'rar',
+        '7z',
+        'tar',
+        'gz',
+        'bz2',
+        'xz',
+        'tgz',
+        'tbz',
+        'cab',
+        'iso',
+        'img',
+
+        // Legacy active content
+        'swf',
+        'xap',
+        'hta',
+
+        // Database and configuration files
+        'sqlite',
+        'sqlite3',
+        'db',
+        'mdb',
+        'accdb',
+        'ini',
+        'conf',
+        'config',
+        'htaccess',
+        'htpasswd',
+        'env',
+        'yml',
+        'yaml',
+        'toml',
+
+        // Other potentially sensitive or executable formats
+        'sql',
+        'log',
+        'bak',
+        'old',
+        'tmp',
+        'dump',
+        'pem',
+        'key',
+        'crt',
+        'csr',
+        'p12',
+        'pfx',
+    ];
+
+    public const NEUTRALIZED_MIME_TYPE = 'text/plain';
+
     public const MIME_TYPES = [
         '1km' => 'application/vnd.1000minds.decision-model+xml',
         '3dml' => 'text/vnd.in3d.3dml',

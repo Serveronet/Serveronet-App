@@ -24,6 +24,7 @@ use App\Services\IPFSService;
 use App\Services\PeerMixService;
 use App\Services\SiteConfigService;
 use App\Services\TorrentService;
+use App\Support\ContentTypeResolver;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -339,12 +340,16 @@ class SiteServerController extends Controller
             $cachedResource->save();
 
             return (new SiteServerController($request))->serveResourceFile(
-                $request, $cachedResource->file_name,
-                $flFile->mime_type ?? 'text/html',
-                $site_id,
-                $domain,
-                $cachedResource->sha256,
-                $siteConfig,
+                request: $request, 
+                fileName: $cachedResource->file_name,
+                mime_type: $flFile->mime_type ?? 'text/html',
+                site_id: $site_id,
+                domain: $domain,
+                etag: $cachedResource->sha256,
+                siteConfig: $siteConfig,
+                debug_data: 'CR from Cache',
+                isVisitors: false,
+                originalFileName: $res_id
             );
         }
 
@@ -356,14 +361,16 @@ class SiteServerController extends Controller
                 $cachedResource = CachedResource::whereSha256($flFile->sha256)->first();
 
                 return (new SiteServerController($request))->serveResourceFile(
-                    $request,
-                    $cachedResource->file_name,
-                    $flFile->mime_type ?? 'text/html',
-                    $site_id,
-                    $domain,
-                    $cachedResource->sha256,
-                    $siteConfig,
+                    request: $request,
+                    fileName: $cachedResource->file_name,
+                    mime_type: $flFile->mime_type ?? 'text/html',
+                    site_id: $site_id,
+                    domain: $domain,
+                    etag: $cachedResource->sha256,
+                    siteConfig: $siteConfig,
                     debug_data: 'Retrieved from IPFS',
+                    isVisitors: false,
+                    originalFileName: $res_id
                 );
             }
         }
@@ -401,14 +408,16 @@ class SiteServerController extends Controller
             $cachedResource->save();
 
             return (new SiteServerController($request))->serveResourceFile(
-                $request,
-                $cachedResource->file_name,
-                $flFile->mime_type ?? 'text/html',
-                $site_id,
-                $domain,
-                $cachedResource->sha256,
-                $siteConfig,
+                request: $request,
+                fileName: $cachedResource->file_name,
+                mime_type: $flFile->mime_type ?? 'text/html',
+                site_id: $site_id,
+                domain: $domain,
+                etag: $cachedResource->sha256,
+                siteConfig: $siteConfig,
                 debug_data: 'Retrieved from Peers',
+                isVisitors: false,
+                originalFileName: $res_id
             );
         }
     }
@@ -550,7 +559,9 @@ class SiteServerController extends Controller
         }
     }
 
-    public function serveResourceFile($request, $fileName, $mime_type, $site_id, $domain, $etag, $siteConfig, $debug_data = null)
+    public function serveResourceFile(
+        $request, $fileName, $mime_type, $site_id, $domain, $etag, 
+        $siteConfig, $debug_data = null, $isVisitors, $originalFileName)
     {
         if (! Storage::disk('cached_resources')->exists($fileName)) {
             $message = 'Resource file not found. Client Error. Perform resource maintenance.';
@@ -560,7 +571,14 @@ class SiteServerController extends Controller
         }
 
         $headersInitial = [];
-        $headersInitial['Content-Type'] = $mime_type;
+        if ($isVisitors) {
+            $resolver = new ContentTypeResolver();
+            $contentType = $resolver->resolve(Storage::disk('cached_resources')->path($fileName), $originalFileName);
+            $headersInitial['Content-Type'] = $contentType;
+        } else {
+            $headersInitial['Content-Type'] = $mime_type;
+        }
+
         $headersInitial['etag'] = $etag;
         if (! is_string($debug_data)) {
             $debug_data = json_encode($debug_data);

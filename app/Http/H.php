@@ -1130,8 +1130,8 @@ class H
             $url = Url::fromString($uiAddress);
             $domain = Domain::fromIDNA2008($url->getHost());
             $result = $topLevelDomains->resolve($domain);
-
             $isPublicHost = $result->suffix()->isIANA();
+            
             if ($isPublicHost && ! Str::endsWith($url->getHost(), 'dns2local.ovh')) {
                 array_push($addressesPublishableAsSitePeer, $uiAddress);
             }

@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Site Developer Api Documentation for Serveronet",
-        "_postman_id": "321f04ec-951f-48dd-b411-69baaab56773",
+        "_postman_id": "245e0fac-249d-44d0-a393-a17937393760",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -510,6 +510,187 @@
                             "header": [],
                             "code": 200,
                             "body": "{\n   \"success\": true,\n   \"data\": [\n      {\n          \"can_upload_files\": \"true\",\n      }\n    ]\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Api Token Endpoints",
+            "description": "",
+            "item": [
+                {
+                    "name": "Visitor Record Create (API Token)",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "site_api\/v1\/api_token_visitor_record_create",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/site_api\/v1\/api_token_visitor_record_create"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"api_token\":\"your_visitor_api_token\",\"_sn_record_json\":\"{\\\"title\\\":\\\"My title\\\", \\\"_sn_table\\\":\\\"posts\\\"}\"}"
+                        },
+                        "description": "See regular Upsert Endpoint for details"
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"success\": true,\n   \"data\": [\n      {\n          \"entity_id\": \"2026...\",\n      }\n    ]\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Visitor File Upload (API Token)",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "site_api\/v1\/api_token_visitor_file_upload",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/site_api\/v1\/api_token_visitor_file_upload"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "undefined"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"api_token\":\"your_visitor_api_token\",\"data\":\"formData\"}"
+                        },
+                        "description": "See regular Endpoint for details"
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\"success\":true,\"data\": {\"id\":\"new_id\"},...",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Site API Query Endpoint (API Token)",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "site_api\/v1\/api_query_endpoint",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/site_api\/v1\/api_query_endpoint"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"api_token\":\"your_visitor_api_token\",\"query_parameters\":\"Json body of query parameters - {\\\"table\\\":\\\"posts\\\",\\\"where\\\":[[\\\"title\\\",\\\"!=\\\",\\\"excluded_title\\\"]]}\"}"
+                        },
+                        "description": "This API needs to be enabled before use\nSee regular Query Endpoint for details"
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"success\": true,\n   \"data\": [\n     {\"body\":\"Post body\"}\n    ]\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Is Authenticated API (API Token)",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "site_api\/v1\/api_is_authenticated",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/site_api\/v1\/api_is_authenticated"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"api_token\":\"your_visitor_api_token\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"success\": true,\n   \"data\": {\n       \"is_authenticated\": true,\n       \"visitor_id\": \"1abc\"\n   }\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Visitor Record Update (API Token)",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "site_api\/v1\/api_token_visitor_record_update",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/site_api\/v1\/api_token_visitor_record_update"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"api_token\":\"your_visitor_api_token\",\"_sn_record_json\":\"{\\\"title\\\":\\\"My title\\\", \\\"_sn_table\\\":\\\"posts\\\"}\"}"
+                        },
+                        "description": "See regular Update Endpoint for details"
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n   \"success\": true,\n   \"data\": [\n      {\n          \"entity_id\": \"2026...\",\n      }\n    ]\n}",
                             "name": ""
                         }
                     ]

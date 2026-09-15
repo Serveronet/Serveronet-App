@@ -145,6 +145,28 @@
                             </li>
                                                                         </ul>
                             </ul>
+                    <ul id="tocify-header-api-token-endpoints" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="api-token-endpoints">
+                    <a href="#api-token-endpoints">Api Token Endpoints</a>
+                </li>
+                                    <ul id="tocify-subheader-api-token-endpoints" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="api-token-endpoints-POSTsite_api-v1-api_token_visitor_record_create">
+                                <a href="#api-token-endpoints-POSTsite_api-v1-api_token_visitor_record_create">Visitor Record Create (API Token)</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="api-token-endpoints-POSTsite_api-v1-api_token_visitor_file_upload">
+                                <a href="#api-token-endpoints-POSTsite_api-v1-api_token_visitor_file_upload">Visitor File Upload (API Token)</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="api-token-endpoints-POSTsite_api-v1-api_query_endpoint">
+                                <a href="#api-token-endpoints-POSTsite_api-v1-api_query_endpoint">Site API Query Endpoint (API Token)</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="api-token-endpoints-POSTsite_api-v1-api_is_authenticated">
+                                <a href="#api-token-endpoints-POSTsite_api-v1-api_is_authenticated">Is Authenticated API (API Token)</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="api-token-endpoints-POSTsite_api-v1-api_token_visitor_record_update">
+                                <a href="#api-token-endpoints-POSTsite_api-v1-api_token_visitor_record_update">Visitor Record Update (API Token)</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
                     <ul id="tocify-header-endpoints" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="endpoints">
                     <a href="#endpoints">Endpoints</a>
@@ -164,7 +186,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: September 11, 2026</li>
+        <li>Last updated: September 12, 2026</li>
     </ul>
 </div>
 
@@ -2515,6 +2537,982 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Example: <code>application/json</code></p>
             </div>
                         </form>
+
+                <h1 id="api-token-endpoints">Api Token Endpoints</h1>
+
+    
+
+                                <h2 id="api-token-endpoints-POSTsite_api-v1-api_token_visitor_record_create">Visitor Record Create (API Token)</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>See regular Upsert Endpoint for details</p>
+
+<span id="example-requests-POSTsite_api-v1-api_token_visitor_record_create">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://site_id.snet.localhost:15080/site_api/v1/api_token_visitor_record_create" \
+    --header "Accept: application/json" \
+    --header "Content-Type: application/json" \
+    --data "{
+    \"api_token\": \"your_visitor_api_token\",
+    \"_sn_record_json\": \"{\\\"title\\\":\\\"My title\\\", \\\"_sn_table\\\":\\\"posts\\\"}\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://site_id.snet.localhost:15080/site_api/v1/api_token_visitor_record_create"
+);
+
+const headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+};
+
+let body = {
+    "api_token": "your_visitor_api_token",
+    "_sn_record_json": "{\"title\":\"My title\", \"_sn_table\":\"posts\"}"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://site_id.snet.localhost:15080/site_api/v1/api_token_visitor_record_create'
+payload = {
+    "api_token": "your_visitor_api_token",
+    "_sn_record_json": "{\"title\":\"My title\", \"_sn_table\":\"posts\"}"
+}
+headers = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'http://site_id.snet.localhost:15080/site_api/v1/api_token_visitor_record_create';
+$response = $client-&gt;post(
+    $url,
+    [
+        'headers' =&gt; [
+            'Accept' =&gt; 'application/json',
+            'Content-Type' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'api_token' =&gt; 'your_visitor_api_token',
+            '_sn_record_json' =&gt; '{"title":"My title", "_sn_table":"posts"}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTsite_api-v1-api_token_visitor_record_create">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+   &quot;success&quot;: true,
+   &quot;data&quot;: [
+      {
+          &quot;entity_id&quot;: &quot;2026...&quot;,
+      }
+    ]
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTsite_api-v1-api_token_visitor_record_create" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTsite_api-v1-api_token_visitor_record_create"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTsite_api-v1-api_token_visitor_record_create"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTsite_api-v1-api_token_visitor_record_create" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTsite_api-v1-api_token_visitor_record_create">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTsite_api-v1-api_token_visitor_record_create" data-method="POST"
+      data-path="site_api/v1/api_token_visitor_record_create"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTsite_api-v1-api_token_visitor_record_create', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTsite_api-v1-api_token_visitor_record_create"
+                    onclick="tryItOut('POSTsite_api-v1-api_token_visitor_record_create');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTsite_api-v1-api_token_visitor_record_create"
+                    onclick="cancelTryOut('POSTsite_api-v1-api_token_visitor_record_create');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTsite_api-v1-api_token_visitor_record_create"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>site_api/v1/api_token_visitor_record_create</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTsite_api-v1-api_token_visitor_record_create"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTsite_api-v1-api_token_visitor_record_create"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>api_token</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="api_token"                data-endpoint="POSTsite_api-v1-api_token_visitor_record_create"
+               value="your_visitor_api_token"
+               data-component="body">
+    <br>
+<p>Example: <code>your_visitor_api_token</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>_sn_record_json</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="_sn_record_json"                data-endpoint="POSTsite_api-v1-api_token_visitor_record_create"
+               value="{"title":"My title", "_sn_table":"posts"}"
+               data-component="body">
+    <br>
+<p>Example: <code>{"title":"My title", "_sn_table":"posts"}</code></p>
+        </div>
+        </form>
+
+                    <h2 id="api-token-endpoints-POSTsite_api-v1-api_token_visitor_file_upload">Visitor File Upload (API Token)</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>See regular Endpoint for details</p>
+
+<span id="example-requests-POSTsite_api-v1-api_token_visitor_file_upload">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://site_id.snet.localhost:15080/site_api/v1/api_token_visitor_file_upload" \
+    --header "Accept: application/json" \
+    --header "Content-Type: undefined" \
+    --data "{
+    \"api_token\": \"your_visitor_api_token\",
+    \"data\": \"formData\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://site_id.snet.localhost:15080/site_api/v1/api_token_visitor_file_upload"
+);
+
+const headers = {
+    "Accept": "application/json",
+    "Content-Type": "undefined",
+};
+
+let body = {
+    "api_token": "your_visitor_api_token",
+    "data": "formData"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://site_id.snet.localhost:15080/site_api/v1/api_token_visitor_file_upload'
+payload = {
+    "api_token": "your_visitor_api_token",
+    "data": "formData"
+}
+headers = {
+  'Accept': 'application/json',
+  'Content-Type': 'undefined'
+}
+
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'http://site_id.snet.localhost:15080/site_api/v1/api_token_visitor_file_upload';
+$response = $client-&gt;post(
+    $url,
+    [
+        'headers' =&gt; [
+            'Accept' =&gt; 'application/json',
+            'Content-Type' =&gt; 'undefined',
+        ],
+        'json' =&gt; [
+            'api_token' =&gt; 'your_visitor_api_token',
+            'data' =&gt; 'formData',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTsite_api-v1-api_token_visitor_file_upload">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{&quot;success&quot;:true,&quot;data&quot;: {&quot;id&quot;:&quot;new_id&quot;},...</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTsite_api-v1-api_token_visitor_file_upload" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTsite_api-v1-api_token_visitor_file_upload"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTsite_api-v1-api_token_visitor_file_upload"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTsite_api-v1-api_token_visitor_file_upload" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTsite_api-v1-api_token_visitor_file_upload">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTsite_api-v1-api_token_visitor_file_upload" data-method="POST"
+      data-path="site_api/v1/api_token_visitor_file_upload"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTsite_api-v1-api_token_visitor_file_upload', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTsite_api-v1-api_token_visitor_file_upload"
+                    onclick="tryItOut('POSTsite_api-v1-api_token_visitor_file_upload');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTsite_api-v1-api_token_visitor_file_upload"
+                    onclick="cancelTryOut('POSTsite_api-v1-api_token_visitor_file_upload');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTsite_api-v1-api_token_visitor_file_upload"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>site_api/v1/api_token_visitor_file_upload</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTsite_api-v1-api_token_visitor_file_upload"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTsite_api-v1-api_token_visitor_file_upload"
+               value="undefined"
+               data-component="header">
+    <br>
+<p>Example: <code>undefined</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>api_token</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="api_token"                data-endpoint="POSTsite_api-v1-api_token_visitor_file_upload"
+               value="your_visitor_api_token"
+               data-component="body">
+    <br>
+<p>Example: <code>your_visitor_api_token</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>data</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="data"                data-endpoint="POSTsite_api-v1-api_token_visitor_file_upload"
+               value="formData"
+               data-component="body">
+    <br>
+<p>Example: <code>formData</code></p>
+        </div>
+        </form>
+
+                    <h2 id="api-token-endpoints-POSTsite_api-v1-api_query_endpoint">Site API Query Endpoint (API Token)</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>This API needs to be enabled before use
+See regular Query Endpoint for details</p>
+
+<span id="example-requests-POSTsite_api-v1-api_query_endpoint">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://site_id.snet.localhost:15080/site_api/v1/api_query_endpoint" \
+    --header "Accept: application/json" \
+    --header "Content-Type: application/json" \
+    --data "{
+    \"api_token\": \"your_visitor_api_token\",
+    \"query_parameters\": \"Json body of query parameters - {\\\"table\\\":\\\"posts\\\",\\\"where\\\":[[\\\"title\\\",\\\"!=\\\",\\\"excluded_title\\\"]]}\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://site_id.snet.localhost:15080/site_api/v1/api_query_endpoint"
+);
+
+const headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+};
+
+let body = {
+    "api_token": "your_visitor_api_token",
+    "query_parameters": "Json body of query parameters - {\"table\":\"posts\",\"where\":[[\"title\",\"!=\",\"excluded_title\"]]}"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://site_id.snet.localhost:15080/site_api/v1/api_query_endpoint'
+payload = {
+    "api_token": "your_visitor_api_token",
+    "query_parameters": "Json body of query parameters - {\"table\":\"posts\",\"where\":[[\"title\",\"!=\",\"excluded_title\"]]}"
+}
+headers = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'http://site_id.snet.localhost:15080/site_api/v1/api_query_endpoint';
+$response = $client-&gt;post(
+    $url,
+    [
+        'headers' =&gt; [
+            'Accept' =&gt; 'application/json',
+            'Content-Type' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'api_token' =&gt; 'your_visitor_api_token',
+            'query_parameters' =&gt; 'Json body of query parameters - {"table":"posts","where":[["title","!=","excluded_title"]]}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTsite_api-v1-api_query_endpoint">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: true,
+    &quot;data&quot;: [
+        {
+            &quot;body&quot;: &quot;Post body&quot;
+        }
+    ]
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTsite_api-v1-api_query_endpoint" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTsite_api-v1-api_query_endpoint"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTsite_api-v1-api_query_endpoint"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTsite_api-v1-api_query_endpoint" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTsite_api-v1-api_query_endpoint">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTsite_api-v1-api_query_endpoint" data-method="POST"
+      data-path="site_api/v1/api_query_endpoint"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTsite_api-v1-api_query_endpoint', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTsite_api-v1-api_query_endpoint"
+                    onclick="tryItOut('POSTsite_api-v1-api_query_endpoint');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTsite_api-v1-api_query_endpoint"
+                    onclick="cancelTryOut('POSTsite_api-v1-api_query_endpoint');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTsite_api-v1-api_query_endpoint"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>site_api/v1/api_query_endpoint</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTsite_api-v1-api_query_endpoint"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTsite_api-v1-api_query_endpoint"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>api_token</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="api_token"                data-endpoint="POSTsite_api-v1-api_query_endpoint"
+               value="your_visitor_api_token"
+               data-component="body">
+    <br>
+<p>Example: <code>your_visitor_api_token</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>query_parameters</code></b>&nbsp;&nbsp;
+<small>json</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="query_parameters"                data-endpoint="POSTsite_api-v1-api_query_endpoint"
+               value="Json body of query parameters - {"table":"posts","where":[["title","!=","excluded_title"]]}"
+               data-component="body">
+    <br>
+<p>Example: <code>Json body of query parameters - {"table":"posts","where":[["title","!=","excluded_title"]]}</code></p>
+        </div>
+        </form>
+
+                    <h2 id="api-token-endpoints-POSTsite_api-v1-api_is_authenticated">Is Authenticated API (API Token)</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+
+
+<span id="example-requests-POSTsite_api-v1-api_is_authenticated">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://site_id.snet.localhost:15080/site_api/v1/api_is_authenticated" \
+    --header "Accept: application/json" \
+    --header "Content-Type: application/json" \
+    --data "{
+    \"api_token\": \"your_visitor_api_token\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://site_id.snet.localhost:15080/site_api/v1/api_is_authenticated"
+);
+
+const headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+};
+
+let body = {
+    "api_token": "your_visitor_api_token"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://site_id.snet.localhost:15080/site_api/v1/api_is_authenticated'
+payload = {
+    "api_token": "your_visitor_api_token"
+}
+headers = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'http://site_id.snet.localhost:15080/site_api/v1/api_is_authenticated';
+$response = $client-&gt;post(
+    $url,
+    [
+        'headers' =&gt; [
+            'Accept' =&gt; 'application/json',
+            'Content-Type' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'api_token' =&gt; 'your_visitor_api_token',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTsite_api-v1-api_is_authenticated">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: true,
+    &quot;data&quot;: {
+        &quot;is_authenticated&quot;: true,
+        &quot;visitor_id&quot;: &quot;1abc&quot;
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTsite_api-v1-api_is_authenticated" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTsite_api-v1-api_is_authenticated"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTsite_api-v1-api_is_authenticated"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTsite_api-v1-api_is_authenticated" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTsite_api-v1-api_is_authenticated">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTsite_api-v1-api_is_authenticated" data-method="POST"
+      data-path="site_api/v1/api_is_authenticated"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTsite_api-v1-api_is_authenticated', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTsite_api-v1-api_is_authenticated"
+                    onclick="tryItOut('POSTsite_api-v1-api_is_authenticated');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTsite_api-v1-api_is_authenticated"
+                    onclick="cancelTryOut('POSTsite_api-v1-api_is_authenticated');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTsite_api-v1-api_is_authenticated"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>site_api/v1/api_is_authenticated</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTsite_api-v1-api_is_authenticated"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTsite_api-v1-api_is_authenticated"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>api_token</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="api_token"                data-endpoint="POSTsite_api-v1-api_is_authenticated"
+               value="your_visitor_api_token"
+               data-component="body">
+    <br>
+<p>Example: <code>your_visitor_api_token</code></p>
+        </div>
+        </form>
+
+                    <h2 id="api-token-endpoints-POSTsite_api-v1-api_token_visitor_record_update">Visitor Record Update (API Token)</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>See regular Update Endpoint for details</p>
+
+<span id="example-requests-POSTsite_api-v1-api_token_visitor_record_update">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://site_id.snet.localhost:15080/site_api/v1/api_token_visitor_record_update" \
+    --header "Accept: application/json" \
+    --header "Content-Type: application/json" \
+    --data "{
+    \"api_token\": \"your_visitor_api_token\",
+    \"_sn_record_json\": \"{\\\"title\\\":\\\"My title\\\", \\\"_sn_table\\\":\\\"posts\\\"}\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://site_id.snet.localhost:15080/site_api/v1/api_token_visitor_record_update"
+);
+
+const headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+};
+
+let body = {
+    "api_token": "your_visitor_api_token",
+    "_sn_record_json": "{\"title\":\"My title\", \"_sn_table\":\"posts\"}"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'http://site_id.snet.localhost:15080/site_api/v1/api_token_visitor_record_update'
+payload = {
+    "api_token": "your_visitor_api_token",
+    "_sn_record_json": "{\"title\":\"My title\", \"_sn_table\":\"posts\"}"
+}
+headers = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$url = 'http://site_id.snet.localhost:15080/site_api/v1/api_token_visitor_record_update';
+$response = $client-&gt;post(
+    $url,
+    [
+        'headers' =&gt; [
+            'Accept' =&gt; 'application/json',
+            'Content-Type' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'api_token' =&gt; 'your_visitor_api_token',
+            '_sn_record_json' =&gt; '{"title":"My title", "_sn_table":"posts"}',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTsite_api-v1-api_token_visitor_record_update">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+   &quot;success&quot;: true,
+   &quot;data&quot;: [
+      {
+          &quot;entity_id&quot;: &quot;2026...&quot;,
+      }
+    ]
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTsite_api-v1-api_token_visitor_record_update" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTsite_api-v1-api_token_visitor_record_update"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTsite_api-v1-api_token_visitor_record_update"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTsite_api-v1-api_token_visitor_record_update" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTsite_api-v1-api_token_visitor_record_update">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTsite_api-v1-api_token_visitor_record_update" data-method="POST"
+      data-path="site_api/v1/api_token_visitor_record_update"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTsite_api-v1-api_token_visitor_record_update', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTsite_api-v1-api_token_visitor_record_update"
+                    onclick="tryItOut('POSTsite_api-v1-api_token_visitor_record_update');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTsite_api-v1-api_token_visitor_record_update"
+                    onclick="cancelTryOut('POSTsite_api-v1-api_token_visitor_record_update');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTsite_api-v1-api_token_visitor_record_update"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>site_api/v1/api_token_visitor_record_update</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTsite_api-v1-api_token_visitor_record_update"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTsite_api-v1-api_token_visitor_record_update"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>api_token</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="api_token"                data-endpoint="POSTsite_api-v1-api_token_visitor_record_update"
+               value="your_visitor_api_token"
+               data-component="body">
+    <br>
+<p>Example: <code>your_visitor_api_token</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>_sn_record_json</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="_sn_record_json"                data-endpoint="POSTsite_api-v1-api_token_visitor_record_update"
+               value="{"title":"My title", "_sn_table":"posts"}"
+               data-component="body">
+    <br>
+<p>Example: <code>{"title":"My title", "_sn_table":"posts"}</code></p>
+        </div>
+        </form>
 
                 <h1 id="endpoints">Endpoints</h1>
 

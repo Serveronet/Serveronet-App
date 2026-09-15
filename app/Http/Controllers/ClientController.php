@@ -41,6 +41,9 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use stdClass;
 use Throwable;
+use Pdp\Domain;
+use Pdp\TopLevelDomains;
+use Spatie\Url\Url;
 
 class ClientController extends Controller
 {
@@ -1084,6 +1087,7 @@ class ClientController extends Controller
             $decodedBody = json_decode($body);
             $success = $decodedBody->success;
             $data = $decodedBody->data;
+            
 
 
             if ($do_inbound_connectivity_check) {
@@ -1099,6 +1103,8 @@ class ClientController extends Controller
                 } else {
                     $peer->last_inbound_connected_at = null;
                     $rc->data['inbound_connectivity_successful'] = false;
+                    $rc->debug_data = $data;
+                    
                 }
 
                 if (! $is_transient) {
@@ -1108,7 +1114,7 @@ class ClientController extends Controller
             }
         } catch (Throwable $th) {
             $rc->error_message = $th->getMessage();
-
+            
             return $rc;
         }
 
@@ -1180,16 +1186,45 @@ class ClientController extends Controller
         }
 
         if ($do_inbound_connectivity_check) {
+            $checkAllowed = false;
             if ($request->requestor_external_address) {
                 $client_address = H::a($request->requestor_external_address);
-                $peer = new Peer;
-                $peer->client_address = $client_address;
+                $requestorUrl = Url::fromString($client_address);
+                $declaredHost = $requestorUrl->getHost();
+                // $remoteHost = request()->getHost();
+                $hostIsIp = filter_var($declaredHost, FILTER_VALIDATE_IP);
+                if ($hostIsIp) {
+                    if ($declaredHost === request()->ip() && H::checkIpIsPublic($client_address)) {
+                        $checkAllowed = true;
+                    }
+                } else {
+                    $isValidDomain = filter_var($declaredHost, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME);
+                    if ($isValidDomain) {
 
-                $checkRC = (new ClientController)->checkPeerConnectivity(peer: $peer,
-                    connect_timeout: 5, is_transient: true);
-                info('$checkRC');
-                info(json_encode($checkRC));
+                        $topLevelDomains = TopLevelDomains::fromPath(resource_path('tlds-alpha-by-domain.txt'));
+                        $domain = Domain::fromIDNA2008($declaredHost);
+                        $result = $topLevelDomains->resolve($domain);
+                        $isPublicHost = $result->suffix()->isIANA();
+                        $ipForDeclaredHost = H::obtainIpForUrl($declaredHost);
+                        if ($isPublicHost && $ipForDeclaredHost === request()->ip())
+                        $checkAllowed = true;
+                    }
+                }
 
+                if ($checkAllowed) {
+                    $peer = new Peer;
+                    $peer->client_address = $client_address;
+
+                    $checkRC = (new ClientController)->checkPeerConnectivity(peer: $peer,
+                        connect_timeout: 5, is_transient: true);
+                    info('$checkRC');
+                    info(json_encode($checkRC));
+                } else {
+                    return $this->return_success([
+                        'result' => KnownResponses::validation_failed,
+                        'error_message' => 'Returning connectivity check not allowed for the url.',
+                    ]);
+                }
             }
         }
 

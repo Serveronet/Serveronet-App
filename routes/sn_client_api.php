@@ -67,7 +67,7 @@ Route::post('p2p_api/v1/p2p_visitor_files', [BackendController::class, 'getSiteV
     ->middleware('throttle:medium_rate');
     
 Route::post('p2p_api/v1/handle_passive_client_initiating_session', [ActiveClientController::class, 'handlePassiveClientInitiatingSession'])
-    ->middleware('throttle:medium_rate');
+    ->middleware('throttle:low_rate');
 
 Route::post('p2p_api/v1/handle_passive_awaiting_requests', [ActiveClientController::class, 'handlePassiveAwaitingRequests'])
     ->middleware('throttle:medium_rate');

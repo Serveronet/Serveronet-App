@@ -14,6 +14,9 @@ tags:
     name: 'Records and Resources'
     description: ''
   -
+    name: 'Api Token Endpoints'
+    description: ''
+  -
     name: Endpoints
     description: ''
 paths:
@@ -431,6 +434,207 @@ paths:
                 example: "{\n   \"success\": true,\n   \"data\": [\n      {\n          \"can_upload_files\": \"true\",\n      }\n    ]\n}"
       tags:
         - 'Records and Resources'
+  /site_api/v1/api_token_visitor_record_create:
+    post:
+      summary: 'Visitor Record Create (API Token)'
+      operationId: visitorRecordCreateAPIToken
+      description: 'See regular Upsert Endpoint for details'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n   \"success\": true,\n   \"data\": [\n      {\n          \"entity_id\": \"2026...\",\n      }\n    ]\n}"
+      tags:
+        - 'Api Token Endpoints'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                api_token:
+                  type: string
+                  description: ''
+                  example: your_visitor_api_token
+                _sn_record_json:
+                  type: string
+                  description: ''
+                  example: '{"title":"My title", "_sn_table":"posts"}'
+              required:
+                - api_token
+                - _sn_record_json
+  /site_api/v1/api_token_visitor_file_upload:
+    post:
+      summary: 'Visitor File Upload (API Token)'
+      operationId: visitorFileUploadAPIToken
+      description: 'See regular Endpoint for details'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: '{"success":true,"data": {"id":"new_id"},...'
+      tags:
+        - 'Api Token Endpoints'
+      requestBody:
+        required: true
+        content:
+          undefined:
+            schema:
+              type: object
+              properties:
+                api_token:
+                  type: string
+                  description: ''
+                  example: your_visitor_api_token
+                data:
+                  type: string
+                  description: ''
+                  example: formData
+              required:
+                - api_token
+                - data
+  /site_api/v1/api_query_endpoint:
+    post:
+      summary: 'Site API Query Endpoint (API Token)'
+      operationId: siteAPIQueryEndpointAPIToken
+      description: "This API needs to be enabled before use\nSee regular Query Endpoint for details"
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: true
+                  data:
+                    -
+                      body: 'Post body'
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    example:
+                      -
+                        body: 'Post body'
+                    items:
+                      type: object
+                      properties:
+                        body:
+                          type: string
+                          example: 'Post body'
+      tags:
+        - 'Api Token Endpoints'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                api_token:
+                  type: string
+                  description: ''
+                  example: your_visitor_api_token
+                query_parameters:
+                  type: json
+                  description: ''
+                  example: 'Json body of query parameters - {"table":"posts","where":[["title","!=","excluded_title"]]}'
+              required:
+                - api_token
+                - query_parameters
+  /site_api/v1/api_is_authenticated:
+    post:
+      summary: 'Is Authenticated API (API Token)'
+      operationId: isAuthenticatedAPIAPIToken
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  success: true
+                  data:
+                    is_authenticated: true
+                    visitor_id: 1abc
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      is_authenticated:
+                        type: boolean
+                        example: true
+                      visitor_id:
+                        type: string
+                        example: 1abc
+      tags:
+        - 'Api Token Endpoints'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                api_token:
+                  type: string
+                  description: ''
+                  example: your_visitor_api_token
+              required:
+                - api_token
+  /site_api/v1/api_token_visitor_record_update:
+    post:
+      summary: 'Visitor Record Update (API Token)'
+      operationId: visitorRecordUpdateAPIToken
+      description: 'See regular Update Endpoint for details'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "{\n   \"success\": true,\n   \"data\": [\n      {\n          \"entity_id\": \"2026...\",\n      }\n    ]\n}"
+      tags:
+        - 'Api Token Endpoints'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                api_token:
+                  type: string
+                  description: ''
+                  example: your_visitor_api_token
+                _sn_record_json:
+                  type: string
+                  description: ''
+                  example: '{"title":"My title", "_sn_table":"posts"}'
+              required:
+                - api_token
+                - _sn_record_json
   /site_api/v1/sse_stream:
     get:
       summary: ''
