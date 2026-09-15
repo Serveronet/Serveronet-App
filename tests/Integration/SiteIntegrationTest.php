@@ -154,7 +154,7 @@ test('Query records on Leech Node', function () {
 
 })->group('Integration');
 
-test('Login as Site Admin and post a grant record', function () use ($devActors) {
+test('Login as Site Admin on Leech and post a grant record', function () use ($devActors) {
     dump('Test Name: '.$this->name());
 
     $page = visit("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19083/login");

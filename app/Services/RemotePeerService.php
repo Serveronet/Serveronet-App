@@ -136,7 +136,7 @@ class RemotePeerService extends Controller
             $debug_data['Delay Reached'] = $delayReached.' '.($delays[$delayReached]['delay'] ?? '');
 
             $crowdQueryResultsCount = CrowdQueryResult::where('query_id', $query_id)->count();
-            info($d['delay'].' $crowdQueryResultsCount: '.$crowdQueryResultsCount);
+            info('Delay: '.$d['delay'].' | $crowdQueryResultsCount: '.$crowdQueryResultsCount);
             if ($crowdQueryResultsCount == 0) {
                 usleep($d['delay']);
 

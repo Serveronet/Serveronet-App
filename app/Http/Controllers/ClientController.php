@@ -889,20 +889,15 @@ class ClientController extends Controller
         $justification_signer_verification_key_base64 = $request->justification_signer_verification_key_base64;
 
         try {
-            $incmmingRecordEnvelope = new stdClass;
-            $incmmingRecordEnvelope->record_json = $justification_record_json;
-            $incmmingRecordEnvelope->signature = $justification_signature;
-            $incmmingRecordEnvelope->signer_verification_key_base64 = $justification_signer_verification_key_base64;
-            $recordEnvelope = new SiteDefinitionEnvelope($incmmingRecordEnvelope);
+            $incommingRecordEnvelope = new stdClass;
+            $incommingRecordEnvelope->record_json = $justification_record_json;
+            $incommingRecordEnvelope->signature = $justification_signature;
+            $incommingRecordEnvelope->signer_verification_key_base64 = $justification_signer_verification_key_base64;
+            $recordEnvelope = new SiteDefinitionEnvelope($incommingRecordEnvelope);
 
         } catch (Throwable $th) {
             info('Malformed envelope received - ignoring. '.$th->getMessage());
 
-            return $this->return_failure('Check not justified');
-        }
-
-        $isJustified = self::isJustified(DataTypes::site_definitions, $recordEnvelope);
-        if (! $isJustified) {
             return $this->return_failure('Check not justified');
         }
 
@@ -912,14 +907,22 @@ class ClientController extends Controller
 
         $notHostedHashes = array_diff($hashes, $hostedHashes);
 
-        info('$notHostedHashes');
-        info(json_encode($notHostedHashes));
+        $notHostedJustifiedHashes = [];
 
-        if (count($notHostedHashes) == 0) {
-            $notHostedHashes = [];
+        foreach ($notHostedHashes as $key => $notHostedHash) {
+            $hashIsJustified = self::isJustified(DataTypes::site_definitions, $recordEnvelope, $notHostedHash);
+            if ($hashIsJustified)
+            array_push($notHostedJustifiedHashes, $notHostedHash);
         }
 
-        return $this->return_success($notHostedHashes);
+        info('$notHostedJustifiedHashes');
+        info(json_encode($notHostedJustifiedHashes));
+
+        if (count($notHostedJustifiedHashes) == 0) {
+            $notHostedJustifiedHashes = [];
+        }
+
+        return $this->return_success($notHostedJustifiedHashes);
     }
 
     public function handleSiteHostingStateCheck(Request $request)
@@ -987,11 +990,11 @@ class ClientController extends Controller
         $justification_signer_verification_key_base64 = $request->justification_signer_verification_key_base64;
 
         try {
-            $incmmingRecordEnvelope = new stdClass;
-            $incmmingRecordEnvelope->record_json = $justification_record_json;
-            $incmmingRecordEnvelope->signature = $justification_signature;
-            $incmmingRecordEnvelope->signer_verification_key_base64 = $justification_signer_verification_key_base64;
-            $recordEnvelope = new SiteDefinitionEnvelope($incmmingRecordEnvelope);
+            $incommingRecordEnvelope = new stdClass;
+            $incommingRecordEnvelope->record_json = $justification_record_json;
+            $incommingRecordEnvelope->signature = $justification_signature;
+            $incommingRecordEnvelope->signer_verification_key_base64 = $justification_signer_verification_key_base64;
+            $recordEnvelope = new SiteDefinitionEnvelope($incommingRecordEnvelope);
 
         } catch (Throwable $th) {
             info('Malformed envelope received - ignoring. '.$th->getMessage());
@@ -999,7 +1002,7 @@ class ClientController extends Controller
             return $this->return_failure('Check not justified');
         }
 
-        $isJustified = self::isJustified($justification_context, $recordEnvelope);
+        $isJustified = self::isJustified($justification_context, $recordEnvelope, $sha256);
         if (! $isJustified) {
             return $this->return_failure('Upload not justified');
         }
@@ -1358,7 +1361,7 @@ class ClientController extends Controller
      * - Is record consistent
      * - Is of the to be hosted site
      */
-    protected static function isJustified($justification_context, $incomingRecordEnvelope): bool
+    protected static function isJustified($justification_context, $incomingRecordEnvelope, $sha256): bool
     {
         $justification_record_json = $incomingRecordEnvelope->record_json;
         $incomingRecord = json_decode($justification_record_json);
@@ -1390,6 +1393,17 @@ class ClientController extends Controller
                 if (! $isRecordConsistent) {
                     return false;
                 }
+
+                $files = json_decode(json_decode($incomingRecordEnvelope->record_json)->file_listing_json);
+                foreach ($files as $key => $file) {
+                    $chunks = json_decode($file->chunks_json);
+                    foreach ($chunks as $key => $chunk) {
+                        if ($sha256 === $chunk->sha256)
+                            return true;
+                    }
+                }
+                return false;
+
                 break;
 
             case DataTypes::visitor_resources:
@@ -1411,6 +1425,15 @@ class ClientController extends Controller
                 if (! $isRecordConsistent) {
                     return false;
                 }
+                
+                $chunks = json_decode(json_decode($incomingRecordEnvelope->chunks));
+                foreach ($chunks as $key => $chunk) {
+                    if ($sha256 === $chunk->sha256)
+                        return true;
+                }
+                
+                return false;
+
                 break;
 
             default:

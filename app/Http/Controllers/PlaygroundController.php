@@ -9,6 +9,7 @@ use App\Http\Controllers\PortForwardController;
 use App\Http\H;
 use App\Models\Peer;
 use App\Models\ServeronetVersion;
+use App\Models\SiteDefinition;
 use App\Models\VisitorResource;
 use App\Services\PQCryptoService;
 use App\Services\SiteDatabaseService;
