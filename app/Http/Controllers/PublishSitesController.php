@@ -17,6 +17,7 @@ use App\Models\Site;
 use App\Models\SiteDefinition;
 use App\Models\VisitorResource;
 use App\Services\ChunkService;
+use App\Services\InternalCallService;
 use App\Services\IPFSService;
 use App\Services\PeerMixService;
 use App\Services\PQCryptoService;
@@ -413,7 +414,7 @@ class PublishSitesController extends Controller
         if (H::isDevNode()) {
             $closure();
         } else {
-            H::dispatchInternalAsyncClosureWrapper($closure);
+            InternalCallService::dispatchInternalAsyncClosureWrapper($closure);
         }
 
         H::pfm('Site publishing continues in background.');

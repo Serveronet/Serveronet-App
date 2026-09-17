@@ -20,6 +20,7 @@ use App\Models\SitePeer;
 use App\Models\Tracker;
 use App\Models\Visitor;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
@@ -27,6 +28,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AdminUiService extends Controller
 {
@@ -180,8 +182,13 @@ class AdminUiService extends Controller
         $url = $internalTestAddress;
         $client = H::setupClient(H::isTorAddress($url));
         $requestConfigSet = [];
+
         $requestConfigSet['empty_payload'] = 'empty_payload';
         $requestConfigSet['ts'] = now()->toDateTimeString();
+
+        $internalClosureExecutionId = Str::random(40);
+        Cache::put(CachePrefixes::internal_closure_.$internalClosureExecutionId, "", 10);
+        $requestConfigSet['internalClosureExecutionId'] = $internalClosureExecutionId;
 
         try {
             $options = [
@@ -192,11 +199,16 @@ class AdminUiService extends Controller
             $response = $client->post($url, $options);
     
             $response = json_decode((string) $response->getBody());
+
+            if (! $response->success) {
+                throw new Exception($response->message);
+            }
+
             $ts = Carbon::parse($response->data->ts); 
             $success = $response->success == true && $ts < now() && $ts->diffInMinutes(now()) < 2;
             $resultMessage = 'Tested: ' . ($success ? 'Successfully connected internally' : 'Failure');
         } catch (\Throwable $th) {
-            $resultMessage = 'Tested: Failure. '. $th->getMessage();
+            $resultMessage = 'Tested: Failure! '. $th->getMessage();
         }
 
         return redirect()->back()->withFragment('app-url')

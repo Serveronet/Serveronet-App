@@ -10,6 +10,7 @@ use App\Http\H;
 use App\Models\PeerReplicationSession;
 use App\Models\ReplicationSession;
 use App\Models\Site;
+use App\Services\InternalCallService;
 use App\Services\P2pReplicationService;
 use App\Services\PeerMixService;
 use Illuminate\Http\Request;
@@ -23,14 +24,17 @@ class ReplicationController extends Controller
 {
     public function peerReplicationSessionHandler(Request $request)
     {
-        $requestConfigSet = H::unwrapRequestConfigSet();
+        $requestConfigSet = InternalCallService::unwrapRequestConfigSet();
 
-        if (! H::isInternalCallCurrent($requestConfigSet)) {
-            info('Outdated or spoofed internal request');
-
+        if (! InternalCallService::isInternalClosureCacheKeyPresent($requestConfigSet)) {
             return;
         }
-        $internalRequestId = H::startInteralRequestReporting(__FUNCTION__);
+
+        if (! InternalCallService::isInternalCallCurrent($requestConfigSet)) {
+            return;
+        }
+        
+        $internalRequestId = InternalCallService::startInteralRequestReporting(__FUNCTION__);
 
         $peerSessionDefinition = $requestConfigSet;
         $peer_replication_session_id = $peerSessionDefinition['peer_replication_session_id'];
@@ -242,7 +246,7 @@ class ReplicationController extends Controller
             $peerReplicationSession->save();
         }
 
-        H::endInteralRequestReporting($internalRequestId);
+        InternalCallService::endInteralRequestReporting($internalRequestId);
 
         return $client_address.' '.$peerReplicationSession->state;
     }
@@ -253,13 +257,15 @@ class ReplicationController extends Controller
 
         self::cleanUpReplicationSessions();
 
-        $requestConfigSet = H::unwrapRequestConfigSet();
+        $requestConfigSet = InternalCallService::unwrapRequestConfigSet();
 
-        $internalRequestId = H::startInteralRequestReporting(__FUNCTION__);
+        $internalRequestId = InternalCallService::startInteralRequestReporting(__FUNCTION__);
 
-        if (! H::isInternalCallCurrent($requestConfigSet)) {
-            info('Outdated or spoofed internal request');
+        if (! InternalCallService::isInternalClosureCacheKeyPresent($requestConfigSet)) {
+            return;
+        }
 
+        if (! InternalCallService::isInternalCallCurrent($requestConfigSet)) {
             return;
         }
 
@@ -403,7 +409,7 @@ class ReplicationController extends Controller
             H::updateSitesHostedState($site_id, pfm: $pfm);
         }
 
-        H::endInteralRequestReporting($internalRequestId);
+        InternalCallService::endInteralRequestReporting($internalRequestId);
 
         info('End of replicateMissedData | Cont ondem: '.tfyn($continous_ondemand).' | DT: '.$data_type.' '.$site_id);
         if ($continous_ondemand) {
@@ -416,7 +422,7 @@ class ReplicationController extends Controller
             $requestConfigSet['visitors_data_type'] = $data_type;
             $requestConfigSet['pfm'] = $pfm;
 
-            H::dispatchInternalAsync('replicate_missed_data', $requestConfigSet);
+            InternalCallService::dispatchInternalAsync('replicate_missed_data', $requestConfigSet);
 
             return;
         }
@@ -613,7 +619,7 @@ class ReplicationController extends Controller
         }
 
         foreach ($peerSessionDefinitions as $peerSessionDefinition) {
-            H::dispatchInternalAsync('peer_replication_session_handler', $peerSessionDefinition);
+            InternalCallService::dispatchInternalAsync('peer_replication_session_handler', $peerSessionDefinition);
         }
     }
 
@@ -652,7 +658,7 @@ class ReplicationController extends Controller
         $requestConfigSet['continous_ondemand'] = $continous_ondemand;
         $requestConfigSet['pfm'] = true;
 
-        H::dispatchInternalAsync('replicate_missed_data', $requestConfigSet, 2);
+        InternalCallService::dispatchInternalAsync('replicate_missed_data', $requestConfigSet, 2);
     }
 
     public function replicateMissedSitePeers($continous_ondemand, $pfm = false, $site_id = null)
@@ -687,7 +693,7 @@ class ReplicationController extends Controller
         $requestConfigSet['continous_ondemand'] = $continous_ondemand;
         $requestConfigSet['pfm'] = true;
 
-        H::dispatchInternalAsync('replicate_missed_data', $requestConfigSet, 2);
+        InternalCallService::dispatchInternalAsync('replicate_missed_data', $requestConfigSet, 2);
     }
 
     public function replicateMissedSitesVisitorRecords($continous_ondemand, $pfm = false, $site_id = null)
@@ -737,7 +743,7 @@ class ReplicationController extends Controller
         $requestConfigSet['continous_ondemand'] = $continous_ondemand;
         $requestConfigSet['pfm'] = true;
 
-        H::dispatchInternalAsync('replicate_missed_data', $requestConfigSet, 2);
+        InternalCallService::dispatchInternalAsync('replicate_missed_data', $requestConfigSet, 2);
     }
 
     public function replicateMissedVisitorResources($continous_ondemand, $pfm = false, $site_id = null)
@@ -781,7 +787,7 @@ class ReplicationController extends Controller
         $requestConfigSet['continous_ondemand'] = $continous_ondemand;
         $requestConfigSet['pfm'] = true;
 
-        H::dispatchInternalAsync('replicate_missed_data', $requestConfigSet, 2);
+        InternalCallService::dispatchInternalAsync('replicate_missed_data', $requestConfigSet, 2);
     }
 
     public static function getOutdatementMinutes(): int

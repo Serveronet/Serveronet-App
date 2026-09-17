@@ -18,6 +18,7 @@ use App\Models\Site;
 use App\Models\SitePeer;
 use App\Models\Tracker;
 use App\Services\AdminUiService;
+use App\Services\InternalCallService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
@@ -446,7 +447,7 @@ class FirstRunController extends Controller
                 H::updateExternalIp(pfm: false);
             };
 
-            H::dispatchInternalAsyncClosureWrapper($closure);
+            InternalCallService::dispatchInternalAsyncClosureWrapper($closure);
         }
 
         H::pfm('Updating external port and Forwarding', log: true);
@@ -455,7 +456,7 @@ class FirstRunController extends Controller
             $closure = function () {
                 (new PortForwardController)->updateExternalPort(pfm: false);
             };
-            H::dispatchInternalAsyncClosureWrapper($closure);
+            InternalCallService::dispatchInternalAsyncClosureWrapper($closure);
         }
 
         return redirect($request->getSchemeAndHttpHost().'/');

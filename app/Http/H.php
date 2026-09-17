@@ -20,6 +20,7 @@ use App\Models\Peer;
 use App\Models\Setting;
 use App\Models\Site;
 use App\Models\SitePeer;
+use App\Services\InternalCallService;
 use Base32\Base32;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
@@ -107,116 +108,7 @@ class H
         $requestConfigSet = [];
         $requestConfigSet['tag'] = $tag;
 
-        H::dispatchInternalAsync('execute_client_action_wrapper', $requestConfigSet);
-    }
-
-    public static function isInternalCallCurrent(array $requestConfigSet): bool
-    {
-        $ts = $requestConfigSet['ts'] ?? null;
-
-        if (! $ts) {
-            return false;
-        }
-
-        $ts = Carbon::parse($ts);
-
-        if ($ts->diffInSeconds(now()) > 10) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static function dispatchInternalAsyncClosureWrapper($closure): void
-    {
-        info('dispatchInternalAsyncClosureWrapper');
-
-        $secret_key_internal_calls = H::getSettVal(SettingIds::secret_key_internal_calls);
-        SerializableClosure::setSecretKey($secret_key_internal_calls);
-
-        $serialized_closure = serialize(new SerializableClosure($closure));
-        $internalClosureExecutionId = Str::random(40);
-        Cache::put(CachePrefixes::internal_closure_.$internalClosureExecutionId, "", 10);
-        $requestConfigSet = [];
-        $requestConfigSet['serialized_closure'] = $serialized_closure;
-        $requestConfigSet['internalClosureExecutionId'] = $internalClosureExecutionId;
-        H::dispatchInternalAsync('handle_internal_closure', $requestConfigSet);
-    }
-
-    /* Dispatches by route path after prefix internal/ */
-    public static function dispatchInternalAsync($route_path, $requestConfigSet, $timeout = 0.15): void
-    {
-        info('dispatchInternalAsync '.$route_path);
-        $requestConfigSet['ts'] = now()->toDateTimeString();
-
-        try {
-            $internalUrl = H::a(config('app.url')).'internal/'.$route_path;
-            info('$internalUrl '.$internalUrl);
-
-            $client = H::setupClient(false);
-            $options = [
-                'timeout' => $timeout,
-                'connect_timeout' => 1,
-                'form_params' => ['requestConfigSet' => encrypt(json_encode($requestConfigSet))],
-            ];
-            H::prepareOptions($options, $internalUrl);
-
-            $client->post($internalUrl, $options);
-
-        } catch (ConnectException $e) {
-            info('dispatchInternalAsync ConnectException '.$route_path.' '.Str::limit($e->getMessage(), 40));
-        } catch (Throwable $th) {
-            info('dispatchInternalAsync $th '.$th->getMessage().' '.$th->getFile().' '.$th->getLine());
-        }
-    }
-
-    public static function unwrapRequestConfigSet(): array
-    {
-        try {
-            request()->validate([
-                'requestConfigSet' => ['required', 'string', 'max:'.Consts::recordJsonMaxSizeBytes],
-            ]);
-        } catch (Throwable $th) {
-            info('unwrapRequestConfigSet Validation Failed: '.$th->getMessage());
-            abort(400);
-        }
-
-        try {
-            $requestConfigSet = json_decode(decrypt(request()->requestConfigSet), true);
-        } catch (Throwable $th) {
-            info('unwrapRequestConfigSet Unwrap Failed: '.$th->getMessage());
-            abort(400);
-        }
-
-        return $requestConfigSet;
-    }
-
-    public static function startInteralRequestReporting($routeName): string
-    {
-        $internalRequestId = Str::random();
-        $internalRequest = new InternalRequest;
-        $internalRequest->route = $routeName;
-        $internalRequest->request_id = $internalRequestId;
-        $internalRequest->started_at = now();
-        $internalRequest->save();
-
-        return $internalRequestId;
-    }
-
-    public static function endInteralRequestReporting($internalRequestId): void
-    {
-        $internalRequest = InternalRequest::where('request_id', $internalRequestId)->first();
-        if (! $internalRequest) {
-            return;
-        }
-
-        $internalRequest->ended_at = now();
-        $taken_seconds = Carbon::parse($internalRequest->started_at)->diffInSeconds(now());
-        $internalRequest->taken_seconds = round($taken_seconds, 2);
-        $internalRequest->save();
-
-        $oldInternalRequests = InternalRequest::where('started_at', '<', now()->subDay())->take(1000);
-        $oldInternalRequests->delete();
+        InternalCallService::dispatchInternalAsync('execute_client_action_wrapper', $requestConfigSet);
     }
 
     public static function savePassiveTriggersForSite($site_id): void

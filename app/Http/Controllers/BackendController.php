@@ -22,6 +22,7 @@ use App\Models\SiteDefinition;
 use App\Models\VisitorResource;
 use App\Services\ChunkService;
 use App\Services\CryptoService;
+use App\Services\InternalCallService;
 use App\Services\IPFSService;
 use App\Services\P2pReplicationService;
 use App\Services\PeerMixService;
@@ -782,7 +783,7 @@ class BackendController extends Controller
             self::dispatchChunksUpload($chunks, $site_id, $entity_id);
         };
 
-        H::dispatchInternalAsyncClosureWrapper($closure);
+        InternalCallService::dispatchInternalAsyncClosureWrapper($closure);
 
         $message = $visitorResource->record_json;
 
@@ -829,7 +830,7 @@ class BackendController extends Controller
         $requestConfigSet = [];
         $requestConfigSet['tag'] = $tag;
 
-        H::dispatchInternalAsync('execute_client_action_wrapper', $requestConfigSet);
+        InternalCallService::dispatchInternalAsync('execute_client_action_wrapper', $requestConfigSet);
     }
 
     /**

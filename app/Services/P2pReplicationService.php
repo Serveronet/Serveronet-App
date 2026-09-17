@@ -263,7 +263,7 @@ class P2pReplicationService extends Controller
 
             };
 
-            H::dispatchInternalAsyncClosureWrapper($closure);
+            InternalCallService::dispatchInternalAsyncClosureWrapper($closure);
 
         }
 

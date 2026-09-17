@@ -47,7 +47,7 @@ class BuiltInTrackerController extends Controller
 
     public function handleAnnounceByUrl(Request $request)
     {
-        info('handleAnnounceByUrl Begin '.$request->info_hash);
+        info('handleAnnounceByUrl Begin');
         /* Required parameters */
         $requiredParams = ['info_hash', 'peer_id', 'port', 'uploaded', 'downloaded', 'left'];
         foreach ($requiredParams as $param) {

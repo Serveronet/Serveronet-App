@@ -82,7 +82,7 @@ class PeerMixService extends Controller
                         $closure = function() use ($trustedSitePeer) {
                             (new BackgroundProcessingController())->verifySitePeer($trustedSitePeer->id);
                         };
-                        H::dispatchInternalAsyncClosureWrapper($closure);
+                        InternalCallService::dispatchInternalAsyncClosureWrapper($closure);
                     }
                     if (($trustedSitePeer->peer->reputation ?? 0) > $minReputation) {
                         $trustedSitePeer->debug_source = 'trusted_site_peers';

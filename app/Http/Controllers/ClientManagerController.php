@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Dicts\SettingIds;
 use App\Http\H;
+use App\Services\InternalCallService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
@@ -71,19 +72,23 @@ class ClientManagerController extends Controller
             $requestConfigSet['thread_id'] = Str::random(3);
             $requestConfigSet['maintainer_id'] = null;
 
-            H::dispatchInternalAsync('loop_maintainer', $requestConfigSet, 2);
+            InternalCallService::dispatchInternalAsync('loop_maintainer', $requestConfigSet, 2);
         }
     }
 
     public static function loopMaintainer()
     {
-        $requestConfigSet = H::unwrapRequestConfigSet();
-        if (! H::isInternalCallCurrent($requestConfigSet)) {
-            info('Outdated or spoofed internal request');
-
+        $requestConfigSet = InternalCallService::unwrapRequestConfigSet();
+        
+        if (! InternalCallService::isInternalClosureCacheKeyPresent($requestConfigSet)) {
             return;
         }
-        $internalRequestId = H::startInteralRequestReporting(__FUNCTION__);
+
+        if (! InternalCallService::isInternalCallCurrent($requestConfigSet)) {
+            return;
+        }
+
+        $internalRequestId = InternalCallService::startInteralRequestReporting(__FUNCTION__);
 
         $thread_id = $requestConfigSet['thread_id'];
         $maintainer_id = $requestConfigSet['maintainer_id'];
@@ -111,7 +116,7 @@ class ClientManagerController extends Controller
             $requestConfigSet = [];
             $requestConfigSet['thread_id'] = $thread_id;
             $requestConfigSet['maintainer_id'] = $maintainer_id;
-            H::dispatchInternalAsync('loop_maintainer', $requestConfigSet, 2);
+            InternalCallService::dispatchInternalAsync('loop_maintainer', $requestConfigSet, 2);
         } catch (Throwable $th) {
         }
         info('loopMaintainer After Http');
@@ -121,7 +126,7 @@ class ClientManagerController extends Controller
         Artisan::call('schedule:run');
         info('End Artisan::call("schedule:run")');
 
-        H::endInteralRequestReporting($internalRequestId);
+        InternalCallService::endInteralRequestReporting($internalRequestId);
 
         return;
     }

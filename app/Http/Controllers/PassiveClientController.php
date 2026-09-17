@@ -9,6 +9,7 @@ use App\Models\CrowdQueryResult;
 use App\Models\Peer;
 use App\Models\ResultContainer;
 use App\Models\Site;
+use App\Services\InternalCallService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -59,18 +60,23 @@ class PassiveClientController extends Controller
             $requestConfigSet['startedAt'] = $startedAt;
             $requestConfigSet['from_browser'] = false;
 
-            H::dispatchInternalAsync('passive_session_worker', $requestConfigSet);
+            InternalCallService::dispatchInternalAsync('passive_session_worker', $requestConfigSet);
         }
     }
 
     public function passiveSessionWorker(Request $request) 
     {
-        $requestConfigSet = H::unwrapRequestConfigSet();
-        if (! H::isInternalCallCurrent($requestConfigSet)) {
-            info('Outdated or spoofed internal request');
+        $requestConfigSet = InternalCallService::unwrapRequestConfigSet();
+        
+        if (! InternalCallService::isInternalClosureCacheKeyPresent($requestConfigSet)) {
             return;
         }
-        $internalRequestId = H::startInteralRequestReporting(__FUNCTION__);
+
+        if (! InternalCallService::isInternalCallCurrent($requestConfigSet)) {
+            return;
+        }
+
+        $internalRequestId = InternalCallService::startInteralRequestReporting(__FUNCTION__);
 
         $passive_token = $requestConfigSet['passive_token'];
         $active_client_address = $requestConfigSet['active_client_address'];
@@ -206,7 +212,7 @@ class PassiveClientController extends Controller
             info('catch_passiveSessionWorker $th '.$th->getMessage().' '.$th->getFile().' '.$th->getLine());
         }
 
-        H::endInteralRequestReporting($internalRequestId);
+        InternalCallService::endInteralRequestReporting($internalRequestId);
 
         $diffSeconds = Carbon::parse($currentSessionStartedAt)->diffInSeconds(now());
         if ($diffSeconds < 1) {
@@ -229,7 +235,7 @@ class PassiveClientController extends Controller
         $requestConfigSet['startedAt'] = $startedAt;
         $requestConfigSet['from_browser'] = false;
 
-        H::dispatchInternalAsync('passive_session_worker', $requestConfigSet);
+        InternalCallService::dispatchInternalAsync('passive_session_worker', $requestConfigSet);
     }
 
     protected function initializePassiveSession($passive_token, $active_client_address, $site_ids, $pfm = false): ResultContainer 
@@ -334,25 +340,28 @@ class PassiveClientController extends Controller
         $requestConfigSet['type'] = $type;
         $requestConfigSet['active_client_address'] = $active_client_address;
 
-        H::dispatchInternalAsync('response_to_actives_action', $requestConfigSet);
+        InternalCallService::dispatchInternalAsync('response_to_actives_action', $requestConfigSet);
     }
 
     public function responseToActivesAction() 
     {
         info('responseToActivesAction start');
-        $requestConfigSet = H::unwrapRequestConfigSet();
+        $requestConfigSet = InternalCallService::unwrapRequestConfigSet();
 
-        if (! H::isInternalCallCurrent($requestConfigSet)) {
-            info('Outdated or spoofed internal request');
+        if (! InternalCallService::isInternalClosureCacheKeyPresent($requestConfigSet)) {
             return;
         }
 
-        $internalRequestId = H::startInteralRequestReporting(__FUNCTION__);
+        if (! InternalCallService::isInternalCallCurrent($requestConfigSet)) {
+            return;
+        }
+
+        $internalRequestId = InternalCallService::startInteralRequestReporting(__FUNCTION__);
 
         $action_order_json = $requestConfigSet['action_order_json'];
         $type = $requestConfigSet['type'];
         $active_client_address = $requestConfigSet['active_client_address'];
-        // $request = request();
+
         info('responseToActivesAction start');
         $action_order = json_decode($action_order_json);     
         info('responseToActivesAction $type: '.$type);
@@ -445,7 +454,7 @@ class PassiveClientController extends Controller
 
         $body = (string) $response->getBody();
 
-        H::endInteralRequestReporting($internalRequestId);
+        InternalCallService::endInteralRequestReporting($internalRequestId);
 
         return $this->return_success($body);
     }

@@ -177,7 +177,7 @@ class TorrentService extends Controller
                     (new BackgroundProcessingController)->verifySitePeer($sitePeer->id);
                 };
 
-                H::dispatchInternalAsyncClosureWrapper($closure);
+                InternalCallService::dispatchInternalAsyncClosureWrapper($closure);
 
                 $peer = Peer::where('client_address', $client_address)->first();
                 if (! $peer) {

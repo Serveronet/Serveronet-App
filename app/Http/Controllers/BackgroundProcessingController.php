@@ -23,6 +23,7 @@ use App\Models\SitePeer;
 use App\Models\VisitorRecord;
 use App\Models\VisitorResource;
 use App\Services\ChunkService;
+use App\Services\InternalCallService;
 use App\Services\IPFSService;
 use App\Services\ListProviderService;
 use App\Services\PeerMixService;
@@ -756,14 +757,17 @@ class BackgroundProcessingController extends Controller
     public function executeClientActionWrapper(Request $request)
     {
         info('executeClientActionWrapper');
-        $requestConfigSet = H::unwrapRequestConfigSet();
+        $requestConfigSet = InternalCallService::unwrapRequestConfigSet();
 
-        if (! H::isInternalCallCurrent($requestConfigSet)) {
-            info('Outdated or spoofed internal request');
-
+        if (! InternalCallService::isInternalClosureCacheKeyPresent($requestConfigSet)) {
             return;
         }
-        $internalRequestId = H::startInteralRequestReporting(__FUNCTION__);
+
+        if (! InternalCallService::isInternalCallCurrent($requestConfigSet)) {
+            return;
+        }
+        
+        $internalRequestId = InternalCallService::startInteralRequestReporting(__FUNCTION__);
 
         $tag = $requestConfigSet['tag'];
 
@@ -773,7 +777,7 @@ class BackgroundProcessingController extends Controller
         /* executeClientAction */
         $this->executeClientAction($request);
 
-        H::endInteralRequestReporting($internalRequestId);
+        InternalCallService::endInteralRequestReporting($internalRequestId);
     }
 
     public function executeClientAction(Request $request)

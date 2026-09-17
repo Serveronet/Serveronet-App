@@ -10,6 +10,7 @@ use App\Http\H;
 use App\Models\ResultContainer;
 use App\Models\Site;
 use App\Models\VisitorRecord;
+use App\Services\InternalCallService;
 use App\Services\P2pReplicationService;
 use App\Services\RemotePeerService;
 use App\Services\SiteConfigService;
@@ -357,24 +358,25 @@ class QueryController extends Controller
         return $queryBuilder;
     }
 
-    public function handleCrowdQueryOrder(Request $request): string
+    public function handleCrowdQueryOrder(Request $request): void
     {
         info('handleCrowdQueryOrder');
-        $requestConfigSet = H::unwrapRequestConfigSet();
-        if (! H::isInternalCallCurrent($requestConfigSet)) {
-            info('Outdated or spoofed internal request');
-
-            return 'Outdated or spoofed internal request';
+        $requestConfigSet = InternalCallService::unwrapRequestConfigSet();
+        
+        if (! InternalCallService::isInternalClosureCacheKeyPresent($requestConfigSet)) {
+            return;
         }
-        $internalRequestId = H::startInteralRequestReporting(__FUNCTION__);
 
-        info('handleCrowdQueryOrder: '.json_encode($requestConfigSet));
+        if (! InternalCallService::isInternalCallCurrent($requestConfigSet)) {
+            return;
+        }
+
+        $internalRequestId = InternalCallService::startInteralRequestReporting(__FUNCTION__);
 
         $address = $requestConfigSet['address'] ?? '';
         if (empty($address)) {
             info('handleCrowdQueryOrder Address empty');
-
-            return 'handleCrowdQueryOrder Address empty';
+            return;
         }
         $client_address = $requestConfigSet['client_address'];
         $site_id = $requestConfigSet['site_id'];
@@ -401,9 +403,6 @@ class QueryController extends Controller
             ];
             $options['timeout'] = H::timeoutAdjust(H::isTorAddress($url), 10);
             $options['form_params'] = $form_params;
-
-            // info('handleCrowdRequestPool 2 $options');
-            // info(json_encode($options));
 
             try {
                 /* Request for page 1 to get total count */
@@ -455,14 +454,15 @@ class QueryController extends Controller
                 }
 
             } catch (Throwable $th) {
-                return response('handleCrowdQueryOrder catch: '.$client_address);
+                info('handleCrowdQueryOrder catch: '.$client_address);
+                return;
             }
         } catch (Throwable $th) {
             info($th->getMessage().' '.$th->getFile().' '.$th->getLine());
         }
-        H::endInteralRequestReporting($internalRequestId);
+        InternalCallService::endInteralRequestReporting($internalRequestId);
 
-        return 'handleCrowdQueryOrder End';
+        return;
     }
 
     protected function streamChunkedJson($queryBuilder, $sql, $query_id, $debug_data, $fulfiller_id, $remote_peer_id,

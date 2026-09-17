@@ -105,7 +105,7 @@ class RemotePeerService extends Controller
 
             $crowdPeers->push($requestConfigSet);
 
-            H::dispatchInternalAsync('handle_crowd_query_order', $requestConfigSet);
+            InternalCallService::dispatchInternalAsync('handle_crowd_query_order', $requestConfigSet);
         }
 
         $delays = [

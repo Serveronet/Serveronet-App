@@ -26,6 +26,7 @@ use App\Models\LocalTrackerInfoHashPeer;
 use App\Models\PeerReplicationSession;
 use App\Models\ReplicationSession;
 use App\Models\ResultContainer;
+use App\Services\InternalCallService;
 use App\Services\PeerMixService;
 use App\Services\PermissionService;
 use App\Services\SiteConfigService;
@@ -143,7 +144,7 @@ class SiteManagerController extends Controller
                         (new SiteManagerController())->republishSite($site_id);
                     };
 
-                    H::dispatchInternalAsyncClosureWrapper($closure);
+                    InternalCallService::dispatchInternalAsyncClosureWrapper($closure);
                     info('Completed site_republish');
 
                 break;
@@ -264,7 +265,7 @@ class SiteManagerController extends Controller
             (new BackgroundProcessingController())->hostedSiteInitHostingActions($site_id);
         };
 
-        H::dispatchInternalAsyncClosureWrapper($closure);
+        InternalCallService::dispatchInternalAsyncClosureWrapper($closure);
     }
 
     /* Re-Publish of visitor records and network records functionality - for offline clients */

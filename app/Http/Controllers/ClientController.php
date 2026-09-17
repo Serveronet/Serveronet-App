@@ -29,6 +29,7 @@ use App\Models\VisitorResource;
 use App\Models\VisitorResourceEnvelope;
 use App\Services\ChunkService;
 use App\Services\IntegrityService;
+use App\Services\InternalCallService;
 use App\Services\ListProviderService;
 use App\Services\P2pReplicationService;
 use App\Services\PeerMixService;
@@ -212,7 +213,7 @@ class ClientController extends Controller
             $requestConfigSet['site_id'] = $site_id;
             $requestConfigSet['action_type'] = $action_type;
 
-            H::dispatchInternalAsync('handle_crowd_retrieval_order', $requestConfigSet);
+            InternalCallService::dispatchInternalAsync('handle_crowd_retrieval_order', $requestConfigSet);
         }
 
         $delays = [
@@ -479,15 +480,19 @@ class ClientController extends Controller
         }
     }
 
-    public function handleCrowdRetrievalOrder(Request $request): string
+    public function handleCrowdRetrievalOrder(Request $request): void
     {
-        $requestConfigSet = H::unwrapRequestConfigSet();
-        if (! H::isInternalCallCurrent($requestConfigSet)) {
-            info('Outdated or spoofed internal request');
+        $requestConfigSet = InternalCallService::unwrapRequestConfigSet();
 
-            return 'Outdated or spoofed internal request';
+        if (! InternalCallService::isInternalClosureCacheKeyPresent($requestConfigSet)) {
+            return;
         }
-        $internalRequestId = H::startInteralRequestReporting(__FUNCTION__);
+
+        if (! InternalCallService::isInternalCallCurrent($requestConfigSet)) {
+            return;
+        }
+
+        $internalRequestId = InternalCallService::startInteralRequestReporting(__FUNCTION__);
 
         $address = $requestConfigSet['address'];
         $client_address = $requestConfigSet['client_address'];
@@ -568,9 +573,9 @@ class ClientController extends Controller
         } catch (Throwable $th) {
             info($th->getMessage().' '.$th->getFile().' '.$th->getLine());
         }
-        H::endInteralRequestReporting($internalRequestId);
+        InternalCallService::endInteralRequestReporting($internalRequestId);
 
-        return true;
+        return;
     }
 
     protected function markRetrievalAsCompleted($retrieval, $payload, $fulfiller_id): void

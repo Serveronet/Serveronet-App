@@ -8,6 +8,7 @@ use App\Http\Consts;
 use App\Http\H;
 use App\Models\Peer;
 use App\Models\SitePeer;
+use App\Services\InternalCallService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
@@ -147,7 +148,7 @@ class GuestController extends Controller
                     $closure = function () use ($sitePeer) {
                         (new BackgroundProcessingController)->verifySitePeer($sitePeer->id);
                     };
-                    H::dispatchInternalAsyncClosureWrapper($closure);
+                    InternalCallService::dispatchInternalAsyncClosureWrapper($closure);
 
                 } else {
                     $sitePeer->archived_at = null;

@@ -16,6 +16,7 @@ use App\Models\Peer;
 use App\Models\PendingAction;
 use App\Models\Site;
 use App\Models\SitePeer;
+use App\Services\InternalCallService;
 use App\Services\IPFSService;
 use App\Services\ListProviderService;
 use App\Services\PQCryptoService;
@@ -167,7 +168,7 @@ class AdminController extends Controller
                     (new ClientController())->checkPeerConnectivity(peer: $peer, do_inbound_connectivity_check: true);
                 };
 
-                H::dispatchInternalAsyncClosureWrapper($closure);
+                InternalCallService::dispatchInternalAsyncClosureWrapper($closure);
 
                 break;
 
@@ -189,7 +190,7 @@ class AdminController extends Controller
                     (new BackgroundProcessingController)->verifySitePeer($sitePeer->id);
                 };
 
-                H::dispatchInternalAsyncClosureWrapper($closure);
+                InternalCallService::dispatchInternalAsyncClosureWrapper($closure);
 
                 break;
 
@@ -497,9 +498,11 @@ class AdminController extends Controller
             abort(400);
         }
 
-        if (! H::isInternalCallCurrent($requestConfigSet)) {
-            info('Outdated or spoofed internal request');
+        if (! InternalCallService::isInternalClosureCacheKeyPresent($requestConfigSet)) {
+            return $this->return_failure('No relevant cache key for this internal closure');
+        }
 
+        if (! InternalCallService::isInternalCallCurrent($requestConfigSet)) {
             return $this->return_failure('Outdated or spoofed internal request');
         }
 

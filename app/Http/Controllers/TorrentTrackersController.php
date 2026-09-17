@@ -7,6 +7,7 @@ use App\Dicts\SettingIds;
 use App\Http\H;
 use App\Models\Site;
 use App\Models\Tracker;
+use App\Services\InternalCallService;
 use App\Services\TorrentService;
 use Arokettu\Bencode\Bencode;
 use Exception;
@@ -120,7 +121,7 @@ class TorrentTrackersController extends Controller
                 'externalIp' => $externalIp,
             ];
 
-            H::dispatchInternalAsync('announce_to_tracker', $announceToTrackerDefinition);
+            InternalCallService::dispatchInternalAsync('announce_to_tracker', $announceToTrackerDefinition);
         }
 
         $allPeers = [];
@@ -228,16 +229,19 @@ class TorrentTrackersController extends Controller
         }
     }
 
-    public function announceToTracker(Request $request)
+    public function announceToTracker()
     {
-        $requestConfigSet = H::unwrapRequestConfigSet();
+        $requestConfigSet = InternalCallService::unwrapRequestConfigSet();
 
-        if (! H::isInternalCallCurrent($requestConfigSet)) {
-            info('Outdated or spoofed internal request');
-
+        if (! InternalCallService::isInternalClosureCacheKeyPresent($requestConfigSet)) {
             return;
         }
-        $internalRequestId = H::startInteralRequestReporting(__FUNCTION__);
+
+        if (! InternalCallService::isInternalCallCurrent($requestConfigSet)) {
+            return;
+        }
+
+        $internalRequestId = InternalCallService::startInteralRequestReporting(__FUNCTION__);
 
         $announceToTrackerDefinition = $requestConfigSet;
 
@@ -384,7 +388,7 @@ class TorrentTrackersController extends Controller
         Cache::put(CachePrefixes::tracker_yield_peers_.$site_id.$tracker_url, json_encode($peers));
         Cache::put(CachePrefixes::tracker_yield_result_.$site_id.$tracker_url, $result);
 
-        H::endInteralRequestReporting($internalRequestId);
+        InternalCallService::endInteralRequestReporting($internalRequestId);
 
         return $trackerYield;
     }
