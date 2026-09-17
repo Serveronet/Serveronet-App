@@ -23,7 +23,7 @@
 
             <!-- Visitor Id -->
             <div class="mt-4">
-                <x-label for="visitor_id" :value="'Identitiy was generated for you. Paste yours or upload if already owned an Identity.'" />
+                <x-label for="visitor_id" :value="'Identity was generated for you. Paste yours or upload if already owned an Identity.'" />
                 <br>
                 <br>
                 <span class="text-gray-500">Visitor</span>

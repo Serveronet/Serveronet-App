@@ -86,7 +86,7 @@
         <br>
         <br>
         <br>
-        <div class="h3">Future and Posibilities</div>
+        <div class="h3">Future and Possibilities</div>
 
         <div class="cards">
 
