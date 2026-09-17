@@ -1426,7 +1426,7 @@ class ClientController extends Controller
                     return false;
                 }
                 
-                $chunks = json_decode(json_decode($incomingRecordEnvelope->chunks));
+                $chunks = json_decode(json_decode($incomingRecordEnvelope->record_json)->chunks_json);
                 foreach ($chunks as $key => $chunk) {
                     if ($sha256 === $chunk->sha256)
                         return true;
