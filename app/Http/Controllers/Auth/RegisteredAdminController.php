@@ -37,8 +37,7 @@ class RegisteredAdminController extends Controller
             ->letters()
             ->mixedCase()
             ->numbers()
-            ->symbols()
-            ->uncompromised();
+            ->symbols();
 
         $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:admins'],

@@ -134,8 +134,7 @@ class FirstRunController extends Controller
             ->letters()
             ->mixedCase()
             ->numbers()
-            ->symbols()
-            ->uncompromised();
+            ->symbols();
 
         $request->validate([
             'client_address' => ['required', 'string', 'max:2048'],

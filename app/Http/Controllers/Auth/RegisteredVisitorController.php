@@ -87,8 +87,7 @@ class RegisteredVisitorController extends Controller
             ->letters()
             ->mixedCase()
             ->numbers()
-            ->symbols()
-            ->uncompromised();
+            ->symbols();
 
         $request->validate([
             'alias' => ['string', 'nullable', 'max:255'],
