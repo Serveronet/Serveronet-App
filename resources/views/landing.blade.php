@@ -74,7 +74,20 @@
             </div>
         </div>
     </section>
+    <div class="container-width">
+        <div class="cards">
+            <div>
+                <a class="btn btn-outline-primary btn btn-lg shadow-sm rounded-1 me-1" rel="prefetch" target="_blank"
+                    wire:navigate.hover="" href="http://client.serveronet.org/">Try on a Demo client</a>
+                or
+                <a class="ms-1 btn btn-outline-success btn-lg shadow-sm rounded-1" rel="prefetch" wire:navigate.hover=""
+                    href="{{ route('documentation', ['doc_tag' => \App\Dicts\DocsMapping::installation_and_deployment]) }}">Install your Client</a>
+            </div>
 
+
+        </div>
+    </div>
+    <br>
     <div class="container-width">
 
 
@@ -85,7 +98,7 @@
         </a>
         <br>
         <br>
-        <br>
+
         <div class="h3">Future and Possibilities</div>
 
         <div class="cards">

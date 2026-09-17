@@ -5,7 +5,7 @@
 ])
 
 @section('content')
-    <div class="h2">Registration</div>
+    <div class="h2">Register or Create an Identity</div>
     <div id="appIdentityUpload">
 
         <div class="bg-danger rounded text-white p-2 mb-4">Warning! Avoid storing your private seed in an untrusted (not
@@ -38,7 +38,7 @@
 
             <!-- Seed -->
             <div class="mt-4">
-                <span class="text-gray-500">Seed (base64)</span>
+                <span class="text-gray-500">Private Seed (base64)</span>
                 <div class="input-group">
                     <input id="base64_seed" v-model="base64_seed" class="form-control" type="text" name="base64_seed"
                         value="{{ old('base64_seed', $keySet->base64_seed) }}" @input="onBase64SeedChange" required />
@@ -65,6 +65,15 @@
                 <br>
                 <span class="text-gray-500">Set your password to login to sites. It is valid for <b
                         class="text-warning">this client only</b>.</span>
+                <span class="btn btn-outine-light btn-sm"
+                    onclick="
+    toastr.info(document.getElementById('partials.this-client').innerHTML, 'Cryptographic Identity', {timeOut: 15000})
+    "
+                    class="text-dark dark:text-white pre text-decoration-none small">
+                    <img style="width: 1em;"
+                        src="{{ asset('sn_client_resources/img/help_FILL0_wght200_GRAD-25_opsz48.svg', request()->isSecure()) }}"
+                        alt="" srcset="">
+                </span>
                 <input id="password" class="form-control" type="password" name="password" required
                     value="{{ $password }}" autocomplete="new-password" />
             </div>
@@ -91,6 +100,10 @@
 
             </div>
         </form>
+
+        <div class="hidden" id="partials.this-client">
+            @include('partials.this-client')
+        </div>
         <script>
             new_visitor_id = "{{ $visitor_id }}"
 
