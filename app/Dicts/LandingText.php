@@ -87,7 +87,7 @@ class LandingText
             'title' => 'External storages',
             'image' => './sn_client_resources/img/desktop_cloud_100dp_1F1F1F_FILL0_wght100_GRAD0_opsz48.svg',
             'subtitle' => 'External cloud storages',
-            'description' => 'Client can store data in externals storages like AWS, Google Drive.',
+            'description' => 'Client can store data in external storages like AWS, Google Drive.',
         ],
     ];
 

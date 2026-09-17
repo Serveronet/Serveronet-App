@@ -16,7 +16,7 @@
         <div class=" justify-content-center">
 
             <a class="ms-0 btn btn-outline-primary btn shadow-sm rounded-1" rel="prefetch" wire:navigate.hover=""
-                href="{{ domainRoute('demos') }}">Demo 🌍</a>
+                href="{{ domainRoute('demos') }}">Demos 🌍</a>
             <link rel="prefetch" href="{{ domainRoute('demos') }}">
 
             <a class="ms-1 btn btn-outline-success btn shadow-sm rounded-1" rel="prefetch" wire:navigate.hover=""
@@ -25,7 +25,7 @@
             <link rel="prefetch"
                 href="{{ route('documentation', ['doc_tag' => \App\Dicts\DocsMapping::installation_and_deployment]) }}">
 
-            <a class="ms-1 btn btn-outline-secondary btn shadow-sm rounded-1" rel="prefetch" wire:navigate.hover=""
+            <a class="ms-1 btn btn-outline-dark btn shadow-sm rounded-1" rel="prefetch" wire:navigate.hover=""
                 href="{{ route('documentation', ['doc_tag' => \App\Dicts\DocsMapping::documentation_index]) }}">Docs
                 ❔</a>
             <link rel="prefetch"

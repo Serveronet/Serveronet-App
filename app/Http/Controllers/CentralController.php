@@ -83,7 +83,7 @@ class CentralController extends Controller
                 'link' => self::techDemoSiteAddress.'.',
                 'highlight' => self::serveronetDemoClientAddress,
                 'title' => 'Subdomain',
-                'description' => 'Site available as a subdomain in a Severonet Client.',
+                'description' => 'Site available as a subdomain in a Serveronet Client.',
             ],
 
             'single_site' => [
@@ -99,8 +99,8 @@ class CentralController extends Controller
                 'protocol' => 'http://',
                 'link' => 'techdemo-snet.',
                 'highlight' => self::serveronetDemoClientAddress,
-                'title' => '-snet domain',
-                'description' => 'Site reachable by a custom -snet top level domain. A redirect.',
+                'title' => '.snet domain',
+                'description' => 'Site reachable by a custom .snet top level domain. A redirect.',
             ],
 
             'dot_localhost_domain' => [
@@ -124,7 +124,7 @@ class CentralController extends Controller
                 'link' => 'techdemo-serveronet-org.',
                 'highlight' => self::serveronetDemoClientAddress,
                 'title' => 'Domain in subdirectory',
-                'description' => 'Site available as a subdirectory in the Severonet Client. ⚠ Classic DNS configuration is required by the site owner.
+                'description' => 'Site available as a subdirectory in the Serveronet Client. ⚠ Classic DNS configuration is required by the site owner.
                 tech-demo-serveronet-org references to tech-demo-serveronet.org',
             ],
         ];

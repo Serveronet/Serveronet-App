@@ -369,7 +369,7 @@ createApp({
   },
   mounted() {
     setTimeout(() => {
-      console.log('mounted' + this.visitor_id + ' ' + this.base64_seed)
+      console.log('IdentityUpload mounted')
     }, 2000);
   },
   methods: {
