@@ -96,6 +96,9 @@ if ($api_token_backend_enabled) {
 }
 
 /* Internal section */
+Route::post('internal/handle_internal_closure', [InternalCallService::class, 'handleInternalClosure'])
+    ->name('handle_internal_closure')->middleware('throttle:medium_rate');
+
 Route::post('internal/replicate_missed_data', [ReplicationController::class, 'replicateMissedData'])
     ->name('replicate_missed_data')->middleware('throttle:medium_rate');
 
@@ -107,9 +110,6 @@ Route::post('internal/execute_client_action_wrapper', [BackgroundProcessingContr
 
 Route::post('internal/handle_internal_call_verification', [AdminController::class, 'handleInternalCallVerification'])
     ->name('handle_internal_call_verification')->middleware('throttle:low_rate');
-
-Route::post('internal/handle_internal_closure', [InternalCallService::class, 'handleInternalClosure'])
-    ->name('handle_internal_closure')->middleware('throttle:medium_rate');
 
 Route::post('internal/peer_replication_session_handler', [ReplicationController::class, 'peerReplicationSessionHandler'])
     ->name('peer_replication_session_handler')->middleware('throttle:medium_rate');
