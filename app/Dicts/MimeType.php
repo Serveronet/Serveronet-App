@@ -80,6 +80,11 @@ final class MimeType
         'svgz',
         'mht',
         'mhtml',
+        'xht', 
+        'xml', 
+        'xsl', 
+        'xsd', 
+        'rng', 
 
         // JavaScript and browser scripts
         'js',
