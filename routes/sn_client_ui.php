@@ -76,8 +76,6 @@ if (! H::isServeronetWelcomeSite()) {
                 ->middleware($owner_only_capable)
                 ->middleware('throttle:medium_rate');
 
-            Route::post('complete_first_run', [FirstRunController::class, 'completeFirstRun']);
-
             /* End Guest UI section */
 
             /* Admin UI section */
@@ -202,10 +200,10 @@ if (! H::isServeronetWelcomeSite()) {
                     ->name($domainRouteNamePrefix.'update_external_port')->middleware('throttle:high_rate');
 
                 Route::post('admin/modify_symlink', [PublishSitesController::class, 'toggleDevSiteSymlink'])
-                    ->name($domainRouteNamePrefix.'modify_symlink')->middleware('throttle:high_rate');
+                    ->name($domainRouteNamePrefix.'modify_symlink')->middleware('throttle:low_rate');
 
                 Route::post('admin/toggle_control_panel_property', [AdminController::class, 'toggleControlPanelProperty'])
-                    ->name($domainRouteNamePrefix.'toggle_control_panel_property')->middleware('throttle:high_rate');
+                    ->name($domainRouteNamePrefix.'toggle_control_panel_property')->middleware('throttle:low_rate');
 
                 Route::get('admin/resources_maintenance', [BackgroundProcessingController::class, 'resourcesMaintenance'])
                     ->name($domainRouteNamePrefix.'resources_maintenance')->middleware('throttle:high_rate');

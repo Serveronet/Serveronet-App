@@ -12,7 +12,7 @@ $GLOBALS['domain'] = $tests_domain;
 $GLOBALS['site_id'] = '';
 $GLOBALS['new_record_random_string'] = 'new_record_random_string';
 $ports = ['19081', '19082', '19083'];
-// $ports = ['19082'];
+// $ports = ['19083'];
 
 $devActors = [
     ['visitor_id' => 'gs4fpzpbfgzxahjsyni3kocrxxhpdy6iqj7uczpbqigeibxs3h6a',
@@ -79,8 +79,8 @@ foreach ($ports as $key => $port) {
 
         test('Register '.$devActor['alias'].' on '.$port, function () use ($port, $devActor) {
             dump('Test Name: '.$this->name());
-
-            $page = visit("http://visitor-control-panel.{$GLOBALS['domain']}:$port/register");
+            loginAsAdmin($page = visit("http://{$GLOBALS['domain']}:{$port}/"));
+            $page->navigate("http://visitor-control-panel.{$GLOBALS['domain']}:$port/register");
             $page->type('input[name=base64_seed]', $devActor['base64_seed']);
             $page->type('input[name=alias]', $devActor['alias']);
             $page->type('input[name=password]', Consts::passwordForTests);
@@ -122,8 +122,8 @@ test('Publish Site on Site Owner Node', function () use ($devActors) {
 
 test('retrieve TD Site on Peer Node', function () {
     dump('Test Name: '.$this->name());
-
-    $page = visit("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19082/");
+    loginAsAdmin($page = visit("http://{$GLOBALS['domain']}:19082/"));
+    $page->navigate("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19082/");
     retry(10, function () use (&$page) {
         $page->navigate("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19082/");
         $page->assertSee('This is a sample web site showing how Sites behave in the Serveronet');
@@ -133,8 +133,9 @@ test('retrieve TD Site on Peer Node', function () {
 
 test('retrieve TD Site on Leech Node not to be hosted', function () {
     dump('Test Name: '.$this->name());
-
-    $page = visit("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19083/?is_to_be_hosted_override=0");
+    
+    loginAsAdmin($page = visit("http://{$GLOBALS['domain']}:19083/"));
+    $page->navigate("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19083/?is_to_be_hosted_override=0");
     retry(10, function () use (&$page) {
         $page->navigate("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19083/?is_to_be_hosted_override=0");
         $page->assertSee('This is a sample web site showing how Sites behave in the Serveronet');
@@ -144,8 +145,9 @@ test('retrieve TD Site on Leech Node not to be hosted', function () {
 
 test('Query records on Leech Node', function () {
     dump('Test Name: '.$this->name());
-
-    $page = visit("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19083/");
+    
+    loginAsAdmin($page = visit("http://{$GLOBALS['domain']}:19083/"));
+    $page->navigate("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19083/");
     $page->press('Show filtered records');
     retry(10, function () use (&$page) {
         $page->press('Show filtered records');
@@ -157,7 +159,8 @@ test('Query records on Leech Node', function () {
 test('Login as Site Admin on Leech and post a grant record', function () use ($devActors) {
     dump('Test Name: '.$this->name());
 
-    $page = visit("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19083/login");
+    loginAsAdmin($page = visit("http://{$GLOBALS['domain']}:19083/"));
+    $page->navigate("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19083/login");
     $page->assertSee('Login to the Site:')
         ->type('input[name=visitor_id]', $devActors[0]['visitor_id'])
         ->type('input[name=password]', Consts::passwordForTests)
@@ -180,7 +183,8 @@ test('Login as Site Admin on Leech and post a grant record', function () use ($d
 test('Login on Leech Node as Visitor with grant and Post a record', function () use ($devActors) {
     dump('Test Name: '.$this->name());
 
-    $page = visit("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19083/login");
+    loginAsAdmin($page = visit("http://{$GLOBALS['domain']}:19083/"));
+    $page->navigate("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19083/login");
     $page->assertSee('Login to the Site:')
         ->type('input[name=visitor_id]', $devActors[1]['visitor_id'])
         ->type('input[name=password]', Consts::passwordForTests)
@@ -200,7 +204,8 @@ test('Login on Leech Node as Visitor with grant and Post a record', function () 
 test('query records for new record string on Peer', function () {
     dump('Test Name: '.$this->name());
 
-    $page = visit("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19082/");
+    loginAsAdmin($page = visit("http://{$GLOBALS['domain']}:19082/"));
+    $page->navigate("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19082/");
     $page->press('Show filtered records');
 
     retry(10, function () use (&$page) {
@@ -213,7 +218,8 @@ test('query records for new record string on Peer', function () {
 test('query records for new record string on Site Owner Node', function () {
     dump('Test Name: '.$this->name());
 
-    $page = visit("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19081/");
+    loginAsAdmin($page = visit("http://{$GLOBALS['domain']}:19081/"));
+    $page->navigate("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19081/");
     $page->press('Show filtered records');
 
     retry(10, function () use (&$page) {
@@ -226,7 +232,8 @@ test('query records for new record string on Site Owner Node', function () {
 test('query records for new record string on Leech Node', function () {
     dump('Test Name: '.$this->name());
 
-    $page = visit("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19083/");
+    loginAsAdmin($page = visit("http://{$GLOBALS['domain']}:19083/"));
+    $page->navigate("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19083/");
     $page->press('Show filtered records');
 
     retry(10, function () use (&$page) {

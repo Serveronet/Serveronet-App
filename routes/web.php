@@ -37,6 +37,8 @@ Route::get('livewire/livewire.min.js', [FrontendAssets::class, 'returnJavaScript
 Route::get('first_run_setup', [FirstRunController::class, 'onFirstRunNotCompleted'])
     ->name('first_run_setup');
 
+Route::post('complete_first_run', [FirstRunController::class, 'completeFirstRun']);
+
 Route::get('documentation/{doc_tag?}', [DocumentationController::class, 'getDoc'])
     ->name('documentation');
 

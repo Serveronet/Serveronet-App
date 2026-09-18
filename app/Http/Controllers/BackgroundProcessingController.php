@@ -1385,7 +1385,7 @@ class BackgroundProcessingController extends Controller
         }
 
         $site_peer_id = $sitePeer->id;
-        sleep(100);
+        usleep(100_000);
         (new BackgroundProcessingController)->verifySitePeer($site_peer_id);
 
         $limit--;

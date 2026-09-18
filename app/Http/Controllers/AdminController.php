@@ -417,7 +417,7 @@ class AdminController extends Controller
 
         switch ($property) {
             case 'owner_only':
-                Artisan::call('config:clear');
+                
                 $SERVE_OWNER_ONLY = config('sn.serve_owner_only');
                 $SERVE_OWNER_ONLY = ! $SERVE_OWNER_ONLY;
                 Artisan::call('env:set SERVE_OWNER_ONLY '.var_export($SERVE_OWNER_ONLY, true));
@@ -425,6 +425,8 @@ class AdminController extends Controller
                 Artisan::call('route:clear');
 
                 Artisan::call('optimize');
+
+                usleep(500_000);
 
                 break;
 

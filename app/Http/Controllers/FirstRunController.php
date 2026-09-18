@@ -188,8 +188,6 @@ class FirstRunController extends Controller
         Artisan::call("env:set APP_URL $client_address_http");
         Artisan::call('env:set SERVE_OWNER_ONLY true');
 
-        // $isDevNode
-
         if (! $app_name) {
             $app_name = Str::limit($request->getHost(), limit: 6, end: '', preserveWords: true);
         }
@@ -428,7 +426,6 @@ class FirstRunController extends Controller
 
         if ($isDevNode) {
             Storage::disk('local')->put('isDevNode.php', ' ');
-            Artisan::call('env:set SERVE_OWNER_ONLY false');
             Artisan::call('env:set APP_DEBUG true');
         }
 

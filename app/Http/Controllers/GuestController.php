@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dicts\CachePrefixes;
 use App\Dicts\DocsMapping;
 use App\Dicts\SettingIds;
 use App\Http\Consts;
@@ -11,6 +12,7 @@ use App\Models\SitePeer;
 use App\Services\InternalCallService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Spatie\Url\Url;
 
@@ -72,9 +74,12 @@ class GuestController extends Controller
         }
 
         if (! $first_run_completed) {
+            
             Artisan::call('route:clear');
             Artisan::call('key:generate');
             Artisan::call('config:cache');
+            usleep(500_000);
+            Artisan::call('route:cache');
 
             return redirect($request->getSchemeAndHttpHost().'/first_run_setup');
         }
