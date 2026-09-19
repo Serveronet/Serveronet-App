@@ -27,7 +27,7 @@
 ⁣
 <a name="linux"></a>
 
-### Linux 64bit (Ubuntu & Debian) and MacOS
+### Linux and MacOS
 
 - Download client bundle
   - `curl -L https://serveronet.org/linux_and_mac_client_bundle.zip -o linux_and_mac_client_bundle.zip`

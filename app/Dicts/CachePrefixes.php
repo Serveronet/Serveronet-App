@@ -45,4 +45,6 @@ class CachePrefixes
     const ts_grant_visitor_record_ = 'ts_grant_visitor_record_';
 
     const internal_closure_ = 'internal_closure_';
+
+    const central_mostRecent_versions = 'central_mostRecent_versions';
 }

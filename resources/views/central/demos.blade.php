@@ -4,8 +4,8 @@
 
 @section('content')
 
-<a class="btn btn-outline-primary btn-sm shadow-sm rounded-1" rel="prefetch" target="_blank"
-wire:navigate.hover="" href="http://client.serveronet.org/">Try on a Demo client</a>
+<a class="btn btn-outline-primary btn-sm shadow-sm rounded-1" target="_blank"
+ href="http://client.serveronet.org/">Try on a Demo client</a>
 <div class="h4 mt-3">You can deploy and access Serveronet Sites in multiple ways</div>
 <ul class="mt-2 list-unstyled">
     @foreach ($demos as $demo)

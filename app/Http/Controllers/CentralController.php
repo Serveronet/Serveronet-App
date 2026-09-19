@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Dicts\CachePrefixes;
 use App\Dicts\PublishedVersionsChannels;
+use App\Dicts\PublishedVersionsLabels;
 use App\Dicts\PublishedVersionsTypes;
 use App\Http\Consts;
 use App\Models\ServeronetVersion;
 use App\Services\PQCryptoService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class CentralController extends Controller
@@ -72,7 +75,47 @@ class CentralController extends Controller
 
     public function downloads()
     {
-        return view('central.downloads');
+        // $mostRecentVersions = collect();
+        // foreach (PublishedVersionsTypes::getConstants() as $key => $type) {
+        //     $v = ServeronetVersion::where('type', $type)->where('channel', 'prod')
+        //         ->orderByDesc('major')
+        //         ->orderByDesc('minor')
+        //         ->select(ServeronetVersion::$publicProperties)->first();
+        //     if ($v) {
+        //         $mostRecentVersions->push($v);
+        //     }
+        // }
+
+        // foreach ($mostRecentVersions as $key => $mostRecentVersion) {
+        //     $mostRecentVersion->label = PublishedVersionsLabels::$mapping[$mostRecentVersion->type];
+        // }
+
+        $mostRecentVersions = Cache::remember(CachePrefixes::central_mostRecent_versions, 10, function () {
+            $mostRecentVersionsCollection = collect();
+            foreach (PublishedVersionsTypes::getConstants() as $key => $type) {
+                $v = ServeronetVersion::where('type', $type)->where('channel', 'prod')
+                    ->orderByDesc('major')
+                    ->orderByDesc('minor')
+                    ->select(ServeronetVersion::$publicProperties)->first();
+                if ($v) {
+                    $mostRecentVersionsCollection->push($v);
+                }
+            }
+
+            foreach ($mostRecentVersionsCollection as $key => $mostRecentVersion) {
+                $mostRecentVersion->label = PublishedVersionsLabels::$mapping[$mostRecentVersion->type];
+            }
+
+            return $mostRecentVersionsCollection;
+        });
+
+        $windows_client_bundle_version = $mostRecentVersions->where("type", PublishedVersionsTypes::windows_client_bundle)->first();
+        $linux_and_mac_client_bundle = $mostRecentVersions->where("type", PublishedVersionsTypes::linux_and_mac_client_bundle)->first();
+        $server_bundle = $mostRecentVersions->where("type", PublishedVersionsTypes::server_bundle)->first();
+        $client_update = $mostRecentVersions->where("type", PublishedVersionsTypes::client_update)->first();
+
+        return view('central.downloads', 
+        compact('windows_client_bundle_version', 'linux_and_mac_client_bundle', 'server_bundle', 'client_update'));
     }
 
     public function demos()

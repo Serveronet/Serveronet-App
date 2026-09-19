@@ -59,7 +59,7 @@ class LandingText
         ],
         [
             'title' => 'Deployment',
-            'subtitle' => 'Linux, Windows, Servers',
+            'subtitle' => 'Linux, Windows, MacOS, Servers',
             'image' => './sn_client_resources/img/deployed_code_FILL0_wght100_GRAD-25_opsz48.svg',
             'description' => 'You can use it on your own PC as a client or deploy on a public hosting server. 
             Deployment is easy and should work on a Shared Hosting, VPS, Raspbian etc.',

@@ -15,17 +15,17 @@
 
         <div class=" justify-content-center">
 
-            <a class="ms-0 btn btn-outline-primary btn shadow-sm rounded-1" rel="prefetch" wire:navigate.hover=""
+            <a class="ms-0 btn btn-outline-primary btn shadow-sm rounded-1"
                 href="{{ domainRoute('demos') }}">Demos 🌍</a>
             <link rel="prefetch" href="{{ domainRoute('demos') }}">
 
-            <a class="ms-1 btn btn-outline-success btn shadow-sm rounded-1" rel="prefetch" wire:navigate.hover=""
+            <a class="ms-1 btn btn-outline-success btn shadow-sm rounded-1"
                 href="{{ route('documentation', ['doc_tag' => \App\Dicts\DocsMapping::installation_and_deployment]) }}">Install
                 ⬇</a>
             <link rel="prefetch"
                 href="{{ route('documentation', ['doc_tag' => \App\Dicts\DocsMapping::installation_and_deployment]) }}">
 
-            <a class="ms-1 btn btn-outline-dark btn shadow-sm rounded-1" rel="prefetch" wire:navigate.hover=""
+            <a class="ms-1 btn btn-outline-dark btn shadow-sm rounded-1"
                 href="{{ route('documentation', ['doc_tag' => \App\Dicts\DocsMapping::documentation_index]) }}">Docs
                 ❔</a>
             <link rel="prefetch"
@@ -78,10 +78,10 @@
         <div class="cards">
             <div>
                 <a class="btn btn-outline-primary btn btn-lg shadow-sm rounded-1 mt-2" rel="prefetch" target="_blank"
-                    wire:navigate.hover="" href="http://client.serveronet.org/">Try on a Demo client</a>
+                    href="http://client.serveronet.org/">Try on a Demo client</a>
                     <span class="ms-1 me-1">or</span>
                 
-                <a class="btn btn-outline-success btn-lg shadow-sm rounded-1 mt-2" rel="prefetch" wire:navigate.hover=""
+                <a class="btn btn-outline-success btn-lg shadow-sm rounded-1 mt-2"
                     href="{{ route('documentation', ['doc_tag' => \App\Dicts\DocsMapping::installation_and_deployment]) }}">Install your Client</a>
             </div>
 
