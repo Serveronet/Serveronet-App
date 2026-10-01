@@ -113,7 +113,7 @@ class TorrentService extends Controller
 
         $sitePeerslifeLength = Carbon::parse($trackers_site_peers_cached_at)->diffInSeconds(now());
 
-        if ($sitePeerslifeLength > $trackersAnnounceInterval || ($sitePeerslifeLength > 6 && $site->trackers_site_peers_count == 0)) {
+        if ($sitePeerslifeLength > $trackersAnnounceInterval || ($sitePeerslifeLength > 60 && $site->trackers_site_peers_count == 0)) {
             
             $trackerSitePeers = (new TorrentTrackersController)->announceOrGetPeers($site_id, is_hosting: $site->is_hosted, returnPeersAsap: true);
             $trackerSitePeers = $trackerSitePeers['hosting'];

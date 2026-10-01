@@ -54,9 +54,6 @@ class RemotePeerService extends Controller
 
         $peers = (new PeerMixService)->getPeerMix(site_id: $site_id);
 
-        // info('$peers');
-        // info(json_encode($peers));
-
         $peer_mix = $peers->pluck('client_address');
         $livePassiveSessionsForSite = PassiveSession::where('last_heartbeat_at', '>', now()->subMinutes(1)->toDateTimeString())
             ->where('site_ids_json', 'like', '%'.$site_id.'%')->get();

@@ -106,7 +106,7 @@ class InternalCallService extends Controller
             $client->post($internalUrl, $options);
 
         } catch (ConnectException $e) {
-            info('dispatchInternalAsync ConnectException '.$route_path.' '.Str::limit($e->getMessage(), 40));
+            info('dispatchInternalAsync ConnectException '.$route_path.' '.Str::limit($e->getMessage(), 30));
         } catch (Throwable $th) {
             info('dispatchInternalAsync $th '.$th->getMessage().' '.$th->getFile().' '.$th->getLine());
         }

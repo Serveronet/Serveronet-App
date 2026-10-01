@@ -1129,8 +1129,10 @@ class ClientController extends Controller
         $rc->operation_successful = true;
         $deleted = false;
 
-        if ($success == true && $data->result == KnownResponses::ok) {
+        if ($success == true && ($data->result == KnownResponses::ok ||
+        $data->result == KnownResponses::validation_failed)) {
             $rc->data['connection_attempt_successful'] = true;
+            
             $peer->last_connected_at = now();
             H::increasePeerReputation($peer->client_address);
             H::pfm('Connected succesfully to: '.$peer->client_address, pfm: $pfm);
@@ -1147,7 +1149,9 @@ class ClientController extends Controller
             }
 
             $rc->error_message = 'cyclic_occured';
+
         } else {
+            
             $rc->error_message = $data->result;
             H::decreasePeerReputation($peer);
             H::pfm('Connection failed to: '.$peer->client_address, pfm: $pfm);

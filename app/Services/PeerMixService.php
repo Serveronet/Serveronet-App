@@ -35,7 +35,7 @@ class PeerMixService extends Controller
     function getPeerMix($site_id, $excludedPeers = []): Collection 
     {
         $peerMixSize = 15;
-        $minReputation = -2000;
+        $minReputation = -100;
         
         $useSitePeersEnabledInSettings = H::getSettVal(SettingIds::use_source_site_peers);
 
@@ -104,6 +104,7 @@ class PeerMixService extends Controller
                         ->orWhereDoesntHave('peer');
             });
             $sitePeersVerified = $sitePeersMostRecentVerifiedBuilder->select(SitePeer::$publicProperties)->take(10)->get();
+            
 
             /* Connectable */
             $sitePeersRecentlyConnectableBuilder = SitePeer::query();
@@ -114,9 +115,12 @@ class PeerMixService extends Controller
             $sitePeersConnectable = $sitePeersRecentlyConnectableBuilder->select(SitePeer::$publicProperties)->take(10)->get(); //->inRandomOrder();
 
             /* Any Site Peer */
-            $anySitePeerBuilder = SitePeer::whereSiteId($site_id)->withoutArchived()->withoutSelf()
+            $anySitePeerBuilder = SitePeer::whereSiteId($site_id)
+            ->withoutArchived()->withoutSelf()
+            ->with('peer')->whereRelation('peer', 'reputation', '>=', $minReputation)
             ->select(SitePeer::$publicProperties)->take(10);
             $anySitePeers = $anySitePeerBuilder->get();
+
         }      
         
         if (H::getSettVal(SettingIds::use_source_trackers) ) {
