@@ -280,6 +280,7 @@ class FirstRunController extends Controller
 
         if ($is_off_network_node) {
             H::setSettingValue(SettingIds::port_forwarding_enabled, false);
+            H::setSettingValue(SettingIds::automatic_trackers_updating_enabled, false);
             H::setSettingValue(SettingIds::client_automatic_update_channel, PublishedVersionsChannels::dev);
             // $versionSource = PublishedVersionsSources::central_server;
             // if (class_exists(DevController::class)) {
@@ -292,6 +293,7 @@ class FirstRunController extends Controller
         }
         if ($isDevNode) {
             H::setSettingValue(SettingIds::port_forwarding_enabled, false);
+            H::setSettingValue(SettingIds::automatic_trackers_updating_enabled, false);
         }
 
         $customCentralServer = $request->input('customCentralServer');

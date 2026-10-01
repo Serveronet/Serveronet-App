@@ -218,6 +218,9 @@ class SettingsController extends Controller
             case SettingIds::dev_custom_central_server_address: return ['value' => 
                 null, 'type' => SettingDataTypes::string, 'is_advanced' => true];
             break;
+            case SettingIds::automatic_trackers_updating_enabled: return ['value' => 
+                true, 'type' => SettingDataTypes::boolean, 'is_advanced' => true];
+            break;
 
             default: return ['value' => 
                 '', 'type' => SettingDataTypes::string, 'is_advanced' => false];
@@ -362,6 +365,9 @@ class SettingsController extends Controller
             break;
             case SettingIds::dev_custom_central_server_address: 
                 return 'Custom Central Server Address';
+            break;
+            case SettingIds::automatic_trackers_updating_enabled: 
+                return 'Automatically add new trackers from NewTrackon';
             break;
             
             default:

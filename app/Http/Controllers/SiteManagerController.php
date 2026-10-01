@@ -288,7 +288,7 @@ class SiteManagerController extends Controller
             ['site_id', $site->site_id],
         ])->withTrashed()
         ->with('grant_record')
-        ->select('record_json', 'signature', 'grantee_visitor_id', 'visitor_id')
+        ->select('record_json', 'signature', 'grantee_visitor_id', 'visitor_id', 'signer_verification_key_base64')
         ->get();
 
         foreach ($visitorRecords as $key => $visitorRecord) {
@@ -305,7 +305,7 @@ class SiteManagerController extends Controller
             ['site_id', $site->site_id],
         ])->withTrashed()
         ->with('grant_record')
-        ->select('record_json', 'signature', 'grantee_visitor_id', 'visitor_id')
+        ->select('record_json', 'signature', 'grantee_visitor_id', 'visitor_id', 'signer_verification_key_base64')
         ->get();
 
         foreach ($visitorResources as $key => $visitorResource) {

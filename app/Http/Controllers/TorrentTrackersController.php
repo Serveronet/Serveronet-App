@@ -51,6 +51,9 @@ class TorrentTrackersController extends Controller
             return redirect(domainRoute('trackers'))->with('status', 'Disabled - Dev environment');
         }
 
+        if (! H::getSettVal(SettingIds::automatic_trackers_updating_enabled))
+        return redirect(domainRoute('trackers'))->with('status', 'Disabled by setting');
+
         $in_ui = request()->in_ui ?? false;
 
         $url = 'https://newtrackon.com/api/http';

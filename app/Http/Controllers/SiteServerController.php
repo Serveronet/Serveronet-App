@@ -316,11 +316,9 @@ class SiteServerController extends Controller
             }
         }
 
-        $pattern = '/^([a-zA-Z0-9-_|\/]+)+$/'; // Path with dot
-        if ($siteConfig->single_Page_Application && preg_match($pattern, $res_id)) {
+        $flFile = collect($site_resources)->where('res_id', $res_id)->first();
+        if (! $flFile && $siteConfig->single_Page_Application && ! Str::contains($res_id, '.')) {
             $flFile = collect($site_resources)->where('res_id', 'index.html')->first();
-        } else {
-            $flFile = collect($site_resources)->where('res_id', $res_id)->first();
         }
         if (! $flFile) {
             $message = 'No such a file in the File Listing';

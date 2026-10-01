@@ -93,6 +93,8 @@ class SettingIds
     public const client_automatic_update_source = 'client_automatic_update_source';
 
     public const dev_custom_central_server_address = 'dev_custom_central_server_address';
+
+    public const automatic_trackers_updating_enabled = 'automatic_trackers_updating_enabled';
     
     
     public static function getConstants()

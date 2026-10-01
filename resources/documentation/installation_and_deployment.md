@@ -13,12 +13,12 @@
 
 - Download client bundle: 
   
-  [Serveronet Windows Client https://serveronet.org/windows_client_bundle.zip](https://serveronet.org/windows_client_bundle.zip)
+  [Serveronet Windows Client https://serveronet.org/windows_client_bundle.zip ▶](https://serveronet.org/windows_client_bundle.zip)
 
 - Unzip downloaded zip
   
 - Run Serveronet_Start.bat
-- Go to http://snet.localhost:15080
+- Go to [http://snet.localhost:15080 ▶](http://snet.localhost:15080/)
 - Perform First Run setup
 - Optionally: Start Tor Brower and IPFS Client and configure in settings to use it
 - Done ✅
