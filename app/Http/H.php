@@ -267,7 +267,8 @@ class H
 
         $site_peer_client_address = H::getCached(
             CachePrefixes::site_peer_client_address_.$site->site_id,
-            SitePeer::whereSiteId($site->site_id)->select('client_address')->withoutSelf()->withoutArchived()->take(10),
+            SitePeer::whereSiteId($site->site_id)->select('client_address')->withoutSelf()->withoutArchived()
+            ->with('peer')->whereRelation('peer', 'reputation', '>=', 0)->take(10),
             isCollection: true
         );
 

@@ -16,19 +16,19 @@
 <div class="">Social Media Site - Allows visitors to create and publish their posts. Also comment and like other visitor's posts. 
     Implemented in Serveronet technology and it's permission model. Visitors have to be granted access before posting. 
     Implemented as an Angular app.</div>
-    <div class="fst-italic">Available on Demo Client</div>
+    <div class="fst-italic">Available on a Demo Client</div>
     <a class="btn btn-outline-secondary btn-sm shadow-sm rounded-1 font-monospace" target="_blank"
  href="http://xkuyjxyjn74l2uikred2prikklbh33ajcxo7ixn4gg4eem7xn7mq.client.serveronet.org/">SN Social ▶</a>
 
 <div class="h5 mt-4 font-monospace">Distributed Denial of Secrets</div>
 <div class="">Mirror of a popular Leaks Site implemented in Serveronet technology. Distributed Denial of Secrets. Implemented as an React app.</div>
-<div class="fst-italic">Available on Demo Client</div>
+<div class="fst-italic">Available on a Demo Client</div>
 <a class="btn btn-outline-secondary btn-sm shadow-sm rounded-1 font-monospace" target="_blank"
  href="http://nldd446sazrflxsmxkgtudwnwykhlvr5dolge3klp3mqfsrycfxa.client.serveronet.org/">DDoSecrets ▶</a>
 
 <div class="h5 mt-4 font-monospace">Tech Demo Site</div>
 <div class="">Tech Demo Site which ilustrates most of technical aspects of implementing a website in Serveronet. Vanila html and Vue Js.</div>
-<div class="fst-italic">Available on Demo Client</div>
+<div class="fst-italic">Available on a Demo Client</div>
 <a class="btn btn-outline-secondary btn-sm shadow-sm rounded-1 mb-4 font-monospace" target="_blank"
  href="http://hwy4phcbfbigqgr5duodyntqcz34ypr2bdwx6d3oa36rsuvujt7a.client.serveronet.org/">Tech Demo ▶</a>
 <hr>
