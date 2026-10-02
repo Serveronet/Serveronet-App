@@ -379,6 +379,7 @@ class UpsertController extends Controller
         } else {
             $updatedRecordCount = 1;
         }
+        $originalEntityCreated = explode('_', $incomingRecord->{SysProps::_sn_entity_id})[0];
         $originatorVisitorId = explode('_', $incomingRecord->{SysProps::_sn_entity_id})[1];
 
         $isSiteAdminRC = PermissionService::isSiteAdmin($signer, $siteConfig);
@@ -423,15 +424,19 @@ class UpsertController extends Controller
         ])->withTrashed()->first();
 
         $newNowString = now()->toDateTimeString();
+        $incomingRecord->{SysProps::_sn_entity_created} = $originalEntityCreated;
+
         if (! $visitorRecord) {
 
             /* New */
             $visitorRecord = new VisitorRecord;
+            
 
         } else {
 
             /* Updating */
             $createdAt = $visitorRecord->created_at;
+            
         }
 
         if ($visitorRecord->is_site_admin_locked && ! $isSiteAdminRC->is_site_admin) {
@@ -451,7 +456,7 @@ class UpsertController extends Controller
 
         $recordAsArrayForJson[SysProps::_sn_is_site_admin_locked] = $incomingRecord->{SysProps::_sn_is_site_admin_locked} ?? false;
 
-        $recordAsArrayForJson[SysProps::_sn_entity_created] = $incomingRecord->{SysProps::_sn_entity_created} ?? $nowMicroTimeString;
+        $recordAsArrayForJson[SysProps::_sn_entity_created] = $incomingRecord->{SysProps::_sn_entity_created};
         $recordAsArrayForJson[SysProps::_sn_entity_updated] = $nowMicroTimeString;
 
         $recordAsArrayForJson[SysProps::_sn_entity_deleted] = $_sn_mark_as_deleted ? $nowMicroTimeString : null;

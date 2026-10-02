@@ -510,7 +510,7 @@ class P2pReplicationService extends Controller
 
         if (! $isRecordConsistent) {
             H::pfm('Record Inconsistent: ', pfm: $pfm);
-            info('VRec Record Inconsistent: ');
+            info('VRec Record is Inconsistent.');
 
             return false;
         } else {
@@ -534,7 +534,7 @@ class P2pReplicationService extends Controller
                 info('Malformed envelope received - ignoring. '.$th->getMessage());
             }
         }
-
+info('isSiteAdminRC reached: '.$incomingRecord->{SysProps::_sn_entity_id});
         $isSiteAdminRC = PermissionService::isSiteAdmin($incomingRecord->{SysProps::_sn_signer}, $siteConfig);
         H::pfm($isSiteAdminRC, pfm: $pfm);
         if (! $isSiteAdminRC->operation_successful) {
@@ -597,7 +597,8 @@ class P2pReplicationService extends Controller
 
         if ($incomingRecord->{SysProps::_sn_entity_updated} > $visitorRecord->entity_updated && ! $createdNew) {
             $dirtyFlag = true;
-            H::pfm('Updating incomming record ', pfm: $pfm);
+
+            H::pfm('Updating incomming record ', pfm: $pfm, log: true);
         }
 
         if ($dirtyFlag) {
