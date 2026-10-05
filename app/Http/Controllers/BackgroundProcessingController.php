@@ -1403,7 +1403,7 @@ class BackgroundProcessingController extends Controller
         request()->validate(['site_peer_id' => 'required|int']);
 
         $sitePeer = SitePeer::find($site_peer_id);
-        info('sitePeer '.json_encode($sitePeer));
+        info('verifySitePeer sitePeer '.json_encode($sitePeer->only(SitePeer::$publicProperties)));
 
         H::pfm('Checking hosting state of peer '.$sitePeer->client_address.' '.$sitePeer->site_id, pfm: $pfm);
         info('Checking hosting state of peer '.$sitePeer->client_address.' '.$sitePeer->site_id);
@@ -1434,7 +1434,7 @@ class BackgroundProcessingController extends Controller
             $data = $result->data;
 
         } catch (Throwable $th) {
-            info('verifySitePeer '.$th->getMessage().' '.$th->getFile().' '.$th->getLine());
+            info('verifySitePeer '.Str::limit($th->getMessage(), 30));
             $peer = Peer::where('client_address', $sitePeer->client_address)->first();
             H::decreasePeerReputation($peer);
             H::pfm($th->getMessage().' '.$th->getFile().' '.$th->getLine(), pfm: $pfm);

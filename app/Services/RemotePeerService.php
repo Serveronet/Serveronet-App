@@ -98,7 +98,7 @@ class RemotePeerService extends Controller
             }
 
             $requestConfigSet['query_id'] = $crowdQuery->query_id;
-            info('$requestConfigSet '.json_encode($requestConfigSet));
+            // info('$requestConfigSet '.json_encode($requestConfigSet));
 
             $crowdPeers->push($requestConfigSet);
 

@@ -406,6 +406,13 @@ class H
         return false;
     }
 
+    public static function prepareIp($ip): string
+    {
+        $ip = Str::contains($ip, ':') ? '['.$ip.']' : $ip;
+
+        return $ip;
+    }
+
     public static function updateSitesHostedState($site_id = null, $pfm = false)
     {
         info('updateSitesHostedState');
@@ -426,13 +433,6 @@ class H
 
             H::publishSelfAsSitePeer(site_id: $site_id, pfm: $pfm);
         }
-    }
-
-    public static function prepareIp($ip): string
-    {
-        $ip = Str::contains($ip, ':') ? '['.$ip.']' : $ip;
-
-        return $ip;
     }
 
     public static function getSiteHostingTargetState($site_id)

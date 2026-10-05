@@ -107,13 +107,14 @@ class TorrentService extends Controller
 
         $site = H::getCached(CachePrefixes::site_.$site_id, Site::whereSiteId($site_id));
 
-        $trackersAnnounceInterval = ( ! H::isDevNode()) ? 1800 : 10;
+        $trackersAnnounceInterval = ( ! H::isDevNode()) ? 600 : 10;
 
-        $trackers_site_peers_cached_at = $site->trackers_site_peers_cached_at ?? 0;
+        $trackers_site_peers_cached_at = $site->trackers_site_peers_cached_at ?? now();
 
         $sitePeerslifeLength = Carbon::parse($trackers_site_peers_cached_at)->diffInSeconds(now());
 
-        if ($sitePeerslifeLength > $trackersAnnounceInterval || ($sitePeerslifeLength > 60 && $site->trackers_site_peers_count == 0)) {
+        if ($sitePeerslifeLength > $trackersAnnounceInterval || ($sitePeerslifeLength > 60 && $site->trackers_site_peers_count <= 2)) {
+            info('getUpdatedTrackerSitePeers - Updating as cache expired');
             
             $trackerSitePeers = (new TorrentTrackersController)->announceOrGetPeers($site_id, is_hosting: $site->is_hosted, returnPeersAsap: true);
             $trackerSitePeers = $trackerSitePeers['hosting'];
@@ -149,12 +150,12 @@ class TorrentService extends Controller
                 }
 
                 if (in_array($client_address, H::getSelfAddresses())) {
-                    info('getUpdatedTrackerSitePeers Not adding peer as is self');
+                    info('getUpdatedTrackerSitePeers Not adding peer as is self: '.$client_address);
 
                     continue;
                 }
 
-                info('getUpdatedTrackerSitePeers before saving: '.$client_address);
+                info('getUpdatedTrackerSitePeers - Saving: '.$client_address);
 
                 $sitePeer = SitePeer::where([
                     ['client_address', $client_address],
@@ -187,15 +188,16 @@ class TorrentService extends Controller
                 }
             }
 
-            $metadata = 'Using trackers as a source of Peers';
+            $metadata = 'Pulled fresh peers from trackers';
         } else {
-            $metadata = 'Using known Site Peers as a source of Peers';
+            info('getUpdatedTrackerSitePeers - Using cached site peers');
+            $metadata = 'Using cached tracker peers';
         }
         $sitePeers = SitePeer::whereSiteId($site_id)->where('source', 'tracker')->get();
 
         $rc->data = $sitePeers;
         $rc->debug_data = [];
-        $rc->metadata = $metadata.' | Cached Site Peers seconds: '.round($sitePeerslifeLength, 0).' | trackers_site_peers_cached_at: '.$trackers_site_peers_cached_at;
+        $rc->metadata = $metadata.' | Cached Site Peers TTL (seconds): '.round($sitePeerslifeLength, 0).' | trackers_site_peers_cached_at: '.$trackers_site_peers_cached_at;
 
         return $rc;
     }

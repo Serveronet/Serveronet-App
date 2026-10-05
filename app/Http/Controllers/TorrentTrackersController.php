@@ -287,7 +287,7 @@ class TorrentTrackersController extends Controller
 
         $url = $urlCommon.'&compact=0';
 
-        $r = null;
+        $decodedBody = null;
 
         $trackerYield = new stdClass;
         $trackerYield->url = $tracker_url;
@@ -303,7 +303,7 @@ class TorrentTrackersController extends Controller
             $statusCode = $response->getStatusCode();
             $body = (string) $response->getBody();
 
-            $r = Bencode::decode($body);
+            $decodedBody = Bencode::decode($body);
 
             $tracker = Tracker::where('url', $tracker_url)->first();
             $tracker->last_error = null;
@@ -314,7 +314,7 @@ class TorrentTrackersController extends Controller
             $firstRunSuccessful = true;
 
         } catch (\Throwable $th) {
-            info('announceToTracker St '.$th->getMessage().' '.$th->getFile().' '.$th->getLine());
+            info('announceToTracker NotCompact '.$th->getMessage());
 
             if ($th instanceof ClientException) {
                 $statusCode = $th->getResponse()->getStatusCode();
@@ -351,7 +351,7 @@ class TorrentTrackersController extends Controller
                 $statusCode = $response->getStatusCode();
                 $body = (string) $response->getBody();
 
-                $r = Bencode::decode($body);
+                $decodedBody = Bencode::decode($body);
 
                 $tracker = Tracker::where('url', $tracker_url)->first();
                 $tracker->last_error = null;
@@ -361,7 +361,7 @@ class TorrentTrackersController extends Controller
                 $trackerYield->result = 'success';
                 $firstRunSuccessful = true;
             } catch (\Throwable $th) {
-                info('announceToTracker Nd '.$th->getMessage().' '.$th->getFile().' '.$th->getLine());
+                info('announceToTracker Compact '.$th->getMessage());
 
                 if ($th instanceof ClientException) {
                     $statusCode = $th->getResponse()->getStatusCode();
@@ -377,15 +377,15 @@ class TorrentTrackersController extends Controller
         }
 
         $result = 'success';
-        if (! $r) {
+        if (! $decodedBody) {
             $result = 'failure';
         }
 
         if ($compact) {
-            $peers = isset($r['peers']) ? $r['peers'] : null;
+            $peers = isset($decodedBody['peers']) ? $decodedBody['peers'] : null;
             $peers = self::parseCompactPeers($peers);
         } else {
-            $peers = $r['peers'] ?? null;
+            $peers = $decodedBody['peers'] ?? null;
         }
 
         Cache::put(CachePrefixes::tracker_yield_peers_.$site_id.$tracker_url, json_encode($peers));
@@ -393,6 +393,8 @@ class TorrentTrackersController extends Controller
 
         InternalCallService::endInteralRequestReporting($internalRequestId);
 
+        info('trackerYield: '.json_encode($trackerYield));
+        info('trackerYield peers: '.json_encode($peers));
         return $trackerYield;
     }
 

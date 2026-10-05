@@ -93,7 +93,7 @@ class InternalCallService extends Controller
 
         try {
             $internalUrl = H::a(config('app.url')).'internal/'.$route_path;
-            info('$internalUrl '.$internalUrl);
+            info('internalUrl: '.$internalUrl);
 
             $client = H::setupClient(false);
             $options = [
@@ -106,7 +106,7 @@ class InternalCallService extends Controller
             $client->post($internalUrl, $options);
 
         } catch (ConnectException $e) {
-            info('dispatchInternalAsync ConnectException '.$route_path.' '.Str::limit($e->getMessage(), 30));
+            // info('dispatchInternalAsync ConnectException '.$route_path.' '.Str::limit($e->getMessage(), 30));
         } catch (Throwable $th) {
             info('dispatchInternalAsync $th '.$th->getMessage().' '.$th->getFile().' '.$th->getLine());
         }
