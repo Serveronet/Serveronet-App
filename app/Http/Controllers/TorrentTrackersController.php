@@ -103,6 +103,10 @@ class TorrentTrackersController extends Controller
         $explicit_failed_trackers = [];
         $tried_trackers_count = count($trackersUrls);
 
+        if (! H::getSettVal(SettingIds::announce_self_as_tracker_site_peer)) {
+            $is_hosting = false;
+        }
+
         $trackersStats = [];
 
         if (
@@ -136,13 +140,16 @@ class TorrentTrackersController extends Controller
             ['delay' => 2_000_000],
             ['delay' => 2_500_000],
             ['delay' => 3_500_000],
-            // Max 10 sec
+            ['delay' => 5_000_000],
+            // Max 15 sec
         ];
         foreach ($delays as $key => $d) {
             foreach ($trackersUrls as $key => $tracker_url) {
                 $result = Cache::get(CachePrefixes::tracker_yield_result_.$site_id.$tracker_url);
-
+                
                 $peers = json_decode(Cache::get(CachePrefixes::tracker_yield_peers_.$site_id.$tracker_url), true) ?? [];
+                info('tracker_yield_result_: '.$result);
+                info('tracker_yield_result_peers: '.json_encode($peers));
                 if ($result) {
                     switch ($result) {
                         case 'success':

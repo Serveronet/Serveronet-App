@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dicts\CachePrefixes;
 use App\Dicts\PublishedVersionsChannels;
 use App\Dicts\PublishedVersionsTypes;
 use App\Dicts\SettingIds;
@@ -22,6 +23,7 @@ use App\Support\ContentTypeResolver;
 use Base32\Base32;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Spatie\Url\Url;
@@ -30,6 +32,6 @@ class PlaygroundController extends Controller
 {
     public function test(Request $request) 
     {
-        
+
     }
 }

@@ -221,6 +221,9 @@ class SettingsController extends Controller
             case SettingIds::automatic_trackers_updating_enabled: return ['value' => 
                 true, 'type' => SettingDataTypes::boolean, 'is_advanced' => true];
             break;
+            case SettingIds::announce_self_as_tracker_site_peer: return ['value' => 
+                true, 'type' => SettingDataTypes::boolean, 'is_advanced' => true];
+            break;
 
             default: return ['value' => 
                 '', 'type' => SettingDataTypes::string, 'is_advanced' => false];
@@ -368,6 +371,9 @@ class SettingsController extends Controller
             break;
             case SettingIds::automatic_trackers_updating_enabled: 
                 return 'Automatically add new trackers from NewTrackon';
+            break;
+            case SettingIds::announce_self_as_tracker_site_peer: 
+                return 'Announce as a Site Peer when hosting. Disable to limit swarm poisoning.';
             break;
             
             default:

@@ -109,10 +109,11 @@ class TorrentService extends Controller
 
         $trackersAnnounceInterval = ( ! H::isDevNode()) ? 600 : 10;
 
-        $trackers_site_peers_cached_at = $site->trackers_site_peers_cached_at ?? now();
+        $trackers_site_peers_cached_at = $site->trackers_site_peers_cached_at ?? now()->subSeconds($trackersAnnounceInterval+1);
 
         $sitePeerslifeLength = Carbon::parse($trackers_site_peers_cached_at)->diffInSeconds(now());
 
+        /* Aggresive Tracker querying when little peers */
         if ($sitePeerslifeLength > $trackersAnnounceInterval || ($sitePeerslifeLength > 60 && $site->trackers_site_peers_count <= 2)) {
             info('getUpdatedTrackerSitePeers - Updating as cache expired');
             

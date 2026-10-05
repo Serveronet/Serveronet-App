@@ -95,6 +95,8 @@ class SettingIds
     public const dev_custom_central_server_address = 'dev_custom_central_server_address';
 
     public const automatic_trackers_updating_enabled = 'automatic_trackers_updating_enabled';
+
+    public const announce_self_as_tracker_site_peer = 'announce_self_as_tracker_site_peer';
     
     
     public static function getConstants()
