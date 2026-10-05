@@ -1197,15 +1197,19 @@ class BackgroundProcessingController extends Controller
     protected static function purgeP2pMessageBody($pfm = false)
     {
         H::pfm('Purge p2p message body', pfm: $pfm);
-        $readyToBeDeltedP2pMessages = P2pMessage::whereNotNull('sent_at')->whereNull('purged_at')
+        $readyToBeClearedP2pMessages = P2pMessage::whereNotNull('sent_at')->whereNull('purged_at')
             ->take(1000)->get();
-        H::pfm('Ready to be purged: '.count($readyToBeDeltedP2pMessages), pfm: $pfm);
+        H::pfm('Ready to be cleared: '.count($readyToBeClearedP2pMessages), pfm: $pfm);
 
-        foreach ($readyToBeDeltedP2pMessages as $key => $p2pMessage) {
+        foreach ($readyToBeClearedP2pMessages as $key => $p2pMessage) {
             $p2pMessage->json_payload = null;
             $p2pMessage->purged_at = now();
             $p2pMessage->save();
         }
+        
+        P2pMessage::whereNotNull('sent_at')->whereNotNull('purged_at')
+        ->where('created_at', '<', now()->subDays(7))->orderByDesc('created_at')
+        ->take(1000)->delete();
     }
 
     protected static function deleteCompletedAndFailedRetrievals($pfm = false)

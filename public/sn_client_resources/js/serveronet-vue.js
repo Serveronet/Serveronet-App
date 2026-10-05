@@ -172,7 +172,7 @@ createApp({
         return this.settingsList
 
       return this.settingsList.filter((item) => {
-        return (item.setting_id.includes(this.searchTerm) || item.desc.includes(this.searchTerm))
+        return (item.setting_id.toLowerCase().includes(this.searchTerm.toLowerCase()) || item.desc.toLowerCase().includes(this.searchTerm.toLowerCase()))
       })
     },
     async reload() {
