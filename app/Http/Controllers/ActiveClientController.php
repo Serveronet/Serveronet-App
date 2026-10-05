@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Dicts\ActionTypes;
 use App\Dicts\RecordStates;
+use App\Dicts\SettingIds;
 use App\Http\H;
 use App\Models\ActivesActionRequest;
 use App\Models\CachedResource;
@@ -230,6 +231,10 @@ class ActiveClientController extends Controller
             return $this->return_failure($th->getMessage());
         }
 
+        $max_passive_sessions_count = H::getSettVal(SettingIds::max_passive_sessions_count);
+        if ($max_passive_sessions_count == 0)
+            return $this->return_failure('Accepting passive setting disabled by setting');
+
         $outdatedPassiveSessions = PassiveSession::
         where('last_heartbeat_at', '<', now()->subMinutes(1)->toDateTimeString())->get();
         $outdatedPassiveSessions->each(function ($passiveSession, $key) {
@@ -253,7 +258,7 @@ class ActiveClientController extends Controller
         }
 
         $totalPassiveSessions = PassiveSession::get();
-        if ($totalPassiveSessions->count() > 6)
+        if ($totalPassiveSessions->count() > $max_passive_sessions_count)
         return $this->return_failure('Too many sessions already');
 
         $passive_client_address = $request->client_address;

@@ -534,15 +534,16 @@ class P2pReplicationService extends Controller
                 info('Malformed envelope received - ignoring. '.$th->getMessage());
             }
         }
-info('isSiteAdminRC reached: '.$incomingRecord->{SysProps::_sn_entity_id});
+        info('isSiteAdminRC reached: '.$incomingRecord->{SysProps::_sn_entity_id});
         $isSiteAdminRC = PermissionService::isSiteAdmin($incomingRecord->{SysProps::_sn_signer}, $siteConfig);
         H::pfm($isSiteAdminRC, pfm: $pfm);
         if (! $isSiteAdminRC->operation_successful) {
+            H::pfm('handleIncomingVisitorRecord Failed to check isAdmin', pfm: $pfm, log: true);
             return false;
         }
 
         if ($incomingRecord->{SysProps::_sn_is_grant_record} ?? false) {
-            H::pfm('handleIncomingVisitorRecord is_grant_record Yes '.$incomingRecord->{SysProps::_sn_entity_id}, pfm: $pfm);
+            H::pfm('handleIncomingVisitorRecord is_grant_record Yes '.$incomingRecord->{SysProps::_sn_entity_id}, pfm: $pfm, log: true);
 
             if (! $isSiteAdminRC->is_site_admin) {
                 return false;
@@ -584,7 +585,7 @@ info('isSiteAdminRC reached: '.$incomingRecord->{SysProps::_sn_entity_id});
             $visitorRecord = new VisitorRecord();
             $dirtyFlag = true;
             $createdNew = true;
-            H::pfm('New Record', pfm: $pfm);
+            H::pfm('New Record', pfm: $pfm, log: true);
         }
 
         if ($visitorRecord->is_site_admin_locked && ! $isSiteAdminRC->is_site_admin) {
@@ -593,7 +594,7 @@ info('isSiteAdminRC reached: '.$incomingRecord->{SysProps::_sn_entity_id});
             return false;
         }
 
-        H::pfm('Dates '.$visitorRecord->entity_updated.' '.$incomingRecord->{SysProps::_sn_entity_updated}, pfm: $pfm);
+        H::pfm('Dates '.$visitorRecord->entity_updated.' '.$incomingRecord->{SysProps::_sn_entity_updated}, pfm: $pfm, log: true);
 
         if ($incomingRecord->{SysProps::_sn_entity_updated} > $visitorRecord->entity_updated && ! $createdNew) {
             $dirtyFlag = true;

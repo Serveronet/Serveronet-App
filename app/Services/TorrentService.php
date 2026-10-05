@@ -191,8 +191,8 @@ class TorrentService extends Controller
 
             $metadata = 'Pulled fresh peers from trackers';
         } else {
-            info('getUpdatedTrackerSitePeers - Using cached site peers');
-            $metadata = 'Using cached tracker peers';
+            info('getUpdatedTrackerSitePeers - Using already known tracker site peers');
+            $metadata = 'Using already known tracker peers';
         }
         $sitePeers = SitePeer::whereSiteId($site_id)->where('source', 'tracker')->get();
 

@@ -47,7 +47,7 @@ class ReplicationController extends Controller
         $max_execution_time = $peerSessionDefinition['max_execution_time'];
 
         $peerReplicationSession = PeerReplicationSession::find($peer_replication_session_id);
-        info('onPeerReplicationSessionHandler: '.$peerReplicationSession->client_address);
+        info('onPeerReplicationSessionHandler: '.$peer_replication_session_id.' '.$peerReplicationSession->client_address);
         $peer = $peerReplicationSession;
 
         $client_address = $peer->client_address;
@@ -169,6 +169,14 @@ class ReplicationController extends Controller
         $record_count_map = $record_count_map->filter(function ($value, $key) use ($last_completed_date) {
             return $key > $last_completed_date;
         });
+        
+        if ($record_count_map->isEmpty()) {
+            info('All pages done. record_count_map empty '.urlencode($client_address));
+            $peerReplicationSession->state = PeerReplicationSessionStates::completed;
+            $peerReplicationSession->detailed_state = 'record_count_map empty - All pages done';
+            $peerReplicationSession->current_page = 1;
+            $peerReplicationSession->save();
+        }
 
         foreach ($record_count_map as $key => $countForDay) {
             info('record_count_map. Processing date: '.$key.' '.$client_address);
@@ -375,7 +383,7 @@ class ReplicationController extends Controller
                     $site->site_id,
                     $session_id,
                 );
-                info('actionAndManageSessions End Second '.$activePRSes->count());
+                info('actionAndManageSessions End of Second | Actives count '.$activePRSes->count());
 
                 if ($activePRSes->count() == 0) {
                     info('No more $activePRSes  '.$activePRSes->count());
@@ -396,7 +404,7 @@ class ReplicationController extends Controller
 
                 $endedAt = now();
                 $secondsTaken = $startedAt->diffInSeconds($endedAt);
-                info('$secondsTaken: '.round($secondsTaken, 2));
+                // info('$secondsTaken: '.round($secondsTaken, 2));
                 if ($secondsTaken > H::getMaxExecutionTime() - 1) {
                     break;
                 }

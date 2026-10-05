@@ -224,6 +224,9 @@ class SettingsController extends Controller
             case SettingIds::announce_self_as_tracker_site_peer: return ['value' => 
                 true, 'type' => SettingDataTypes::boolean, 'is_advanced' => true];
             break;
+            case SettingIds::max_passive_sessions_count: return ['value' => 
+                4, 'type' => SettingDataTypes::integer, 'is_advanced' => true];
+            break;
 
             default: return ['value' => 
                 '', 'type' => SettingDataTypes::string, 'is_advanced' => false];
@@ -374,6 +377,9 @@ class SettingsController extends Controller
             break;
             case SettingIds::announce_self_as_tracker_site_peer: 
                 return 'Announce as a Site Peer when hosting. Disable to limit swarm poisoning.';
+            break;
+            case SettingIds::max_passive_sessions_count: 
+                return 'Max passive sessions count. Set 0 to disable accepting sessions.';
             break;
             
             default:

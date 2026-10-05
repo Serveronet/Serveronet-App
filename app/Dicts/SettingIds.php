@@ -97,6 +97,8 @@ class SettingIds
     public const automatic_trackers_updating_enabled = 'automatic_trackers_updating_enabled';
 
     public const announce_self_as_tracker_site_peer = 'announce_self_as_tracker_site_peer';
+
+    public const max_passive_sessions_count = 'max_passive_sessions_count';
     
     
     public static function getConstants()

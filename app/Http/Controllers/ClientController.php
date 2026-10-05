@@ -224,7 +224,9 @@ class ClientController extends Controller
             ['delay' => 3],
             ['delay' => 4],
             ['delay' => 5],
+            ['delay' => 6],
         ];
+        /* Max ~21 */
 
         foreach ($delays as $key => $d) {
 
@@ -830,17 +832,27 @@ class ClientController extends Controller
                     ->orderBy('updated_at');
                 break;
         }
-        info('From DT To: '.$from.' '.$data_type.' '.$to.' page: '.$page.' range: '.json_encode($range));
+        info('handleRequestModifiedBetweenDates From DT To: '.$from.' '.$data_type.' '.$to.' page: '.$page.' range: '.json_encode($range));
 
         if ($count_only) {
             $response = $queryBuilder->count();
 
+            // $record_count_map = $queryBuilder
+            //     ->select(DB::raw('DATE(updated_at) as date'), DB::raw('COUNT(*) as count'))
+            //     ->groupBy(DB::raw('DATE(updated_at)'))
+            //     ->orderBy('date', 'asc')
+            //     ->pluck('count', 'date')
+            //     ->toArray();
+
             $record_count_map = $queryBuilder
-                ->select(DB::raw('DATE(updated_at) as date'), DB::raw('COUNT(*) as count'))
-                ->groupBy(DB::raw('DATE(updated_at)'))
-                ->orderBy('date', 'asc')
-                ->pluck('count', 'date')
-                ->toArray();
+            ->selectRaw('SUBSTR(entity_updated, 1, 8) as date, COUNT(*) as count')
+            ->groupByRaw('SUBSTR(entity_updated, 1, 8)')
+            ->orderBy('date', 'asc')
+            ->pluck('count', 'date')
+            ->mapWithKeys(fn ($count, $date) => [
+                Carbon::createFromFormat('Ymd', $date)->format('Y-m-d') => $count,
+            ])
+            ->toArray();
 
             return $this->return_success([
                 'count' => $response,
@@ -850,6 +862,7 @@ class ClientController extends Controller
         } else {
 
             info($queryBuilder->toSql());
+            info('handleRequestModifiedBetweenDates count: '.$queryBuilder->count());
 
             $response = $queryBuilder->paginate(perPage: $perPage, page: $page);
 

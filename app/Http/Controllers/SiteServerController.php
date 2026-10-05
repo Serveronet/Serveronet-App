@@ -394,7 +394,7 @@ class SiteServerController extends Controller
 
             $message = 'The resource could not be retrieved: '.$res_id.' | Sha 256: '
             .$flFile->sha256;
-            $status_code = 404;
+            $status_code = 504;
 
             return response(view('conditionalXXX', compact('message', 'status_code', 'debug_data')), status: $status_code);
         }
