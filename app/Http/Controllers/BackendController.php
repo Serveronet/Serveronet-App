@@ -436,7 +436,7 @@ class BackendController extends Controller
         $site = Site::whereSiteId($site_id)
             ->with('most_recent_site_definition:'
             .implode(',', SiteDefinition::$publicProperties)
-            .implode(',', $additionalColumns))
+            )
             ->select(array_merge(Site::$publicProperties, $additionalColumns))
             ->first();
 
