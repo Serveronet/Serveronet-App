@@ -428,9 +428,16 @@ class BackendController extends Controller
             return $invalidResult;
         }
 
+        $additionalColumns = [
+            'is_hosted', 'visitor_records_replication_end_ts', 'visitor_resources_replication_end_ts', 
+            'site_definitions_replication_end_ts', 'site_peers_replication_end_ts'
+        ];
+
         $site = Site::whereSiteId($site_id)
-            ->with('most_recent_site_definition:'.implode(',', SiteDefinition::$publicProperties))
-            ->select(Site::$publicProperties)
+            ->with('most_recent_site_definition:'
+            .implode(',', SiteDefinition::$publicProperties)
+            .implode(',', $additionalColumns))
+            ->select(array_merge(Site::$publicProperties, $additionalColumns))
             ->first();
 
         if (! $site) {
