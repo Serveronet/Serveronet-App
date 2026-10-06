@@ -290,7 +290,7 @@ class QueryController extends Controller
             }
         }
 
-        $limit = $queryParameters['limit'] ?? 1_000_000;
+        $offset = $queryParameters['offset'] ?? 0;
 
         if ($envelopeOnly) {
             $queryBuilder->select(SysProps::sys_props_envelope);
@@ -298,10 +298,10 @@ class QueryController extends Controller
 
         $sql = $queryBuilder->toSql();
 
-        // $queryBuilder->ddRawSql();
+        // dd($queryBuilder->ddRawSql());
 
         try {
-            $recordsCount = min($queryBuilder->count(), $limit);
+            $recordsCount = count($queryBuilder->get(SysProps::_sn_entity_id));
         } catch (Throwable $th) {
             $error_message = $th->getMessage();
             if ($responseAsResultContainer) {
@@ -314,7 +314,7 @@ class QueryController extends Controller
         }
 
         if ($count_only && $responseAsResultContainer) {
-            info('$count_only && $responseAsResultContainer');
+            info('queryEndpoint count_only && responseAsResultContainer');
             $rc = new ResultContainer;
             $rc->operation_successful = true;
             $rc->data = $recordsCount;
@@ -323,7 +323,8 @@ class QueryController extends Controller
         }
 
         if ($count_only && ! $responseAsResultContainer) {
-            return $this->return_success(['records_count' => $recordsCount]);
+            $debug_data['sql'] = $sql;
+            return $this->return_success(['records_count' => $recordsCount], debug_data: $debug_data);
         }
 
         if ($responseAsResultContainer) {
@@ -339,7 +340,7 @@ class QueryController extends Controller
 
         return $this->streamChunkedJson(
             $queryBuilder, $sql, $query_id, $debug_data, $fulfiller_id, $remote_peer_id,
-            $recordsCount, $trusted_site_peer_token, $debug
+            $recordsCount, $trusted_site_peer_token, $offset, $debug
         );
 
     }
@@ -466,28 +467,48 @@ class QueryController extends Controller
     }
 
     protected function streamChunkedJson($queryBuilder, $sql, $query_id, $debug_data, $fulfiller_id, $remote_peer_id,
-        $recordsCount, $trusted_site_peer_token, $debug)
+        $recordsCount, $trusted_site_peer_token, $offset, $debug)
     {
         return response()->stream(
             function () use ($queryBuilder, $sql, $query_id, $debug_data, $fulfiller_id, $remote_peer_id,
-                $recordsCount, $trusted_site_peer_token, $debug) {
+                $recordsCount, $trusted_site_peer_token, $offset, $debug) {
 
                 echo '{"data":[';
                 $i = 0;
+                $chunkSize = 100;
 
-                $queryBuilder->chunk(100, function ($objects) use (&$i, $recordsCount) {
+                $queryBuilder->offset($offset)->chunk($chunkSize + 1, function ($objects) use (&$i, $recordsCount, $chunkSize) {
+                    // dd($objects->count());
+                    $hasMore = $objects->count() > $chunkSize;
+                    $rowsToProcess = $objects->take($chunkSize);
 
-                    foreach ($objects as $object) {
-                        $i++;
-                        if ($i <= $recordsCount) {
-                            echo json_encode($object);
-                        } else {
+                    foreach ($rowsToProcess as $index => $row) {
+                        $isLast = ! $hasMore && $index === $rowsToProcess->count() - 1;
+                        echo json_encode($row);
+                        if ($isLast) {
                             break;
                         }
-                        if ($i <= $recordsCount - 1) {
+                        // if ($i <= $recordsCount) {
+                            
+                        // } else {
+                        //     break;
+                        // }
+                        if (! $isLast) {
                             echo ',';
                         }
                     }
+
+                    // foreach ($objects as $object) {
+                    //     $i++;
+                    //     if ($i <= $recordsCount) {
+                    //         echo json_encode($object);
+                    //     } else {
+                    //         break;
+                    //     }
+                    //     if ($i <= $recordsCount - 1) {
+                    //         echo ',';
+                    //     }
+                    // }
 
                 });
 

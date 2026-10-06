@@ -148,8 +148,8 @@ class TorrentTrackersController extends Controller
                 $result = Cache::get(CachePrefixes::tracker_yield_result_.$site_id.$tracker_url);
                 
                 $peers = json_decode(Cache::get(CachePrefixes::tracker_yield_peers_.$site_id.$tracker_url), true) ?? [];
-                info('tracker_yield_result_: '.$result);
-                info('tracker_yield_result_peers: '.json_encode($peers));
+                info('tracker_yield_result_: (delay) '.$d['delay'].' '.$result.' '.$tracker_url);
+                // info('tracker_yield_result_peers: '.json_encode($peers));
                 if ($result) {
                     switch ($result) {
                         case 'success':

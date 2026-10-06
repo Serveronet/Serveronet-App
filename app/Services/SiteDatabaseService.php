@@ -738,8 +738,12 @@ class SiteDatabaseService extends Controller
             $queryBuilder->orderBy(SysProps::_sn_entity_id);
         }
 
-        if (isset($queryParameters['limit'])) {
-            $queryBuilder->limit($queryParameters['limit']);
+        if (isset($queryParameters['offset'])) {
+            $queryBuilder->offset($queryParameters['offset']);
+        }
+
+        if (isset($queryParameters['limit']) || isset($queryParameters['offset'])) {
+            $queryBuilder->limit($queryParameters['limit'] ?? 20); //Per Page match
         }
 
         $queryBuilder->whereNull(SysProps::_sn_entity_deleted);
