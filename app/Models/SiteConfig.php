@@ -74,7 +74,7 @@ class SiteConfig
                 'version_number' => 1,
                 'columnAlters' => [
                     'posts' => [
-                        'co-author' => ['datatype' => 'string', 'nullable' => true, 'default' => 'Unknown'],
+                        'co_author' => ['datatype' => 'string', 'nullable' => true, 'default' => 'Unknown'],
                     ],
                 ],
                 'columnDrops' => [

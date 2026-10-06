@@ -9,21 +9,76 @@ To access Site API documentation browse to this path when on a Site
 
 [Site API Documentation ▶](http://visitor-control-panel.snet.localhost:15080/sn_client_resources/site_api_docs/index.html)
 
-Values from the database can be queried with Site API backend using query parameters.   
+Values from the database can be queried with Site API backend using query parameters.  
+Pass `query_parameters` as a JSON object (or a JSON string) in the request body.  
 Following query parameters are supported:
-- where
-- orWhere
-- whereNull
-- whereNotNull
-- whereIn
-- whereNotIn
-- orderBy
-- limit
+
+| Parameter | JSON shape | Behaviour |
+| --- | --- | --- |
+| `table` | `"posts"` | Required. Name of the table to query. |
+| `where` | `[["title","=","excluded_title"],["views",">=","10"]]` | Array of `[column, operator, value]` triples. All triples are ANDed together. |
+| `orWhere` | `[["title","like","%news%"],["author","=","alice"]]` | Array of `[column, operator, value]` triples combined into ONE OR group, which is ANDed with the `where` group: `where... AND (or1 OR or2 OR ...)`. Arbitrary mixed AND/OR nesting is not expressible. |
+| `whereNull` | `"author"` | A single column name string (not a list). Matches rows where the column IS NULL. |
+| `whereNotNull` | `"author"` | A single column name string (not a list). Matches rows where the column IS NOT NULL. |
+| `whereIn` | `["status",["draft","published"]]` | A single `[column, [values]]` pair (not an array of pairs). |
+| `whereNotIn` | `["status",["archived"]]` | A single `[column, [values]]` pair (not an array of pairs). |
+| `orderBy` | `["_sn_entity_updated","desc"]` | A `[column, "asc"\|"desc"]` pair. If omitted, results are ordered by `_sn_entity_id`. |
+| `offset` | `40` | Number of rows to skip. Use with `orderBy` for stable pagination. |
+| `limit` | `20` | Maximum number of rows returned. |
+
+Pagination behaviour: if neither `limit` nor `offset` is set, no LIMIT clause is applied. If either one is set, `limit` defaults to `20` unless given explicitly.
+
+Operators are passed directly to Eloquent, so any SQL operator string works (`=`, `!=`, `like`, `>=`, ...). Negated operators must be sent lowercase as a string, for example `"not like"`.
+
+Deleted records never appear in results: a `whereNull("_sn_entity_deleted")` condition is always appended to the query.
+
+Full example body:
+
+```json
+{
+  "table": "posts",
+  "where": [["status", "=", "published"]],
+  "orWhere": [["title", "like", "%news%"], ["author", "=", "alice"]],
+  "whereNotNull": "body",
+  "whereIn": ["category", ["announcements", "updates"]],
+  "whereNotIn": ["status", ["archived"]],
+  "orderBy": ["_sn_entity_updated", "desc"],
+  "offset": 20,
+  "limit": 10
+}
+```
+
+### CSRF token for POST requests
+Site API POST endpoints are protected by Laravel CSRF middleware. Only `site_api/v1/api_*` endpoints (API token auth) are exempt;
+every other POST (`query_endpoint`, `visitor_record_create`, ...) fails with HTTP 419 without a token.
+
+Most JS frameworks handle this automatically - for example axios re-sends the `XSRF-TOKEN` cookie as an `X-XSRF-TOKEN` header,
+which is why the Tech Demo site works out of the box. A hand-written client (like `fetch()`) must send the header itself:
+
+1. `GET /site_api/v1/csrf-cookie` - sets the `XSRF-TOKEN` cookie
+2. Read the `XSRF-TOKEN` cookie value and URL-decode it
+3. Send it as `X-XSRF-TOKEN` header with each POST request
 
 ## Single Page Applications - SPA
 SPA Sites require **single_Page_Application** in Site Config to be set to **true** for proper routing.  
 Index.html will be served for all non-file requests and base path adjusted.  
 This setting is required for example for Angular and other js frameworks.
+
+### Finding your Site API base URL - `site_root` cookie
+The same site files can be served under a client path prefix (non-direct hosting), so a SPA must not assume it lives at the origin root.  
+When serving site files, the Client sets cookies on every response:
+
+- `site_root` - absolute base URL of the Site API backend
+- `client_root` - absolute URL of the Client home
+- `site_id` - Site ID the files are served for
+- `ui_addresses_json` - JSON list of Client UI addresses
+
+Read `site_root` and prefix all Site API calls with it, like the Tech Demo does:
+
+```js
+const siteRoot = getCookieValueByName('site_root') // e.g. "http://site-id.snet.localhost:15080/"
+await fetch(siteRoot + 'site_api/v1/csrf-cookie')
+```
 
 ## Publishing your Site
 Steps to publish a new Site:
@@ -60,9 +115,14 @@ Site can allow to upload Visitor's file. Site Owner can set it as false to speed
 Site optionally can have it's own database. Configure the schema in db_Schema_Versions. Boolean.
 #### db_Schema_Versions
 DB Schema Versions definition that will result in SQL DDLs. They will bring site database to the most recent version. It will be executed on each client hosting this site. Several systemic fields will be added automatically.  
-Each version should be indicated by a comparable string value of `version_number` key. These will work: "0", "v0", "2026-05...".  
-On upgrade changes to the database will applied on all the peers.
-Start with `version_number` "0", `tableCreates` and `indexCreates`. See `Tech Demo` site and example Site Config on how to manage database versions.  
+##### Version identifiers
+Each version is indicated by a comparable string value of `version_number` key. The identifier format is not strictly defined - "1", "2", "v1", "v2", "a", "b", "2026-05..." all work. It is stored on the Site as its current database version.  
+On upgrade changes to the database will be applied on all the peers.
+Versions are applied in order to bring the database up to date: every version identifier greater than the stored current version is executed, sorted ascending. Numeric identifiers compare as numbers, other identifiers compare as strings, so keep one consistent style ("v2" sorts after "v10").  
+Each version is identified by its key in `db_Schema_Versions` and the matching `version_number` field - the key and the `version_number` value must be equal, otherwise the version is never found and silently skipped. That means:
+- Object form: `"v1": { "version_number": "v1", ... }` - any identifier works.
+- List form: position is the identifier, so `version_number` must be `0`, `1`, `2`, ... matching the index.
+Start with version `"0"`, `tableCreates` and `indexCreates`. See `Tech Demo` site and example Site Config on how to manage database versions.  
 With the next version you can add `columnAlters`. 
 
 You can define following database schema manipulations:
@@ -88,7 +148,8 @@ Following data types are now supported:
 - double
   
 They can be nullable or not.  
-You can define default values.
+You can define default values.  
+Table and column names must match ^[a-zA-Z_][a-zA-Z0-9_]*$ and be ≤ 64
 
 #### show_Adults_Only_Gate
 Site optionally can show Adults Only gate. Age Check compliant. Boolean.
@@ -99,7 +160,18 @@ Inject javascript script which adds helper button with usefull links and informa
 
 ## Reserved paths
 Site API backend reserves certain paths. They are used for Client static paths or API endpoints.
-Do not create site folders starting with those paths: `sn_client_resources`, `site_api`, `visitor_file`
+
+Don't name files or folders in the site directory that starts with one of these prefixes:
+
+- `register`
+- `login`
+- `logout`
+- `visitor_actions`
+- `retrieving`
+- `site_api`
+- `visitor_file`
+- `site_assets`
+- `sn_client_resources`
 
 ## Reserved database field
 When creating schema defintion for a Site do not use following column names. They will be overwritten.
