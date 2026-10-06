@@ -15,5 +15,7 @@ class TrimStrings extends Middleware
         'current_password',
         'password',
         'password_confirmation',
+        'info_hash',
+        'peer_id',
     ];
 }
