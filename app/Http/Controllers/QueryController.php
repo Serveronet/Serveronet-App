@@ -324,6 +324,7 @@ class QueryController extends Controller
 
         if ($count_only && ! $responseAsResultContainer) {
             $debug_data['sql'] = $sql;
+
             return $this->return_success(['records_count' => $recordsCount], debug_data: $debug_data);
         }
 
@@ -340,7 +341,7 @@ class QueryController extends Controller
 
         return $this->streamChunkedJson(
             $queryBuilder, $sql, $query_id, $debug_data, $fulfiller_id, $remote_peer_id,
-            $recordsCount, $trusted_site_peer_token, $offset, $debug
+            $trusted_site_peer_token, $offset, $debug
         );
 
     }
@@ -363,7 +364,7 @@ class QueryController extends Controller
     {
         info('handleCrowdQueryOrder');
         $requestConfigSet = InternalCallService::unwrapRequestConfigSet();
-        
+
         if (! InternalCallService::isInternalClosureCacheKeyPresent($requestConfigSet)) {
             return;
         }
@@ -377,6 +378,7 @@ class QueryController extends Controller
         $address = $requestConfigSet['address'] ?? '';
         if (empty($address)) {
             info('handleCrowdQueryOrder Address empty');
+
             return;
         }
         $client_address = $requestConfigSet['client_address'];
@@ -456,6 +458,7 @@ class QueryController extends Controller
 
             } catch (Throwable $th) {
                 info('handleCrowdQueryOrder catch: '.$client_address);
+
                 return;
             }
         } catch (Throwable $th) {
@@ -463,22 +466,20 @@ class QueryController extends Controller
         }
         InternalCallService::endInteralRequestReporting($internalRequestId);
 
-        return;
     }
 
     protected function streamChunkedJson($queryBuilder, $sql, $query_id, $debug_data, $fulfiller_id, $remote_peer_id,
-        $recordsCount, $trusted_site_peer_token, $offset, $debug)
+        $trusted_site_peer_token, $offset, $debug)
     {
         return response()->stream(
             function () use ($queryBuilder, $sql, $query_id, $debug_data, $fulfiller_id, $remote_peer_id,
-                $recordsCount, $trusted_site_peer_token, $offset, $debug) {
+                $trusted_site_peer_token, $offset, $debug) {
 
                 echo '{"data":[';
                 $i = 0;
                 $chunkSize = 100;
 
-                $queryBuilder->offset($offset)->chunk($chunkSize + 1, function ($objects) use (&$i, $recordsCount, $chunkSize) {
-                    // dd($objects->count());
+                $queryBuilder->offset($offset)->chunk($chunkSize + 1, function ($objects) use (&$i, $chunkSize) {
                     $hasMore = $objects->count() > $chunkSize;
                     $rowsToProcess = $objects->take($chunkSize);
 
@@ -488,27 +489,10 @@ class QueryController extends Controller
                         if ($isLast) {
                             break;
                         }
-                        // if ($i <= $recordsCount) {
-                            
-                        // } else {
-                        //     break;
-                        // }
                         if (! $isLast) {
                             echo ',';
                         }
                     }
-
-                    // foreach ($objects as $object) {
-                    //     $i++;
-                    //     if ($i <= $recordsCount) {
-                    //         echo json_encode($object);
-                    //     } else {
-                    //         break;
-                    //     }
-                    //     if ($i <= $recordsCount - 1) {
-                    //         echo ',';
-                    //     }
-                    // }
 
                 });
 
