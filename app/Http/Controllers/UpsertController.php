@@ -274,7 +274,7 @@ class UpsertController extends Controller
      *    "success": true,
      *    "data": [
      *       {
-     *           "entity_id": "2026...",
+     *           "_sn_entity_id": "2026...",
      *       }
      *     ]
      * }
@@ -290,6 +290,7 @@ class UpsertController extends Controller
      * Receives a json body of a record to be updated (in _sn_record_json parameters)
      * Json requires target table (_sn_table), entity id to be updated (_sn_entity_id)
      * and site's database fields
+     * Send _sn_mark_as_deleted to mark as deleted
      *
      * @authenticated
      *
@@ -297,13 +298,13 @@ class UpsertController extends Controller
      *
      * @group Records and Resources
      *
-     * @bodyParam _sn_record_json string required Example: {"title":"My title", "_sn_table":"posts"}
+     * @bodyParam _sn_record_json string required Example: {"_sn_entity_id": "2026...", "_sn_table":"posts", "title":"Updated title"}
      *
      * @response 200 {
      *    "success": true,
      *    "data": [
      *       {
-     *           "entity_id": "2026...",
+     *           "_sn_entity_id": "2026...",
      *       }
      *     ]
      * }

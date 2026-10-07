@@ -39,9 +39,9 @@ class Consts
 
     const siteFilesMaxTotalSizeBytesServeronet = 1024 * 1024 * 1024; //1GB
 
-    const recordJsonMaxSizeBytes = 200 * 1024;
+    const recordJsonMaxSizeBytes = 1024 * 1024; //1 MB
 
-    const queryMaxSizeBytes = 100 * 1024;
+    const queryMaxSizeBytes = 200 * 1024;
 
     const maxFileSizeIpfsPublish = 100_000_000;
 

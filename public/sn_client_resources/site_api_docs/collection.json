@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Site Developer Api Documentation for Serveronet",
-        "_postman_id": "245e0fac-249d-44d0-a393-a17937393760",
+        "_postman_id": "ccd767cc-96f1-476f-a79b-45073b27dbfd",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -691,52 +691,6 @@
                             "header": [],
                             "code": 200,
                             "body": "{\n   \"success\": true,\n   \"data\": [\n      {\n          \"entity_id\": \"2026...\",\n      }\n    ]\n}",
-                            "name": ""
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Endpoints",
-            "description": "",
-            "item": [
-                {
-                    "name": "GET site_api\/v1\/sse_stream",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "site_api\/v1\/sse_stream",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/site_api\/v1\/sse_stream"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": "",
-                        "auth": {
-                            "type": "noauth"
-                        }
-                    },
-                    "response": [
-                        {
-                            "header": [
-                                {
-                                    "key": "cache-control",
-                                    "value": "no-cache, private"
-                                },
-                                {
-                                    "key": "content-type",
-                                    "value": "text\/html; charset=utf-8"
-                                }
-                            ],
-                            "code": 400,
-                            "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\" \/>\n    <meta name=\"robots\" content=\"noindex,nofollow,noarchive\" \/>\n    <title>An Error Occurred: Bad Request<\/title>\n    <link rel=\"icon\" href=\"data:image\/svg+xml,<svg xmlns=%22http:\/\/www.w3.org\/2000\/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>\u274c<\/text><\/svg>\" \/>\n    <style>body { background-color: #fff; color: #222; font: 16px\/1.5 -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; margin: 0; }\n.container { margin: 30px; max-width: 600px; }\nh1 { color: #dc3545; font-size: 24px; }\nh2 { font-size: 18px; }<\/style>\n<\/head>\n<body>\n<div class=\"container\">\n    <h1>Oops! An Error Occurred<\/h1>\n    <h2>The server returned a \"400 Bad Request\".<\/h2>\n\n    <p>\n        Something is broken. Please let us know what you were doing when this error occurred.\n        We will fix it as soon as possible. Sorry for any inconvenience caused.\n    <\/p>\n<\/div>\n<\/body>\n<\/html>",
                             "name": ""
                         }
                     ]

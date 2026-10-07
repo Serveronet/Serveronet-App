@@ -18,13 +18,17 @@ As every Site is a separate realm, the Site Owner manages rights for each Visito
 
 ## Permissions
 ### Visitor with rights
-Site Owner can grant rights to create or edit owned records. It is performed by publishing a grant record. Grant record indicates that specified Visitor has rights to post to specified database table or upload files. To revoke access the grant record needs to be marked as deleted. Peers will revalidate right periodically.
+Site Owner can grant rights to create or edit owned records. It is performed by publishing a grant record. Grant record indicates that specified Visitor has rights to post to specified database table or upload files. To revoke access the grant record needs to be marked as deleted. Peers will revalidate right periodically.  
+To issue a Grant Record the Site Admin logs in the Client and specifies to which Visitor Identity to issue and publishes a record. See Tech Demo Site for and example.
 
 ### Admin rights
 Site Owner can also grant admin rights to other identities. Such rights allow to moderate, tamper or delete all the records. Site Administrators are defined in Site Definition file.
+To assign Site Admin rights Site Owner publishes new Site Definition with visitor_id add to site_Admin_Signers property.
+Site Admin can mark a record as Site Admin Locked (_sn_is_site_admin_locked). This prevents deleted or moderated records from being editable by Visitor.
 
 ### Site Owner rights
 Site Owner has also rights manage all the records plus publish a new Site Definition.
+Site Owner rights are inherit when publishing new Site version and it's Site Definition.
 
 ## Using an Identity
 When posting a record or uploading a file the Client will use Indentity's private seed to sign the data. 

@@ -63,7 +63,7 @@ return [
              * The route can be referenced by name or path here. Wildcards are supported.
              */
             'exclude' => [
-                // '/health', 'admin.*'
+                'site_api/v1/sse_stream'
             ],
 
             /*

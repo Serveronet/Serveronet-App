@@ -158,6 +158,21 @@ Some sites can provide list of Banned Sites or domains. Such lists can be enable
 #### inject_Feeling_Library
 Inject javascript script which adds helper button with usefull links and information. Boolean.
 
+## Limits and Limitations
+### Limits
+To keep the network healthy there are limits to entities which are enforced by the Client.  
+- Single record can be up to 1MB - Site may need to split long articles into multiple related recors
+- Query with parameters can be up to 200KB - it might become important in whereIn clause with many ids
+- Single resource defined in Site Definition File Listing can be up to 1GB - Use Visitor Resource for larger files where there is no limit
+- Resources are chunked into smaller files and their limit is 4MB
+- IPFS publish size is limited to 100MB
+
+### Limitations
+Serveronet is a distributed P2P Network and database relations are not enforced. 
+Implement relations with dedicated columns or additional relational tables.
+There are no Joins, Aggregates, Grouping. 
+Queries have to be deterministic.
+
 ## Reserved paths
 Site API backend reserves certain paths. They are used for Client static paths or API endpoints.
 
@@ -174,7 +189,7 @@ Don't name files or folders in the site directory that starts with one of these 
 - `sn_client_resources`
 
 ## Reserved database field
-When creating schema defintion for a Site do not use following column names. They will be overwritten.
+When creating schema defintion for a Site do not use following column names. They are used internally by the Client and will be overwritten.
 
 - _sn_entity_id
 - _sn_record_json
@@ -210,16 +225,18 @@ snetdnslink.example.com. 3600 IN    TXT     "snetdnslink=gjdg45..."
 OpenNIC servers ([OpenNIC ▶](https://www.opennic.org/)) are used to get DNS records pointing to the site address.
 
 ## Allow remote access to SN backend
-When developing a compiled SPA site you might need access Site API Backend from the app.
+When developing a compiled SPA site you might need access Site API Backend from the app.  
+See Site API for endpoint which support API Token authentication.
 
 Edit .env file and set or add those values as below
 
-- API_TOKEN_BACKEND_ENABLED=true
-- DEV_SITE_API_CORS_ALLOW_ALL=true
+- API_TOKEN_BACKEND_ENABLED=true - to enable Api Token Site API endpoints
+- DEV_SITE_API_CORS_ALLOW_ALL=true - to allow Site Api from dev environments - Cross-Origin Resource Sharing
   
 Change requires config clear: php artisan config:clear
 
 ## Automated publishing
+### Visitor Records
 There may be a need to frequently send new records or updates to your Site. 
 You can post your updates in an automated way using token and Site API. 
 
@@ -228,7 +245,7 @@ Steps:
 - Go to the Visitor's Control Panel. 
 - Click on `[Enable API Token]` to generate a new API Token
 - With API Token you can make requests as the Visitor
-- Allow remote access to SN backend, as in section - `Allow remote access to SN backend`
+- Allow remote access to SN backend, see section - `Allow remote access to SN backend`
 - Make a POST request as in this example
 
    ```
@@ -239,8 +256,25 @@ Steps:
    > Please note that HTTPS or running client locally is highly recommeded in such a case.
 
 Header and query parameters authentications are supported as well
-   ```?api_token=your_visitor_api_token```
+   ```?api_token=your_visitor_api_token```  
    ```Authorization: Bearer your_visitor_api_token```  
+
+### Site Version (Site Definition) publishing
+API Token endpoint allows to publish a new versions of the Site. For example with additional Administrators or with updated files.
+
+Steps
+- Allow remote access to SN backend, see section - Allow remote access to SN backend
+- In Client database set Api Token in admins table
+- Make POST request to Client url (not Site Url) with required properties  
+  Example: 
+  ```http://snet.localhost:15080/p2p_api/v1/api_publish_site```  
+  See Automated publishing - Visitor Records section for a similar example.
+
+Following properties will be required:
+- title - New Site title
+- site_config_json - New Site Config as json
+- site_id - Site ID to publish as
+- developed_site_dir - directory with site files to be indexed
 
 ## Vanity Address
 Generation steps:
