@@ -59,7 +59,7 @@
     </div>
     <div class="fs-6">
         Find out more about Serveronet in the <a class="btn btn-outline-secondary"
-            href="{{ domainRoute('documentation', ['doc_tag' => \App\Dicts\DocsMapping::about_serveronet]) }}">Documentation
+            href="{{ route('documentation', ['doc_tag' => \App\Dicts\DocsMapping::about_serveronet]) }}">Documentation
             →</a>
     </div>
     <br>

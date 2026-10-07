@@ -36,11 +36,7 @@
             <div>Access with Api Token allows you to Post to the backend without being Authenticated with a password.</div>
             <div>This is designed for continuous automatic posting of updates.</div>
             <div>As this is not secure, enable only when you know what you are doing.</div>
-            <div>See the
-                <a
-                    href="{{ domainRoute('documentation', ['doc_tag' => App\Dicts\DocsMapping::sites_development]) }}">documentation</a>
-                on how to use.
-            </div>
+            <div>See the Sites Development documentation on how to use.</div>
             <br>
             <form action="{{ domainRoute('toggle_api_token_upsert_endpoints', ['site_id' => $site_id]) }}" method="POST">
                 @csrf
