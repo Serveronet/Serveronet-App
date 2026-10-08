@@ -459,11 +459,11 @@ class SiteDatabaseService extends Controller
                                 }
                                 $builder = $table;
                                 if ($methodName) {
+                                    $definition = $builder->$methodName($columnName);
                                     if (isset($column->default)) {
-                                        $builder->$methodName($columnName)->default($column->default);
-                                    } else {
-                                        $builder->$methodName($columnName)->nullable($column->nullable ?? true);
+                                        $definition->default($column->default);
                                     }
+                                    $definition->nullable($column->nullable ?? true);
                                 }
                             }
                         });
@@ -484,11 +484,11 @@ class SiteDatabaseService extends Controller
                                 }
                                 $builder = $table;
                                 if ($methodName) {
+                                    $definition = $builder->$methodName($columnName);
                                     if (isset($alter->default)) {
-                                        $builder->$methodName($columnName)->default($alter->default);
-                                    } else {
-                                        $builder->$methodName($columnName)->nullable($alter->nullable ?? true);
+                                        $definition->default($alter->default);
                                     }
+                                    $definition->nullable($alter->nullable ?? true);
                                 }
                             }
                         });
@@ -518,13 +518,13 @@ class SiteDatabaseService extends Controller
                 }
 
                 if (isset($schemaDefinition->columnDrops)) {
-                    foreach ($schemaDefinition->dropColumns as $tableName => $columnName) {
+                    foreach ($schemaDefinition->columnDrops as $tableName => $columnName) {
                         Schema::connection($site_id)->dropColumns($tableName, $columnName);
                     }
                 }
 
                 if (isset($schemaDefinition->tableDrops)) {
-                    foreach ($schemaDefinition->dropTables as $key => $tableName) {
+                    foreach ($schemaDefinition->tableDrops as $key => $tableName) {
                         Schema::connection($site_id)->dropIfExists($tableName);
                     }
                 }
