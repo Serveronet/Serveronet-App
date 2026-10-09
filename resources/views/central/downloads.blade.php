@@ -7,11 +7,11 @@
     <br>
     <div class="">
         <div class="m-1">
-            <a class="btn btn-outline-success" href="{{ domainRoute('windows_client_bundle.zip') }}">
+            <a class="btn btn-outline-success" style="width:12em;" href="{{ domainRoute('windows_client_bundle.zip') }}">
                 Windows Bundle
                 <br>
-                <img style="width:10em;" src="{{ asset('sn_client_resources/img/windows.png', request()->isSecure()) }}"
-                    alt="" srcset="">
+                <img style="width:6em;" src="{{ asset('sn_client_resources/img/windows.png', request()->isSecure()) }}"
+                    alt="Windows" srcset="">
             </a>
             <div>For Windows</div>
 
@@ -19,13 +19,25 @@
         <br>
         <div class="m-1">
 
-            <a class="btn btn-outline-success" href="{{ domainRoute('linux_and_mac_client_bundle.zip') }}">
-                Linux and Mac Bundle
+            <a class="btn btn-outline-success" style="width:12em;" href="{{ domainRoute('linux_and_mac_client_bundle.zip') }}">
+                MacOS
                 <br>
-                <img style="width:10em;" src="{{ asset('sn_client_resources/img/ubuntu.png', request()->isSecure()) }}"
-                    alt="" srcset="">
+                <img style="width:6em;" src="{{ asset('sn_client_resources/img/desktop_mac_FILL0_wght100_GRAD-25_opsz48.svg', request()->isSecure()) }}"
+                    alt="MacOS" srcset="">
             </a>
-            <div>For Linux (Ubuntu, Debian, Raspbian) and Mac</div>
+            <div>For Mac</div>
+
+        </div>
+        <br>
+        <div class="m-1">
+
+            <a class="btn btn-outline-success" style="width:12em;" href="{{ domainRoute('linux_and_mac_client_bundle.zip') }}">
+                Linux
+                <br>
+                <img style="width:6em;" src="{{ asset('sn_client_resources/img/ubuntu.png', request()->isSecure()) }}"
+                    alt="Ubuntu" srcset="">
+            </a>
+            <div>For Linux (Ubuntu, Debian, Raspbian)</div>
 
         </div>
 
@@ -43,14 +55,14 @@
     <a class="btn btn-sm btn-outline-success" href="{{ domainRoute('client_update.zip') }}">Client Update</a>
     <br>
     <hr>
-    <div class="text-secondary small overflow-auto"><code>{{ $windows_client_bundle_version->label }} - Ver:
-            {{ $windows_client_bundle_version->version }} | SHA256: {{ $windows_client_bundle_version->sha256 }}</code>
+    <div class="text-secondary small overflow-auto"><code>{{ $windows_client_bundle_version->label ?? '' }} - Ver:
+            {{ $windows_client_bundle_version->version ?? '' }} | SHA256: {{ $windows_client_bundle_version->sha256 ?? '' }}</code>
     </div>
-    <div class="text-secondary small overflow-auto"><code>{{ $linux_and_mac_client_bundle->label }} - Ver:
-            {{ $linux_and_mac_client_bundle->version }} | SHA256: {{ $linux_and_mac_client_bundle->sha256 }}</code></div>
-    <div class="text-secondary small overflow-auto"><code>{{ $server_bundle->label }} - Ver:
-            {{ $server_bundle->version }} | SHA256: {{ $server_bundle->sha256 }}</code></div>
-    <div class="text-secondary small overflow-auto"><code>{{ $client_update->label }} - Ver:
-            {{ $client_update->version }} | SHA256: {{ $client_update->sha256 }}</code></div>
+    <div class="text-secondary small overflow-auto"><code>{{ $linux_and_mac_client_bundle->label ?? '' }} - Ver:
+            {{ $linux_and_mac_client_bundle->version ?? '' }} | SHA256: {{ $linux_and_mac_client_bundle->sha256 ?? '' }}</code></div>
+    <div class="text-secondary small overflow-auto"><code>{{ $server_bundle->label ?? '' }} - Ver:
+            {{ $server_bundle->version ?? '' }} | SHA256: {{ $server_bundle->sha256 ??'' }}</code></div>
+    <div class="text-secondary small overflow-auto"><code>{{ $client_update->label ??'' }} - Ver:
+            {{ $client_update->version ?? '' }} | SHA256: {{ $client_update->sha256 ??'' }}</code></div>
     <br>
 @endsection
