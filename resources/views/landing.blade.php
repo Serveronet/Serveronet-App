@@ -16,8 +16,8 @@
         <div class=" justify-content-center">
 
             <a class="ms-0 btn btn-outline-primary btn shadow-sm rounded-1"
-                href="{{ domainRoute('demos') }}">Demos 🌍</a>
-            <link rel="prefetch" href="{{ domainRoute('demos') }}">
+                href="{{ route('demos') }}">Demos 🌍</a>
+            <link rel="prefetch" href="{{ route('demos') }}">
 
             <a class="ms-1 btn btn-outline-success btn shadow-sm rounded-1"
                 href="{{ route('documentation', ['doc_tag' => \App\Dicts\DocsMapping::installation_and_deployment]) }}">Install
@@ -90,13 +90,6 @@
     </div>
     <br>
     <div class="container-width">
-
-
-        <a class="ms-2 mb-2 btn p-2 btn-outline-secondary btn-lg rounded-1" target="_blank"
-            href="http://github.com/serveronet">See it on Github
-            <img class="me-2" src="{{ asset('sn_client_resources/img/github-black.svg', request()->isSecure()) }}"
-                style="width:1.6em; float: left;" />
-        </a>
         <br>
         <br>
 

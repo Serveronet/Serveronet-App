@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DocumentationController;
 use App\Http\Controllers\FirstRunController;
+use App\Http\H;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +43,7 @@ Route::post('complete_first_run', [FirstRunController::class, 'completeFirstRun'
 Route::get('documentation/{doc_tag?}', [DocumentationController::class, 'getDoc'])
     ->name('documentation');
 
+if (! H::isServeronetWelcomeSite())
 Route::get('/', function () {
     $issueType = 'ui_fallback';
     $message = '';

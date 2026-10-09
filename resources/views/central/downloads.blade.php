@@ -7,7 +7,7 @@
     <br>
     <div class="">
         <div class="m-1">
-            <a class="btn btn-outline-success" style="width:12em;" href="{{ domainRoute('windows_client_bundle.zip') }}">
+            <a class="btn btn-outline-success" style="width:12em;" href="{{ route('windows_client_bundle.zip') }}">
                 Windows Bundle
                 <br>
                 <img style="width:6em;" src="{{ asset('sn_client_resources/img/windows.png', request()->isSecure()) }}"
@@ -19,7 +19,7 @@
         <br>
         <div class="m-1">
 
-            <a class="btn btn-outline-success" style="width:12em;" href="{{ domainRoute('linux_and_mac_client_bundle.zip') }}">
+            <a class="btn btn-outline-success" style="width:12em;" href="{{ route('linux_and_mac_client_bundle.zip') }}">
                 MacOS
                 <br>
                 <img style="width:6em;" src="{{ asset('sn_client_resources/img/desktop_mac_FILL0_wght100_GRAD-25_opsz48.svg', request()->isSecure()) }}"
@@ -31,7 +31,7 @@
         <br>
         <div class="m-1">
 
-            <a class="btn btn-outline-success" style="width:12em;" href="{{ domainRoute('linux_and_mac_client_bundle.zip') }}">
+            <a class="btn btn-outline-success" style="width:12em;" href="{{ route('linux_and_mac_client_bundle.zip') }}">
                 Linux
                 <br>
                 <img style="width:6em;" src="{{ asset('sn_client_resources/img/ubuntu.png', request()->isSecure()) }}"
@@ -47,12 +47,12 @@
     <br>
     <div class="h5">Advanced Downloads</div>
     <div>Server bundle (For: Shared Hosting, VPS) - See documentation on how to deploy</div>
-    <a class="btn btn-outline-success" href="{{ domainRoute('server_bundle.zip') }}">Server Bundle</a>
+    <a class="btn btn-outline-success" href="{{ route('server_bundle.zip') }}">Server Bundle</a>
 
     <br>
     <br>
     <div>Manual Client Update</div>
-    <a class="btn btn-sm btn-outline-success" href="{{ domainRoute('client_update.zip') }}">Client Update</a>
+    <a class="btn btn-sm btn-outline-success" href="{{ route('client_update.zip') }}">Client Update</a>
     <br>
     <hr>
     <div class="text-secondary small overflow-auto"><code>{{ $windows_client_bundle_version->label ?? '' }} - Ver:
