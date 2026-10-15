@@ -8,9 +8,6 @@
     <div class="h2">Register or Create an Identity</div>
     <div id="appIdentityUpload">
 
-        <div class="bg-danger rounded text-white p-2 mb-4">Warning! Avoid storing your private seed in an untrusted (not
-            owned) Serveronet client</div>
-
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
@@ -39,6 +36,14 @@
             <!-- Seed -->
             <div class="mt-4">
                 <span class="text-gray-500">Private Seed (base64)</span>
+                <span class="btn btn-outine-light btn-sm text-dark dark:text-white pre text-decoration-none small"
+                    onclick="
+    toastr.info(document.getElementById('partials.private-seed').innerHTML, 'Private Seed', {timeOut: 20000})
+    ">
+                    <img style="width: 1em;"
+                        src="{{ asset('sn_client_resources/img/help_FILL0_wght200_GRAD-25_opsz48.svg', request()->isSecure()) }}"
+                        alt="" srcset="">
+                </span>
                 <div class="input-group">
                     <input id="base64_seed" v-model="base64_seed" class="form-control" type="text" name="base64_seed"
                         value="{{ old('base64_seed', $keySet->base64_seed) }}" @input="onBase64SeedChange" required />
@@ -67,7 +72,7 @@
                         class="text-warning">this client only</b>.</span>
                 <span class="btn btn-outine-light btn-sm"
                     onclick="
-    toastr.info(document.getElementById('partials.this-client').innerHTML, 'Cryptographic Identity', {timeOut: 15000})
+    toastr.info(document.getElementById('partials.this-client').innerHTML, 'Cryptographic Identity', {timeOut: 20000})
     "
                     class="text-dark dark:text-white pre text-decoration-none small">
                     <img style="width: 1em;"
@@ -104,6 +109,14 @@
         <div class="hidden" id="partials.this-client">
             @include('partials.this-client')
         </div>
+        <div class="hidden" id="partials.private-seed">
+            @include('partials.private-seed')
+        </div>
+        <style>
+            #toast-container>div.toast-info {
+                opacity: .4;
+            }
+        </style>
         <script>
             new_visitor_id = "{{ $visitor_id }}"
 
