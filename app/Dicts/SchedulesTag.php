@@ -48,6 +48,7 @@ class SchedulesTag
     const Reset_Non_Hosted_Sites_Database = 'Reset_Non_Hosted_Sites_Database';
     const Establish_Passive_Sessions = 'Establish_Passive_Sessions';
     const Get_Newer_Site_Definitions_For_Non_Hosted = 'Get_Newer_Site_Definitions_For_Non_Hosted';
+    const Rotate_Logs = 'Rotate_Logs';
     const Ensure_Daily_Actions_Executed = 'Ensure_Daily_Actions_Executed';
     
     public static function getConstants()

@@ -38,6 +38,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Throwable;
@@ -93,6 +94,7 @@ class BackgroundProcessingController extends Controller
         ['tag' => SchedulesTag::Get_New_Trackers_From_NewTrackon, 'method_name' => 'dailyAt', 'ensure_daily_execution' => true, 'is_one_time' => false, 'log_execution' => true],
         ['tag' => SchedulesTag::Update_Client, 'method_name' => 'dailyAt', 'ensure_daily_execution' => true, 'is_one_time' => false, 'log_execution' => true],
         ['tag' => SchedulesTag::Get_Newer_Site_Definitions_For_Non_Hosted, 'method_name' => 'dailyAt', 'ensure_daily_execution' => true, 'is_one_time' => false, 'log_execution' => true],
+        ['tag' => SchedulesTag::Rotate_Logs, 'method_name' => 'dailyAt', 'ensure_daily_execution' => true, 'is_one_time' => false, 'log_execution' => true],
         ['tag' => SchedulesTag::Ensure_Daily_Actions_Executed, 'method_name' => 'hourlyAt', 'ensure_daily_execution' => false, 'is_one_time' => false, 'log_execution' => false],
 
     ];
@@ -990,6 +992,10 @@ class BackgroundProcessingController extends Controller
                 BackgroundProcessingController::getNewerSiteDefinitionsForNonHosted(pfm: $pfm);
                 break;
 
+            case SchedulesTag::Rotate_Logs:
+                self::rotateLogs(pfm: $pfm);
+                break;
+
             case SchedulesTag::Ensure_Daily_Actions_Executed:
                 self::ensureDailyActionsExecuted(pfm: $pfm);
                 break;
@@ -1099,6 +1105,58 @@ class BackgroundProcessingController extends Controller
         // - peers
         // - site peers
         // - sites
+    }
+
+    /**
+     * Rotates storage/logs/laravel.log by renaming it into dated laravel-Y-m-d-H-i.log file
+     * once daily at most, keeps current day log as laravel.log
+     * and deletes rotated logs older then 7 days
+     */
+    protected static function rotateLogs($pfm = false)
+    {
+        $logsPath = storage_path('logs');
+        $currentLogPath = $logsPath.'/laravel.log';
+        $rotatedTodayPrefix = 'laravel-'.now()->format('Y-m-d').'-';
+
+        $alreadyRotatedToday = false;
+
+        foreach (File::glob($logsPath.'/laravel-*.log') as $rotatedLogPath) {
+            $rotatedLogFileName = basename($rotatedLogPath);
+
+            if (Str::startsWith($rotatedLogFileName, $rotatedTodayPrefix)) {
+                $alreadyRotatedToday = true;
+            }
+
+            $rotatedLogDate = Str::substr(Str::after($rotatedLogFileName, 'laravel-'), 0, 10);
+
+            try {
+                $rotatedLogCarbon = Carbon::createFromFormat('Y-m-d', $rotatedLogDate);
+            } catch (Exception $e) {
+                H::pfm('Skipping unrecognized log file: '.$rotatedLogPath, pfm: $pfm);
+                continue;
+            }
+
+            if ($rotatedLogCarbon->lessThan(now()->subDays(7)->startOfDay())) {
+                File::delete($rotatedLogPath);
+                H::pfm('Deleted log older then 7 days: '.$rotatedLogPath, pfm: $pfm);
+            }
+        }
+
+        if ($alreadyRotatedToday) {
+            H::pfm('Logs already rotated today', pfm: $pfm);
+
+            return;
+        }
+
+        if (File::exists($currentLogPath) && File::size($currentLogPath) > 0) {
+            $rotatedLogFileName = 'laravel-'.now()->format('Y-m-d-H-i').'.log';
+
+            File::move($currentLogPath, $logsPath.'/'.$rotatedLogFileName);
+            File::put($currentLogPath, '');
+
+            info('rotateLogs rotated laravel.log to '.$rotatedLogFileName);
+            H::pfm('Rotated laravel.log to '.$rotatedLogFileName, pfm: $pfm);
+        }
     }
 
     /**
