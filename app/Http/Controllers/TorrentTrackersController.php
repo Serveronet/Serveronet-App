@@ -14,7 +14,6 @@ use Exception;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use stdClass;
@@ -51,8 +50,9 @@ class TorrentTrackersController extends Controller
             return redirect(domainRoute('trackers'))->with('status', 'Disabled - Dev environment');
         }
 
-        if (! H::getSettVal(SettingIds::automatic_trackers_updating_enabled))
-        return redirect(domainRoute('trackers'))->with('status', 'Disabled by setting');
+        if (! H::getSettVal(SettingIds::automatic_trackers_updating_enabled)) {
+            return redirect(domainRoute('trackers'))->with('status', 'Disabled by setting');
+        }
 
         $in_ui = request()->in_ui ?? false;
 
@@ -146,7 +146,7 @@ class TorrentTrackersController extends Controller
         foreach ($delays as $key => $d) {
             foreach ($trackersUrls as $key => $tracker_url) {
                 $result = Cache::get(CachePrefixes::tracker_yield_result_.$site_id.$tracker_url);
-                
+
                 $peers = json_decode(Cache::get(CachePrefixes::tracker_yield_peers_.$site_id.$tracker_url), true) ?? [];
                 info('tracker_yield_result_: (delay) '.$d['delay'].' '.$result.' '.$tracker_url);
                 // info('tracker_yield_result_peers: '.json_encode($peers));
@@ -402,14 +402,16 @@ class TorrentTrackersController extends Controller
 
         info('trackerYield: '.json_encode($trackerYield));
         info('trackerYield peers: '.json_encode($peers));
+
         return $trackerYield;
     }
 
-    public static function parseCompactPeers(string|null $peerBinary): array
+    public static function parseCompactPeers(?string $peerBinary): array
     {
         $peers = [];
-        if (! $peerBinary)
-        return $peers;
+        if (! $peerBinary) {
+            return $peers;
+        }
 
         $length = strlen($peerBinary);
 
@@ -458,7 +460,7 @@ class TorrentTrackersController extends Controller
             return;
         }
 
-        $announceFrequencyMinutes = ( ! H::isDevNode()) ? 10 : 1;
+        $announceFrequencyMinutes = (! H::isDevNode()) ? 10 : 1;
 
         $hostedSitePendingAnnounceBuilder = Site::where([
             ['is_hosted', 1],
@@ -472,12 +474,15 @@ class TorrentTrackersController extends Controller
             $hostedSitePendingAnnounceBuilder->whereSiteId($site_id);
         }
 
-        $hostedSitePendingAnnounce = $hostedSitePendingAnnounceBuilder->first();
+        $hostedSitePendingAnnounce = $hostedSitePendingAnnounceBuilder
+            ->orderBy('last_self_hosting_trackers_announced_at')->first();
 
         if (! $hostedSitePendingAnnounce || $limit < 1) {
             H::pfm('No more pending or limit hit: '.$limit.' '.__FUNCTION__, pfm: $pfm);
 
             return;
+        } else {
+            info('trackerAnnouncingHosting: '.$hostedSitePendingAnnounce->site_id);
         }
         $site = $hostedSitePendingAnnounce;
         $t = new TorrentTrackersController;

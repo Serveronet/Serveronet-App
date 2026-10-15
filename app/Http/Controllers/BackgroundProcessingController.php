@@ -1493,7 +1493,6 @@ class BackgroundProcessingController extends Controller
             (new ReplicationController)->replicateMissedSiteDefinitions(continous_ondemand: true, site_id: $site_id, pfm: false);
             (new ReplicationController)->replicateMissedSitesVisitorRecords(continous_ondemand: true, site_id: $site_id, pfm: false);
             (new ReplicationController)->replicateMissedVisitorResources(continous_ondemand: true, site_id: $site_id, pfm: false);
-            H::updateSitesHostedState(site_id: $site_id, pfm: false);
         }
     }
 
