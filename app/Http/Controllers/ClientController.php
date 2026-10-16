@@ -792,44 +792,52 @@ class ClientController extends Controller
         $response = null;
         $range = [];
 
+        $rangeColumn = 'entity_updated';
+        $dateFormat = 'Ymd';
+
         switch ($data_type) {
 
             case DataTypes::site_peers:
-
-                $range = [['updated_at', '>', $from], ['updated_at', '<', $to]];
+                $rangeColumn = 'updated_at';
+                $dateFormat = 'Y-m-d';
+                $range = [[$rangeColumn, '>', $from], [$rangeColumn, '<', $to]];
                 $queryBuilder = SitePeer::where($range)->withoutArchived()->where('site_id', $site_id)
-                    ->select(SitePeer::$publicProperties)->orderBy('updated_at');
+                    ->select(SitePeer::$publicProperties)->orderBy($rangeColumn);
                 break;
 
             case DataTypes::site_definitions:
-
+                $rangeColumn = 'entity_created';
+                $dateFormat = 'Ymd';
                 $from = Carbon::parse($from)->format(Consts::visitorDataDateIdFormat);
                 $to = Carbon::parse($to)->format(Consts::visitorDataDateIdFormat);
-                $range = [['entity_created', '>', $from], ['entity_created', '<', $to]];
+                $range = [[$rangeColumn, '>', $from], ['entity_created', '<', $to]];
                 $queryBuilder = SiteDefinition::where($range)->where('site_id', $site_id)
-                    ->select('record_json', 'signature', 'signer_verification_key_base64')->orderBy('updated_at');
+                    ->select('record_json', 'signature', 'signer_verification_key_base64')
+                    ->orderBy($rangeColumn);
                 break;
 
             case DataTypes::visitor_records:
-
+                $rangeColumn = 'entity_updated';
+                $dateFormat = 'Ymd';
                 $from = Carbon::parse($from)->format(Consts::visitorDataDateIdFormat);
                 $to = Carbon::parse($to)->format(Consts::visitorDataDateIdFormat);
-                $range = [['entity_updated', '>', $from], ['entity_updated', '<', $to]];
+                $range = [[$rangeColumn, '>', $from], [$rangeColumn, '<', $to]];
                 $queryBuilder = VisitorRecord::withTrashed()->where($range)->where('site_id', $site_id)
                     ->with('grant_record')
                     ->select('record_json', 'signature', 'grantee_visitor_id', 'visitor_id', 'signer_verification_key_base64')
-                    ->orderBy('updated_at');
+                    ->orderBy($rangeColumn);
                 break;
 
             case DataTypes::visitor_resources:
-
+                $rangeColumn = 'entity_updated';
+                $dateFormat = 'Ymd';
                 $from = Carbon::parse($from)->format(Consts::visitorDataDateIdFormat);
                 $to = Carbon::parse($to)->format(Consts::visitorDataDateIdFormat);
-                $range = [['entity_updated', '>', $from], ['entity_updated', '<', $to]];
+                $range = [[$rangeColumn, '>', $from], [$rangeColumn, '<', $to]];
                 $queryBuilder = VisitorResource::withTrashed()->where($range)->where('site_id', $site_id)
                     ->with('grant_record')
                     ->select('record_json', 'signature', 'grantee_visitor_id', 'visitor_id', 'signer_verification_key_base64')
-                    ->orderBy('updated_at');
+                    ->orderBy($rangeColumn);
                 break;
         }
         info('handleRequestModifiedBetweenDates From DT To: '.$from.' '.$data_type.' '.$to.' page: '.$page.' range: '.json_encode($range));
@@ -845,12 +853,12 @@ class ClientController extends Controller
             //     ->toArray();
 
             $record_count_map = $queryBuilder
-            ->selectRaw('SUBSTR(entity_updated, 1, 8) as date, COUNT(*) as count')
-            ->groupByRaw('SUBSTR(entity_updated, 1, 8)')
+            ->selectRaw('SUBSTR('.$rangeColumn.', 1, 8) as date, COUNT(*) as count')
+            ->groupByRaw('SUBSTR('.$rangeColumn.', 1, 8)')
             ->orderBy('date', 'asc')
             ->pluck('count', 'date')
             ->mapWithKeys(fn ($count, $date) => [
-                Carbon::createFromFormat('Ymd', $date)->format('Y-m-d') => $count,
+                Carbon::createFromFormat($dateFormat, $date)->format('Y-m-d') => $count,
             ])
             ->toArray();
 

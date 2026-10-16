@@ -1,6 +1,10 @@
 <div class="flex flex-col" style="height: calc(100vh - 8px); margin: 2px; margin-top: 0;">
     {{-- Single-line toolbar --}}
     <div class="flex items-center gap-2 px-2 py-1 bg-gray-100 border-b border-gray-300 flex-shrink-0">
+        <a href="{{ domainRoute('home') }}" title="Home" class="inline-flex items-center">
+            <img src="{{ asset('sn_client_resources/img/logo.png', request()->isSecure()) }}" class="h-4" alt="Home" />
+        </a>
+
         <span class="font-bold text-gray-800 text-sm whitespace-nowrap">Logs</span>
 
         @if($autoRefresh)
