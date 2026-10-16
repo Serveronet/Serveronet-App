@@ -23,7 +23,7 @@ class BuiltInTrackerController extends Controller
     {
         info('handleAnnounceByUrl Begin');
         /* Required parameters */
-        $requiredParams = ['info_hash', 'peer_id', 'port', 'uploaded', 'downloaded', 'left'];
+        $requiredParams = ['info_hash', 'peer_id', 'port', 'uploaded', 'downloaded', 'left', 'peer_url'];
         foreach ($requiredParams as $param) {
             if (! $request->has($param)) {
                 return response(Bencode::encode(['failure reason' => "Missing required parameter: {$param}"]), 200)
