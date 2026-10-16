@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\LocalTrackerInfoHashPeer;
+use App\Models\Site;
 use App\Traits\HasCommonBulkActions;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,6 +18,22 @@ final class LocalTrackerInfoHashPeersTable extends PowerGridComponent
 
     public string $tableName = 'local_tracker_info_hash_peers';
     protected $dataType = 'local_tracker_info_hash_peers';
+
+    protected ?array $siteIdByInfoHashCache = null;
+
+    protected function siteIdByInfoHash(): array
+    {
+        if ($this->siteIdByInfoHashCache === null) {
+            $map = [];
+            foreach (Site::query()->pluck('site_id') as $siteId) {
+                $map[sha1((string) $siteId)] = $siteId;
+            }
+
+            $this->siteIdByInfoHashCache = $map;
+        }
+
+        return $this->siteIdByInfoHashCache;
+    }
 
     public function setUp(): array
     {
@@ -59,6 +76,7 @@ final class LocalTrackerInfoHashPeersTable extends PowerGridComponent
             ->add('a', fn($model) => e($model->archived_at ?
                 Carbon::parse($model->archived_at)->format('d/m/Y H:i:s') : ''))
             ->add('last_event')
+            ->add('matched_site_id', fn(LocalTrackerInfoHashPeer $model) => e($this->siteIdByInfoHash()[strtolower((string) $model->info_hash)] ?? ''))
             ->add('created_at_formatted', fn(LocalTrackerInfoHashPeer $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'));
     }
 
@@ -91,6 +109,8 @@ final class LocalTrackerInfoHashPeersTable extends PowerGridComponent
             Column::make('Last event', 'last_event')
                 ->sortable()
                 ->searchable(),
+
+            Column::make('Site id', 'matched_site_id'),
 
             Column::make('Updated at', 'updated_at_formatted', 'updated_at')
                 ->sortable(),

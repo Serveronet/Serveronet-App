@@ -55,15 +55,15 @@ final class ReplicationSessionsTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('session_id', 'session_id')->searchable()->sortable(),
-            Column::make('data_type', 'data_type')->searchable()->sortable(),
-            Column::make('last_heartbeat', 'last_heartbeat')->searchable()->sortable(),
-            Column::make('from', 'from')->searchable()->sortable(),
-            Column::make('to', 'to')->searchable()->sortable(),
-            Column::make('state', 'state')->searchable()->sortable(),
-            Column::make('detailed_state', 'detailed_state')->searchable()->sortable(),
-            Column::make('retries', 'retries')->searchable()->sortable(),
-            Column::make('site_id', 'site_id')->searchable()->sortable(),
+            Column::make('Session ID', 'session_id')->searchable()->sortable(),
+            Column::make('Data Type', 'data_type')->searchable()->sortable(),
+            Column::make('Last Heartbeat', 'last_heartbeat')->searchable()->sortable(),
+            Column::make('From', 'from')->searchable()->sortable(),
+            Column::make('To', 'to')->searchable()->sortable(),
+            Column::make('State', 'state')->searchable()->sortable(),
+            Column::make('Detailed State', 'detailed_state')->searchable()->sortable(),
+            Column::make('Retries', 'retries')->searchable()->sortable(),
+            Column::make('Site ID', 'site_id')->searchable()->sortable(),
         ];
     }
 

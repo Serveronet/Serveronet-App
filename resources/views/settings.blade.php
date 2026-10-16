@@ -3,7 +3,7 @@
 @section('content')
     <div id="appSettings">
 
-        <div class="bg-danger mb-4 rounded text-white p-1 ps-2">Warning Settings are not sanitized. Proceed if you know what
+        <div class="bg-danger mb-4 rounded text-white p-1 ps-2" v-if="showAdvanced">Warning: Settings are not sanitized. Proceed if you know what
             you are doing.</div>
         Edit and Save to apply.
         <br>
