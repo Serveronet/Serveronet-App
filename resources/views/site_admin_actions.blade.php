@@ -19,7 +19,7 @@
 
         <div class="vr"></div>
         <div class="m-1 p-2 rounded sn-action-min">
-            <div class="mb-1 sn-action-min-height">Hosting target State</div>
+            <div class="mb-1 sn-action-min-height">Hosting Target State</div>
             <form wire:submit="editSiteState('{{ \App\Dicts\Tags::hosting }}')" @click="$dispatch('action-start')">
                 <button class="btn btn-outline-success btn-sm col-12" type="submit">
                     {{ $site->is_to_be_hosted ? 'To Unhost' : 'To be Hosted' }}
@@ -32,7 +32,7 @@
             <div class="mb-1 sn-action-min-height">Pin</div>
             <form wire:submit="editSiteState('{{ \App\Dicts\Tags::pinning }}')" @click="$dispatch('action-start')">
                 <button class="btn btn-outline-warning btn-sm col-12" type="submit">
-                    {{ !$site->is_pinned ? 'Pin' : 'Un Pin' }}
+                    {{ !$site->is_pinned ? 'Pin' : 'Unpin' }}
                 </button>
             </form>
         </div>

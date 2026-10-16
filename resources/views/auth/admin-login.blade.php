@@ -1,8 +1,8 @@
 @extends('layouts.guest', ['banner' => 'Client Admin', 'help_title' => 'Client Administration', 'help_link' => null])
 
 @section('content')
-    <div class="h4">Client Administrator login</div>
-    <div class="h6">Use a password set during the First Run setup</div>
+    <div class="h4">Client Administrator Login</div>
+    <div class="h6">Use the password set during the First Run setup</div>
     <br>
 
 

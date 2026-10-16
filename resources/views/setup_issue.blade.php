@@ -5,6 +5,6 @@
     <br>
     <br>
     <div class="h6">
-        <a href="{{ $relavant_link }}">Relavant link</a>
+        <a href="{{ $relavant_link }}">Relevant link</a>
     </div>
 @endsection

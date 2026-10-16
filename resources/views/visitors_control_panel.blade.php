@@ -19,10 +19,10 @@
             <form action="{{ domainRoute('forget_visitor', ['site_id' => $site_id]) }}" method="POST">
                 @csrf
                 <div class="h3">Forget Visitor</div>
-                <div class="h6">Your visitor and it's private seed will be removed from this client.</div>
+                <div class="h6">Your visitor and its private seed will be removed from this client.</div>
                 <div class="h6">They will be lost if not backed up.</div>
-                <div class="h6">You will be able to register on a client again if private seed is known to you.</div>
-                <div>Type this phraze to confirm account deletion: </div>
+                <div class="h6">You will be able to register on a client again if the private seed is known to you.</div>
+                <div>Type this phrase to confirm account deletion: </div>
                 <div class="fst-italic">{{ $requiredPhrase }}</div>
                 <input type="text" class="form-control mt-3" name="required_phrase"
                     placeholder="Type required phrase here">
@@ -33,16 +33,16 @@
             <hr class="border border-success border-1 mt-4 mb-2" />
 
             <div class="h3">Access with Api Token</div>
-            <div>Access with Api Token allows you to Post to the backend without being Authenticated with a password.</div>
+            <div>Access with Api Token allows you to post to the backend without being authenticated with a password.</div>
             <div>This is designed for continuous automatic posting of updates.</div>
             <div>As this is not secure, enable only when you know what you are doing.</div>
-            <div>See the Sites Development documentation on how to use.</div>
+            <div>See the Sites Development documentation on how to use it.</div>
             <br>
             <form action="{{ domainRoute('toggle_api_token_upsert_endpoints', ['site_id' => $site_id]) }}" method="POST">
                 @csrf
                 <button type="submit" class="btn btn-outline-warning m-1">
                     @if (Auth::guard('visitor')->user()->api_token)
-                        Disable Api token
+                        Disable Api Token
                     @else
                         Enable Api Token
                     @endif

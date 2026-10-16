@@ -31,7 +31,7 @@
     <br>
     <br>
     <a class="btn btn-light fw-bold" style="width: 100%;" href="{{ \App\Http\H::siteUrl($target_site_id) . 'login' }}">
-        Continue to Site and log in with you new identity</a>
+        Continue to Site and log in with your new identity</a>
     <br>
     <br>
     <br>

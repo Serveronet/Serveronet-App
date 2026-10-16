@@ -19,7 +19,7 @@
     </script>
 @endif
 
-@if (session('error')))
+@if (session('error'))
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             toastr.error("{{ session('error') }}", {timeOut: 10000});

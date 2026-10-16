@@ -6,7 +6,7 @@
 
     <div class="ms-2">
         @if ($client_not_connectable ?? true)
-            <div class="bg-warning mb-4 rounded text-white p-1 ps-2">This Client appears to be not connectable. Publishing
+            <div class="bg-warning mb-4 rounded text-white p-1 ps-2">This Client appears to not be connectable. Publishing
                 might fail.</div>
         @endif
         <div class="h6">Place your Sites in the Developed Sites Directory</div>
@@ -72,7 +72,7 @@
                         {{ $developed_site->siteTotalSizeReadable }}</span>
 
                     @if ($developed_site->siteTotalSizeBytes > \App\Http\Consts::siteFilesMaxTotalSizeBytesServeronet)
-                        <span class="badge rounded-pill text-bg-danger">⚠ Total maximum size exceed (10MB)</span>
+                        <span class="badge rounded-pill text-bg-danger">? Total maximum size exceeded (10MB)</span>
                     @endif
 
                     @if ($developed_site->reservedDirPresent)

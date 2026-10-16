@@ -40,7 +40,7 @@
                 @csrf
                 <div class="mb-3">
                     <label for="app_url" class="form-label">App Url.</label>
-                    <label for="app_url" class="form-label form-control-sm">Adjust for specific needs. Otherwise leave a
+                    <label for="app_url" class="form-label form-control-sm">Adjust for specific needs. Otherwise leave the
                         default value.</label>
 
                     <input type="url" class="form-control" id="app_url" name="app_url"

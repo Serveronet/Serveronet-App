@@ -1,7 +1,7 @@
 @extends('layouts.central', ['banner' => 'Downloads', 'help_tag' => App\Dicts\DocsMapping::about_serveronet])
 
 @section('content')
-    <div class="h6">Important: Read documentation before use</div>
+    <div class="h6">Important: Read the documentation before use</div>
     <a href="{{ route('documentation', ['doc_tag' => 'documentation_index']) }}">Installation and Deployment</a>
     <br>
     <br>
@@ -46,7 +46,7 @@
     <br>
     <br>
     <div class="h5">Advanced Downloads</div>
-    <div>Server bundle (For: Shared Hosting, VPS) - See documentation on how to deploy</div>
+    <div>Server bundle (For: Shared Hosting, VPS) - See the documentation on how to deploy</div>
     <a class="btn btn-outline-success" href="{{ route('server_bundle.zip') }}">Server Bundle</a>
 
     <br>

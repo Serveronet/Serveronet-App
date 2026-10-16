@@ -3,7 +3,7 @@
 @section('content')
     <div class="h1">This Site is for adults only!</div>
     <br>
-    <div class="h4">If you are not an adult please be aware that some things cannot be unseen or unread.</div>
+    <div class="h4">If you are not an adult, please be aware that some things cannot be unseen or unread.</div>
     <br>
     Press Continue to access this Site or Go back to Index
     <hr>

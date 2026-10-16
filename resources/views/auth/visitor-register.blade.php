@@ -20,7 +20,7 @@
 
             <!-- Visitor Id -->
             <div class="mt-4">
-                <x-label for="visitor_id" :value="'Identity was generated for you. Paste yours or upload if already owned an Identity.'" />
+                <x-label for="visitor_id" :value="'An Identity was generated for you. Paste yours or upload if you already own an Identity.'" />
                 <br>
                 <br>
                 <span class="text-gray-500">Visitor</span>
@@ -36,7 +36,7 @@
             <!-- Seed -->
             <div class="mt-4">
                 <span class="text-gray-500">Private Seed (base64)</span>
-                <span class="btn btn-outine-light btn-sm text-dark dark:text-white pre text-decoration-none small"
+                <span class="btn btn-outline-light btn-sm text-dark dark:text-white pre text-decoration-none small"
                     onclick="
     toastr.info(document.getElementById('partials.private-seed').innerHTML, 'Private Seed', {timeOut: 20000})
     ">
@@ -68,9 +68,9 @@
             <div class="mt-4">
                 <x-label for="password" :value="__('Password')" />
                 <br>
-                <span class="text-gray-500">Set your password to login to sites. It is valid for <b
+                <span class="text-gray-500">Set your password to log in to sites. It is valid for <b
                         class="text-warning">this client only</b>.</span>
-                <span class="btn btn-outine-light btn-sm"
+                <span class="btn btn-outline-light btn-sm"
                     onclick="
     toastr.info(document.getElementById('partials.this-client').innerHTML, 'Cryptographic Identity', {timeOut: 20000})
     "

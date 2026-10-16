@@ -8,8 +8,8 @@
     <form method="POST" action="./" id="appCheckMysqlConnection">
         @csrf
         <div class="ms-3">
-            <div class="h3">Serveronet Client - Inital Configuration</div>
-            <div class="h7">Complete First Run to make this client operational</div>
+            <div class="h3">Serveronet Client - Initial Configuration</div>
+            <div class="h7">Complete the First Run to make this client operational</div>
 
 
 
@@ -36,15 +36,15 @@
                         data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <div class="mt-4 text-gray-600 dark:text-gray-400 text-sm">
-                                <div class="h6">Leave default if unsure. Adjust to your situation. </div>
+                                <div class="h6">Leave the default if unsure. Adjust to your situation. </div>
                                 <div class="input-group mb-0 p-1 pb-0">
-                                    <span class="input-group-text">🔒</span>
+                                    <span class="input-group-text">??</span>
                                     <input type="text" class="form-control" name="client_address_https"
                                         id="client_address_https" placeholder="HTTPS Address"
                                         value="{{ $client_address_https }}">
                                 </div>
                                 <div class="input-group mb-0 p-1 pb-0">
-                                    <span class="input-group-text">🌍</span>
+                                    <span class="input-group-text">??</span>
                                     <input type="text" class="form-control" name="client_address" id="client_address"
                                         placeholder="Address" value="{{ $client_address }}">
                                 </div>
@@ -87,7 +87,7 @@
                         data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                Serveronet Client can use SQLite or MySql database
+                                Serveronet Client can use a SQLite or MySql database
 
                                 <div class="form-check mt-2">
                                     <input class="form-check-input" type="radio" name="DB_CONNECTION" id="sqlite"
@@ -146,7 +146,7 @@
                                             name="siteDatabasesInMySql" id="siteDatabasesInMySql"
                                             v-model="siteDatabasesInMySql">
                                         <label class="form-check-label" for="siteDatabasesInMySql">
-                                            Tenant Site's Databases In MySql
+                                            Tenant Sites' Databases In MySql
                                         </label>
                                         <div class="alert alert-warning">Warning: Requires CREATE SCHEMA and CREATE USER
                                             privileges</div>
@@ -185,7 +185,7 @@
 
                 <div class="ml-2">
                     <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                        Administrator can block Sites and adjust settings of this client
+                        The Administrator can block Sites and adjust settings of this client
                     </div>
                     <!-- Name -->
                     <div>

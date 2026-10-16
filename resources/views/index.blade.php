@@ -34,7 +34,7 @@
         @csrf
         <div class="fs-6" x-data="{}">
             Got a Site ID?
-            <span class="btn btn-outine-light btn-sm"
+            <span class="btn btn-outline-light btn-sm"
                 @click="
     toastr.info(document.getElementById('partials.welcome-tooltip').innerHTML, 'Addresses supported', {timeOut: 20000})
     "
@@ -68,7 +68,7 @@
     <br>
     <hr>
     <div class="small">
-        Administrator of this client can re-run "First Run setup" by deleting <i>fist_run_completed.php</i> file in
+        Administrator of this client can re-run "First Run setup" by deleting <i>first_run_completed.php</i> file in
         storage/app/ directory.
     </div>
 

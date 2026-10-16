@@ -20,7 +20,7 @@
     <br>
     <a name="modify_symlink"></a>
     <div class="h4">Site Development - Local public folder</div>
-    <span class="fs-6">Preview Developed site on your local client. </span>
+    <span class="fs-6">Preview developed sites on your local client. </span>
     <br>
     <span class="fs-6">Warning: Might be insecure. Files on your drive are exposed and rendered.</span>
     <form class="mb-4 mt-1" method="POST">
@@ -54,7 +54,7 @@
         'forceUpdate' => true,
         'pfm' => true,
     ]) }}"
-        class="btn btn-danger }} m-1">Update</a>
+        class="btn btn-danger m-1">Update</a>
     <br>
 
 
@@ -63,7 +63,7 @@
     <br>
     <a name="toggle_control_panel_property"></a>
     <div class="h3">Private or Public Client</div>
-    <div class="h6">Serveronet Sites browsing available to all visitors or Client Owner only</div>
+    <div class="h6">Serveronet Sites browsing is available to all visitors or to the Client Owner only</div>
     <div class="mb-1">Currently: <span class="h6 fw-bold">{{ $ownerOnly ? 'Owner\'s only' : 'Public for visitors' }}<span>
     </div>
     <form action="{{ 'toggle_control_panel_property' }}" method="POST">
