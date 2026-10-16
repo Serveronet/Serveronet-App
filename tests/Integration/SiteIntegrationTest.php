@@ -81,11 +81,13 @@ foreach ($ports as $key => $port) {
             dump('Test Name: '.$this->name());
             loginAsAdmin($page = visit("http://{$GLOBALS['domain']}:{$port}/"));
             $page->navigate("http://visitor-control-panel.{$GLOBALS['domain']}:$port/register");
+            $page->wait(1);
+            $page->clear('input[name=base64_seed]');
             $page->type('input[name=base64_seed]', $devActor['base64_seed']);
             $page->type('input[name=alias]', $devActor['alias']);
             $page->type('input[name=password]', Consts::passwordForTests);
             $page->type('input[name=password_confirmation]', Consts::passwordForTests);
-            $page->wait(1);
+            
             $page->submit();
             $page->assertSee('Your Identity is');
 

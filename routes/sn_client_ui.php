@@ -51,7 +51,7 @@ if (! H::isServeronetWelcomeSite()) {
             $SERVE_OWNER_ONLY = config('sn.serve_owner_only');
 
             Route::get('favicon.ico', [UtilsController::class, 'getFavicon'])
-                ->name($domainRouteNamePrefix.'favicon')->middleware($owner_only_capable)->middleware('throttle:high_rate');
+                ->name($domainRouteNamePrefix.'favicon')->middleware('throttle:high_rate');
 
             Route::post('firstrun/check_mysql_connectivity', [FirstRunController::class, 'checkMysqlConnectivity'])
                 ->middleware('throttle:medium_rate');

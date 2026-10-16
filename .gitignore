@@ -7,8 +7,8 @@
 /public/new_version.zip
 /public/storage
 /storage/*.key
-/resources/views/dev
 /routes/dev.php
+/tests/Browser/
 /vendor
 .env
 .env.backup
