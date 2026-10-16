@@ -7,7 +7,6 @@
 /public/new_version.zip
 /public/storage
 /storage/*.key
-/routes/dev.php
 /tests/Browser/
 /vendor
 .env
