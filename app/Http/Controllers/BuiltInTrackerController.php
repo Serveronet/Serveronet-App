@@ -16,32 +16,6 @@ class BuiltInTrackerController extends Controller
 {
     public function builtInTracker(Request $request)
     {
-        // $info_hashes = Cache::get('info_hashes', []);
-        // // $info_hashes = LocalTrackerInfoHashPeer::query()->get();
-        // $allSites = Site::with('most_recent_site_definition')->get();
-
-        
-        // $sitesWithHashes = [];
-        // foreach ($allSites as $key => $site) {
-        //     $site->site_info_hash = sha1($site->site_id);
-        //     array_push($sitesWithHashes, [
-        //         'site_info_hash' => $site->site_info_hash,
-        //         'site_id' => $site->site_id,
-        //         'title' => $site->most_recent_site_definition->title ?? 'Unknown Site',
-        //     ]);
-        // }
-
-        // foreach ($info_hashes as $key_info_hash => $info_hash) {
-        //     foreach ($sitesWithHashes as $key => $siteHash) {
-        //         if ($key_info_hash == $siteHash['site_info_hash']) {
-        //             $info_hashes[$key_info_hash]['title'] = $siteHash['title'];
-        //             $info_hashes[$key_info_hash]['site_id'] = $siteHash['site_id'];
-
-        //             continue;
-        //         }
-        //     }
-        // }        
-
         return view('built_in_tracker');
     }
 
