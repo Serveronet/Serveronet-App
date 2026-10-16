@@ -1,5 +1,5 @@
 # Introduction
-Those are advanced deployment steps and might require some degree of IT skills. Proceed with them when you know what your doing as misconfiguration might result in security issues.
+These are advanced deployment steps and might require some degree of IT skills. Proceed with them only when you know what you're doing, as misconfiguration might result in security issues.
 
 # Manual installation - Apache Server
 **Newer Ubuntu, Debian, Raspbian**
@@ -8,7 +8,7 @@ You can deploy Serveronet client as a site on your server.
 
 Requires php >= 8.3
 
-In this deployment flow we are deploying as http://localhost/ in /var/www/serveronet directory
+In this deployment flow we are deploying as http://localhost/ in the /var/www/serveronet directory
 
 ## Install prerequisites
 
@@ -17,11 +17,11 @@ sudo apt install apache2 php libapache2-mod-php php-sqlite3 php-gmp php-curl php
 ```
 
 ## Steps
-- Activate rewrite mod. Important! for security 
+- Activate the rewrite mod. Important for security!
   
   `sudo a2enmod rewrite`
 
-- Download and unzip bundle into proper location. In this example /var/www/serveronet will be used. 
+- Download and unzip the bundle into the proper location. In this example /var/www/serveronet will be used. 
 
   ```curl -L https://serveronet.org/server_bundle.zip -o server_bundle.zip```
 
@@ -48,7 +48,7 @@ sudo apt install apache2 php libapache2-mod-php php-sqlite3 php-gmp php-curl php
     </Directory>
     ```
 
-- Deploy relavant configuration for the HTTPS version - not covered by this documentation.
+- Deploy relevant configuration for the HTTPS version - not covered by this documentation.
 
 - Reload web server configuration
   
@@ -56,10 +56,10 @@ sudo apt install apache2 php libapache2-mod-php php-sqlite3 php-gmp php-curl php
 
 - Navigate to http://localhost/ (or proper host) to complete the First Run
 
-⁣
+?
 
 ## As a Tor hidden service
-Follow **manual instalation** steps and apply these adjustments
+Follow the **manual installation** steps and apply these adjustments
 
 - Generate onion address - not covered by this documentation.
 
@@ -86,10 +86,10 @@ References:
 
 https://community.torproject.org/onion-services/setup/
 
-⁣
+?
 
 # Docker
-- Create Empty volume - required to access developed sites directory
+- Create an empty volume - required to access the developed sites directory
   
     ```
   docker volume create serveronet_volume
@@ -115,7 +115,7 @@ https://community.torproject.org/onion-services/setup/
     -p 15080:80 -p 15443:443 \
     dunglas/frankenphp
   ```
-- Connect to the Container and install missing php-zip extension
+- Connect to the Container and install the missing php-zip extension
 
   ```
   docker exec -it serveronet_frankenphp sh -c "install-php-extensions zip"
@@ -126,7 +126,7 @@ https://community.torproject.org/onion-services/setup/
   ```
 - Browse to https://snet.localhost:15443 to complete the First Run
 
-⁣
+?
 
 # Termux and Android Terminal (and Termux docker)
 
@@ -135,10 +135,10 @@ https://community.torproject.org/onion-services/setup/
   ```docker run -p 15080:15080 -p 15443:15443 -it termux/termux-docker:latest```
 
   
-- **docker only:** Enable root shell  -  [🔗termux-docker](https://github.com/termux/termux-docker)
+- **docker only:** Enable root shell  -  [??termux-docker](https://github.com/termux/termux-docker)
 
   ```/entrypoint.sh```
-- Connect to shell and execute following:
+- Connect to the shell and execute the following:
 
   ```curl -L https://serveronet.org/linux_and_mac_client_bundle.zip -o serveronet.zip```
 
@@ -150,16 +150,16 @@ https://community.torproject.org/onion-services/setup/
   
 - Browse to http://snet.localhost:15080/
 
-⁣
+?
 
 # Tor Setup
 
-How to make client accesible on a Tor onion address
+How to make the client accessible on a Tor onion address
 
 Steps:
 
 1. Close Tor Browser or stop Tor
-2. Edit torrc configuration file and add following lines
+2. Edit the torrc configuration file and add the following lines
    
    ```HiddenServiceDir ../hidden_service/```
 
