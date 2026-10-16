@@ -44,6 +44,9 @@ final class PeerReplicationSessionsTable extends PowerGridComponent
             ->add('current_page')
             ->add('per_page')
             ->add('total_records')
+            ->add('progress', fn(PeerReplicationSession $model) => (int) $model->total_records > 0
+                ? min(100, (int) round((int) $model->current_page * (int) $model->per_page / (int) $model->total_records * 100)) . '%'
+                : '')
             ->add('state')
             ->add('last_completed_date')
             ->add('last_heartbeat')
@@ -56,17 +59,18 @@ final class PeerReplicationSessionsTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('session_id', 'session_id')->searchable()->sortable(),
-            Column::make('client_address', 'client_address')->searchable()->sortable(),
-            Column::make('current_page', 'current_page')->searchable()->sortable(),
-            Column::make('per_page', 'per_page')->searchable()->sortable(),
-            Column::make('total_records', 'total_records')->searchable()->sortable(),
-            Column::make('state', 'state')->searchable()->sortable(),
-            Column::make('last_completed_date', 'last_completed_date')->searchable()->sortable(),
-            Column::make('last_heartbeat', 'last_heartbeat')->searchable()->sortable(),
-            Column::make('detailed_state', 'detailed_state')->searchable()->sortable(),
-            Column::make('record_count_map', 'record_count_map')->searchable()->sortable(),
-            Column::make('created_at', 'created_at')->searchable()->sortable(),
+            Column::make('Session ID', 'session_id')->searchable()->sortable(),
+            Column::make('Client Address', 'client_address')->searchable()->sortable(),
+            Column::make('Current Page', 'current_page')->searchable()->sortable(),
+            Column::make('Per Page', 'per_page')->searchable()->sortable(),
+            Column::make('Total Records', 'total_records')->searchable()->sortable(),
+            Column::make('Progress', 'progress'),
+            Column::make('State', 'state')->searchable()->sortable(),
+            Column::make('Last Completed Date', 'last_completed_date')->searchable()->sortable(),
+            Column::make('Last Heartbeat', 'last_heartbeat')->searchable()->sortable(),
+            Column::make('Detailed State', 'detailed_state')->searchable()->sortable(),
+            Column::make('Record Count Map', 'record_count_map')->searchable()->sortable(),
+            Column::make('Created At', 'created_at')->searchable()->sortable(),
         ];
     }
 
