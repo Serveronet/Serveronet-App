@@ -24,6 +24,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\ValidationException;
 
 /* Hadles UI of the Admin section */
@@ -365,6 +366,59 @@ class AdminController extends Controller
             H::setSettingValue(SettingIds::last_tor_connectivity_check_ts, now());
 
             H::pfm('Error while connecting to tor.', pfm: $pfm);
+            H::pfm($th->getMessage(), pfm: $pfm);
+        }
+    }
+
+    public function testProxyAccess($pfm = false)
+    {
+        if (! $pfm) {
+            $pfm = request()->pfm;
+        }
+
+        H::echoHeaderWithViewport($pfm);
+
+        H::pfm('Testing Proxy access. Please wait...', pfm: $pfm);
+
+        if (! H::isProxyActive()) {
+            H::setSettingValue(SettingIds::was_proxy_connectable, false);
+            H::setSettingValue(SettingIds::last_proxy_connectivity_check_ts, now());
+
+            H::pfm('Proxy is not enabled or is not configured in Client Settings.', pfm: $pfm);
+
+            return;
+        }
+
+        $url = 'https://checkip.amazonaws.com';
+
+        $directIp = null;
+        try {
+            $directIp = trim(Http::timeout(10)->get($url)->body());
+        } catch (\Throwable $th) {
+            H::pfm('Could not detect direct external IP: '.$th->getMessage(), pfm: $pfm);
+        }
+
+        try {
+            $client = H::setupClient(is_tor_address: false);
+            $options = ['timeout' => 20];
+            H::prepareOptions($options, $url);
+            $response = $client->request('GET', $url, $options);
+            $proxyIp = trim((string) $response->getBody());
+
+            H::setSettingValue(SettingIds::was_proxy_connectable, true);
+            H::setSettingValue(SettingIds::last_proxy_connectivity_check_ts, now());
+
+            H::pfm('Requests are routed through the proxy. External IP seen by remote servers: '.$proxyIp, pfm: $pfm);
+
+            if ($directIp !== null && $directIp !== '' && $proxyIp !== $directIp) {
+                H::pfm('Proxy is changing the exit address. Direct IP: '.$directIp.' Proxy IP: '.$proxyIp, pfm: $pfm);
+            }
+        } catch (\Throwable $th) {
+
+            H::setSettingValue(SettingIds::was_proxy_connectable, false);
+            H::setSettingValue(SettingIds::last_proxy_connectivity_check_ts, now());
+
+            H::pfm('Error while connecting through the proxy.', pfm: $pfm);
             H::pfm($th->getMessage(), pfm: $pfm);
         }
     }

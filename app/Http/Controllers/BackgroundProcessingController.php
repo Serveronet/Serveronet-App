@@ -80,6 +80,7 @@ class BackgroundProcessingController extends Controller
         ['tag' => SchedulesTag::Process_Site_Definitions_Pending_Distribution, 'method_name' => 'everyFourMinutes', 'ensure_daily_execution' => true, 'is_one_time' => false, 'log_execution' => true],
         ['tag' => SchedulesTag::Sqlite_Database_Backup, 'method_name' => 'hourlyAt', 'ensure_daily_execution' => true, 'is_one_time' => false, 'log_execution' => true],
         ['tag' => SchedulesTag::Test_Tor_Access, 'method_name' => 'everyTenMinutes', 'ensure_daily_execution' => false, 'is_one_time' => false, 'log_execution' => true],
+        ['tag' => SchedulesTag::Test_Proxy_Access, 'method_name' => 'everyTenMinutes', 'ensure_daily_execution' => false, 'is_one_time' => false, 'log_execution' => true],
         ['tag' => SchedulesTag::Test_Ipfs, 'method_name' => 'everyTenMinutes', 'ensure_daily_execution' => false, 'is_one_time' => false, 'log_execution' => true],
         ['tag' => SchedulesTag::Schuffle_Peer_Id, 'method_name' => 'dailyAt', 'ensure_daily_execution' => true, 'is_one_time' => false, 'log_execution' => true],
         ['tag' => SchedulesTag::Purge_Excessive_Records, 'method_name' => 'dailyAt', 'ensure_daily_execution' => true, 'is_one_time' => false, 'log_execution' => true],
@@ -950,6 +951,10 @@ class BackgroundProcessingController extends Controller
 
             case SchedulesTag::Test_Tor_Access:
                 (new AdminController)->testTorAccess(pfm: $pfm);
+                break;
+
+            case SchedulesTag::Test_Proxy_Access:
+                (new AdminController)->testProxyAccess(pfm: $pfm);
                 break;
 
             case SchedulesTag::Test_Ipfs:

@@ -24,8 +24,7 @@ Go to documentation section on  -
 
 ## Project status
 
-Project is in the alpha stage. Do not use in production environments.  
-Bacause this Serveronet Client is a web application and requires security updates author promises up to a year of security patches to the underlaying stack.
+Project is in the alpha stage. Do not use in production environments.
 
 
 ## License

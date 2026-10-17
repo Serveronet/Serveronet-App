@@ -181,6 +181,9 @@ if (! H::isServeronetWelcomeSite()) {
                 Route::post('admin/test_tor_access', [AdminController::class, 'testTorAccess'])
                     ->name($domainRouteNamePrefix.'test_tor_access')->middleware('throttle:high_rate');
 
+                Route::post('admin/test_proxy_access', [AdminController::class, 'testProxyAccess'])
+                    ->name($domainRouteNamePrefix.'test_proxy_access')->middleware('throttle:high_rate');
+
                 Route::post('admin/test_ipfs', [AdminController::class, 'testIpfs'])
                     ->name($domainRouteNamePrefix.'test_ipfs')->middleware('throttle:high_rate');
 

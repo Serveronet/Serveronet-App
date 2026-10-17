@@ -1048,6 +1048,59 @@ class H
         return $is_tor_address;
     }
 
+    public static function getProxyString(): ?string
+    {
+        if (! H::getSettVal(SettingIds::proxy_enabled)) {
+            return null;
+        }
+
+        $proxy_address = trim((string) H::getSettVal(SettingIds::proxy_address));
+        $proxy_port = (int) H::getSettVal(SettingIds::proxy_port);
+        $proxy_type = strtolower(trim((string) H::getSettVal(SettingIds::proxy_type)));
+
+        if ($proxy_address === '' || $proxy_port < 1 || $proxy_port > 65535) {
+            return null;
+        }
+
+        if (! in_array($proxy_type, ['http', 'https', 'socks4', 'socks5'])) {
+            $proxy_type = 'http';
+        }
+
+        $auth = '';
+        $proxy_user = trim((string) H::getSettVal(SettingIds::proxy_user));
+        $proxy_password = (string) H::getSettVal(SettingIds::proxy_password);
+
+        if ($proxy_user !== '') {
+            $auth = rawurlencode($proxy_user);
+            if ($proxy_password !== '') {
+                $auth .= ':'.rawurlencode($proxy_password);
+            }
+            $auth .= '@';
+        }
+
+        return $proxy_type.'://'.$auth.$proxy_address.':'.$proxy_port;
+    }
+
+    public static function getProxyOptions(): array
+    {
+        $proxy_string = H::getProxyString();
+
+        if ($proxy_string === null) {
+            return [];
+        }
+
+        return ['proxy' => [
+            'http' => $proxy_string,
+            'https' => $proxy_string,
+            'no' => ['localhost', '.localhost', '127.0.0.0/8', '::1'],
+        ]];
+    }
+
+    public static function isProxyActive(): bool
+    {
+        return H::getProxyString() !== null;
+    }
+
     public static function setupClient($is_tor_address, $forceTorClient = false, $long_connect = false)
     {
         $isTorAvailable = H::getIsTorAvailable();
@@ -1078,11 +1131,11 @@ class H
             /* GuzzleClient required for stream support */
             $streamHandler = new CurlHandler;
             $stack = HandlerStack::create($streamHandler);
-            $client = new Client([
+            $client = new Client(array_merge([
                 'verify' => false,
                 'connect_timeout' => $connect_timeout,
                 'allow_redirects' => ['strict' => true],
-            ]);
+            ], H::getProxyOptions()));
         }
 
         return $client;
@@ -1105,9 +1158,15 @@ class H
                 $urls = [$urls];
             }
 
+            $isProxyActive = H::isProxyActive();
             $CURLOPT_RESOLVE_strings = [];
 
             foreach ($urls as $key => $url) {
+
+                if ($isProxyActive && ! H::isTorAddress($url)) {
+                    continue;
+                }
+
                 $host = (Url::fromString(H::a($url)))->getHost();
                 $placeholdedPort = (new PortForwardController)->getPort($url);
                 $ip = H::obtainIpForUrl($url);
@@ -1115,7 +1174,9 @@ class H
                 array_push($CURLOPT_RESOLVE_strings, $CURLOPT_RESOLVE_string);
             }
 
-            $options['curl'][CURLOPT_RESOLVE] = $CURLOPT_RESOLVE_strings;
+            if (count($CURLOPT_RESOLVE_strings) > 0) {
+                $options['curl'][CURLOPT_RESOLVE] = $CURLOPT_RESOLVE_strings;
+            }
         }
     }
 

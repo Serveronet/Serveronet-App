@@ -116,6 +116,30 @@ class SettingsController extends Controller
             case SettingIds::last_tor_connectivity_check_ts: return ['value' => 
                 Consts::startOfServeronet, 'type' => SettingDataTypes::datetime, 'is_advanced' => true];
             break;
+            case SettingIds::proxy_enabled: return ['value' => 
+                false, 'type' => SettingDataTypes::boolean, 'is_advanced' => false];
+            break;
+            case SettingIds::proxy_type: return ['value' => 
+                'http', 'type' => SettingDataTypes::string, 'is_advanced' => false];
+            break;
+            case SettingIds::proxy_address: return ['value' => 
+                '127.0.0.1', 'type' => SettingDataTypes::string, 'is_advanced' => false];
+            break;
+            case SettingIds::proxy_port: return ['value' => 
+                3128, 'type' => SettingDataTypes::integer, 'is_advanced' => false];
+            break;
+            case SettingIds::proxy_user: return ['value' => 
+                '', 'type' => SettingDataTypes::string, 'is_advanced' => true];
+            break;
+            case SettingIds::proxy_password: return ['value' => 
+                '', 'type' => SettingDataTypes::string, 'is_advanced' => true];
+            break;
+            case SettingIds::was_proxy_connectable: return ['value' => 
+                false, 'type' => SettingDataTypes::boolean, 'is_advanced' => true];
+            break;
+            case SettingIds::last_proxy_connectivity_check_ts: return ['value' => 
+                Consts::startOfServeronet, 'type' => SettingDataTypes::datetime, 'is_advanced' => true];
+            break;
             case SettingIds::was_ipfs_connectable: return ['value' => 
                 false, 'type' => SettingDataTypes::boolean, 'is_advanced' => true];
             break;
@@ -269,6 +293,30 @@ class SettingsController extends Controller
             break;
             case SettingIds::last_tor_connectivity_check_ts: 
                 return 'Last time when tor connectivity check occured.';
+            break;
+            case SettingIds::proxy_enabled: 
+                return 'Route peer-to-peer requests (non Tor) through a proxy server. Applies to all Guzzle based p2p requests: peer API calls, trackers, updates, bootstrap. Tor (.onion) traffic keeps using the Tor client.';
+            break;
+            case SettingIds::proxy_type: 
+                return 'Proxy protocol: http, https, socks4 or socks5. Example HTTP proxy on this machine: http';
+            break;
+            case SettingIds::proxy_address: 
+                return 'Proxy server address. Example local proxy: 127.0.0.1';
+            break;
+            case SettingIds::proxy_port: 
+                return 'Proxy server port. Example local Squid HTTP proxy: 3128';
+            break;
+            case SettingIds::proxy_user: 
+                return 'Proxy authentication user name. Leave empty for proxies without authentication.';
+            break;
+            case SettingIds::proxy_password: 
+                return 'Proxy authentication password. Leave empty for proxies without authentication.';
+            break;
+            case SettingIds::was_proxy_connectable: 
+                return 'Was proxy connectable';
+            break;
+            case SettingIds::last_proxy_connectivity_check_ts: 
+                return 'Last time when proxy connectivity check occured.';
             break;
             case SettingIds::was_ipfs_connectable: 
                 return 'Was IPFS connectable';

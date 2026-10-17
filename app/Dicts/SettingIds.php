@@ -25,6 +25,22 @@ class SettingIds
     public const was_tor_connectable = 'was_tor_connectable';
 
     public const last_tor_connectivity_check_ts = 'last_tor_connectivity_check_ts';
+
+    public const proxy_enabled = 'proxy_enabled';
+
+    public const proxy_type = 'proxy_type';
+
+    public const proxy_address = 'proxy_address';
+
+    public const proxy_port = 'proxy_port';
+
+    public const proxy_user = 'proxy_user';
+
+    public const proxy_password = 'proxy_password';
+
+    public const was_proxy_connectable = 'was_proxy_connectable';
+
+    public const last_proxy_connectivity_check_ts = 'last_proxy_connectivity_check_ts';
     
     public const was_ipfs_connectable = 'was_ipfs_connectable';
 

@@ -38,6 +38,7 @@ class SchedulesTag
     const Update_Client = 'Update_Client';
     const Check_Budle_Update_Available = 'Check_Budle_Update_Available';
     const Test_Tor_Access = 'Test_Tor_Access';
+    const Test_Proxy_Access = 'Test_Proxy_Access';
     const Test_Ipfs = 'Test_Ipfs';
     const Schuffle_Peer_Id = 'Schuffle_Peer_Id';
     const Purge_Excessive_Records = 'Purge_Excessive_Records';
