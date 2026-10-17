@@ -14,7 +14,7 @@
         <div>
             <x-label for="name" :value="__('Admin username')" />
 
-            <x-input id="name" class="form-control" type="text" name="name" :value="'admin'" readonly required />
+            <x-input id="name" class="form-control" type="text" name="name" :value="'admin'" required />
         </div>
 
         <!-- Password -->

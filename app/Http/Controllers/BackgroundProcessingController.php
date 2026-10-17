@@ -102,7 +102,7 @@ class BackgroundProcessingController extends Controller
 
     public static function getBackgroundSchedulesConfig(): Collection
     {
-        $dbSchedules = BackgroundSchedule::get();
+        $dbSchedules = BackgroundSchedule::inRandomOrder()->get();
         $dbPeriodicSchedules = $dbSchedules->where('is_one_time', false);
         $schedulesTable = collect(BackgroundProcessingController::$schedulesTable);
 
