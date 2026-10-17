@@ -794,12 +794,14 @@ class ClientController extends Controller
 
         $rangeColumn = 'entity_updated';
         $dateFormat = 'Ymd';
+        $subStrLen = '8';
 
         switch ($data_type) {
 
             case DataTypes::site_peers:
                 $rangeColumn = 'updated_at';
                 $dateFormat = 'Y-m-d';
+                $subStrLen = '10';
                 $range = [[$rangeColumn, '>', $from], [$rangeColumn, '<', $to]];
                 $queryBuilder = SitePeer::where($range)->withoutArchived()->where('site_id', $site_id)
                     ->select(SitePeer::$publicProperties)->orderBy($rangeColumn);
@@ -808,6 +810,7 @@ class ClientController extends Controller
             case DataTypes::site_definitions:
                 $rangeColumn = 'entity_created';
                 $dateFormat = 'Ymd';
+                $subStrLen = '8';
                 $from = Carbon::parse($from)->format(Consts::visitorDataDateIdFormat);
                 $to = Carbon::parse($to)->format(Consts::visitorDataDateIdFormat);
                 $range = [[$rangeColumn, '>', $from], ['entity_created', '<', $to]];
@@ -819,6 +822,7 @@ class ClientController extends Controller
             case DataTypes::visitor_records:
                 $rangeColumn = 'entity_updated';
                 $dateFormat = 'Ymd';
+                $subStrLen = '8';
                 $from = Carbon::parse($from)->format(Consts::visitorDataDateIdFormat);
                 $to = Carbon::parse($to)->format(Consts::visitorDataDateIdFormat);
                 $range = [[$rangeColumn, '>', $from], [$rangeColumn, '<', $to]];
@@ -831,6 +835,7 @@ class ClientController extends Controller
             case DataTypes::visitor_resources:
                 $rangeColumn = 'entity_updated';
                 $dateFormat = 'Ymd';
+                $subStrLen = '8';
                 $from = Carbon::parse($from)->format(Consts::visitorDataDateIdFormat);
                 $to = Carbon::parse($to)->format(Consts::visitorDataDateIdFormat);
                 $range = [[$rangeColumn, '>', $from], [$rangeColumn, '<', $to]];
@@ -845,16 +850,9 @@ class ClientController extends Controller
         if ($count_only) {
             $response = $queryBuilder->count();
 
-            // $record_count_map = $queryBuilder
-            //     ->select(DB::raw('DATE(updated_at) as date'), DB::raw('COUNT(*) as count'))
-            //     ->groupBy(DB::raw('DATE(updated_at)'))
-            //     ->orderBy('date', 'asc')
-            //     ->pluck('count', 'date')
-            //     ->toArray();
-
             $record_count_map = $queryBuilder
-            ->selectRaw('SUBSTR('.$rangeColumn.', 1, 8) as date, COUNT(*) as count')
-            ->groupByRaw('SUBSTR('.$rangeColumn.', 1, 8)')
+            ->selectRaw('SUBSTR('.$rangeColumn.', 1, '.$subStrLen.') as date, COUNT(*) as count')
+            ->groupByRaw('SUBSTR('.$rangeColumn.', 1, '.$subStrLen.')')
             ->orderBy('date', 'asc')
             ->pluck('count', 'date')
             ->mapWithKeys(fn ($count, $date) => [
