@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Http\Controllers\BackgroundProcessingController;
 use App\Http\Controllers\UpdaterController;
+use App\Services\InternalCallService;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Http\Request;
@@ -40,7 +41,10 @@ class Kernel extends ConsoleKernel
                     $request->merge(['tag' => $tag, 'pfm' => false]);
 
                     try {
-                        (new BackgroundProcessingController())->executeClientAction($request);
+                        $requestConfigSet = [];
+                        $requestConfigSet['tag'] = $tag;
+
+                        InternalCallService::dispatchInternalAsync('execute_client_action_wrapper', $requestConfigSet);
                     } catch (Throwable $th) {
                         info($th->getMessage().' '.$th->getFile().' '.$th->getLine());
                     }
