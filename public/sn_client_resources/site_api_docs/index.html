@@ -176,7 +176,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: October 7, 2026</li>
+        <li>Last updated: October 19, 2026</li>
     </ul>
 </div>
 
@@ -1672,7 +1672,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
 
 <p>Receives a json body of a record to be updated (in _sn_record_json parameters)
 Json requires target table (_sn_table), entity id to be updated (_sn_entity_id)
-and site's database fields</p>
+and site's database fields
+Send _sn_mark_as_deleted to mark as deleted</p>
 
 <span id="example-requests-POSTsite_api-v1-visitor_record_update">
 <blockquote>Example request:</blockquote>
@@ -1684,7 +1685,7 @@ and site's database fields</p>
     --header "Accept: application/json" \
     --header "Content-Type: application/json" \
     --data "{
-    \"_sn_record_json\": \"{\\\"title\\\":\\\"My title\\\", \\\"_sn_table\\\":\\\"posts\\\"}\"
+    \"_sn_record_json\": \"{\\\"_sn_entity_id\\\": \\\"2026...\\\", \\\"_sn_table\\\":\\\"posts\\\", \\\"title\\\":\\\"Updated title\\\"}\"
 }"
 </code></pre></div>
 
@@ -1700,7 +1701,7 @@ const headers = {
 };
 
 let body = {
-    "_sn_record_json": "{\"title\":\"My title\", \"_sn_table\":\"posts\"}"
+    "_sn_record_json": "{\"_sn_entity_id\": \"2026...\", \"_sn_table\":\"posts\", \"title\":\"Updated title\"}"
 };
 
 fetch(url, {
@@ -1716,7 +1717,7 @@ import json
 
 url = 'http://site_id.snet.localhost:15080/site_api/v1/visitor_record_update'
 payload = {
-    "_sn_record_json": "{\"title\":\"My title\", \"_sn_table\":\"posts\"}"
+    "_sn_record_json": "{\"_sn_entity_id\": \"2026...\", \"_sn_table\":\"posts\", \"title\":\"Updated title\"}"
 }
 headers = {
   'Accept': 'application/json',
@@ -1738,7 +1739,7 @@ $response = $client-&gt;post(
             'Content-Type' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            '_sn_record_json' =&gt; '{"title":"My title", "_sn_table":"posts"}',
+            '_sn_record_json' =&gt; '{"_sn_entity_id": "2026...", "_sn_table":"posts", "title":"Updated title"}',
         ],
     ]
 );
@@ -1757,7 +1758,7 @@ print_r(json_decode((string) $body));</code></pre></div>
    &quot;success&quot;: true,
    &quot;data&quot;: [
       {
-          &quot;entity_id&quot;: &quot;2026...&quot;,
+          &quot;_sn_entity_id&quot;: &quot;2026...&quot;,
       }
     ]
 }</code>
@@ -1842,10 +1843,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="_sn_record_json"                data-endpoint="POSTsite_api-v1-visitor_record_update"
-               value="{"title":"My title", "_sn_table":"posts"}"
+               value="{"_sn_entity_id": "2026...", "_sn_table":"posts", "title":"Updated title"}"
                data-component="body">
     <br>
-<p>Example: <code>{"title":"My title", "_sn_table":"posts"}</code></p>
+<p>Example: <code>{"_sn_entity_id": "2026...", "_sn_table":"posts", "title":"Updated title"}</code></p>
         </div>
         </form>
 
@@ -3400,7 +3401,7 @@ print_r(json_decode((string) $body));</code></pre></div>
    &quot;success&quot;: true,
    &quot;data&quot;: [
       {
-          &quot;entity_id&quot;: &quot;2026...&quot;,
+          &quot;_sn_entity_id&quot;: &quot;2026...&quot;,
       }
     ]
 }</code>

@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Site Developer Api Documentation for Serveronet",
-        "_postman_id": "ccd767cc-96f1-476f-a79b-45073b27dbfd",
+        "_postman_id": "fb76f695-7a15-4191-9255-5f5751a842c2",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -368,15 +368,15 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"_sn_record_json\":\"{\\\"title\\\":\\\"My title\\\", \\\"_sn_table\\\":\\\"posts\\\"}\"}"
+                            "raw": "{\"_sn_record_json\":\"{\\\"_sn_entity_id\\\": \\\"2026...\\\", \\\"_sn_table\\\":\\\"posts\\\", \\\"title\\\":\\\"Updated title\\\"}\"}"
                         },
-                        "description": "Receives a json body of a record to be updated (in _sn_record_json parameters)\nJson requires target table (_sn_table), entity id to be updated (_sn_entity_id)\nand site's database fields"
+                        "description": "Receives a json body of a record to be updated (in _sn_record_json parameters)\nJson requires target table (_sn_table), entity id to be updated (_sn_entity_id)\nand site's database fields\nSend _sn_mark_as_deleted to mark as deleted"
                     },
                     "response": [
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n   \"success\": true,\n   \"data\": [\n      {\n          \"entity_id\": \"2026...\",\n      }\n    ]\n}",
+                            "body": "{\n   \"success\": true,\n   \"data\": [\n      {\n          \"_sn_entity_id\": \"2026...\",\n      }\n    ]\n}",
                             "name": ""
                         }
                     ]
@@ -690,7 +690,7 @@
                         {
                             "header": [],
                             "code": 200,
-                            "body": "{\n   \"success\": true,\n   \"data\": [\n      {\n          \"entity_id\": \"2026...\",\n      }\n    ]\n}",
+                            "body": "{\n   \"success\": true,\n   \"data\": [\n      {\n          \"_sn_entity_id\": \"2026...\",\n      }\n    ]\n}",
                             "name": ""
                         }
                     ]
