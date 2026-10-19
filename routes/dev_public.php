@@ -13,6 +13,7 @@ foreach ($uiDomains as $key => $domain) {
 
         Route::any('/dfrf', [DevPublicController::class, 'deleteFirstRunFile'])
             ->middleware('auth_admin:admin')
+            ->middleware('throttle:low_rate')
             ->name($domainRouteNamePrefix.'dfrf');
 
         Route::any('/refresh_config', [DevPublicController::class, 'refreshConfig'])

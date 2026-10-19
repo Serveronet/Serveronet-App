@@ -42,7 +42,8 @@ Route::get('register', [RegisteredVisitorController::class, 'create'])->name($ro
     ->middleware($owner_only_capable)->middleware('single_site_id')
     ->middleware('throttle:medium_rate');
 
-Route::post('register', [RegisteredVisitorController::class, 'store'])->middleware($owner_only_capable)->middleware('single_site_id');
+Route::post('register', [RegisteredVisitorController::class, 'store'])->middleware($owner_only_capable)
+    ->middleware('single_site_id')->middleware('throttle:low_rate');
 
 Route::get('login', [AuthenticatedVisitorSessionController::class, 'create'])->name($routePrefix.'login')
     ->middleware($owner_only_capable)->middleware('single_site_id')
@@ -70,17 +71,17 @@ $owner_only_capable = $SERVE_OWNER_ONLY ? ['auth_owner:owner'] : [];
 Route::get('logout', [AuthenticatedVisitorSessionController::class, 'destroy'])
     ->name($domain.'logout')->middleware($owner_only_capable)
     ->middleware('auth_visitor:visitor')
-    ->middleware('single_site_id');
+    ->middleware('single_site_id')->middleware('throttle:low_rate');
 
 Route::get('visitor_actions_identity_created', [RegisteredVisitorController::class, 'identitySummary'])
     ->name($domain.'identity_created')
     ->middleware('auth_visitor:visitor')
-    ->middleware($owner_only_capable);
+    ->middleware($owner_only_capable)->middleware('throttle:low_rate');
 
 Route::post('visitor_actions_download_identity', [RegisteredVisitorController::class, 'downloadIdentity'])
     ->name($domain.'download_identity')
     ->middleware('auth_visitor:visitor')
-    ->middleware($owner_only_capable);
+    ->middleware($owner_only_capable)->middleware('throttle:low_rate');
 
 Route::post('visitor_actions/remove_recent_visitor_id', [SitesVisitorController::class, 'removeRecentVisitorId'])
     ->name($routePrefix.'remove_recent_visitor_id')
@@ -240,9 +241,11 @@ $owner_only_capable = $SERVE_OWNER_ONLY ? ['auth_owner:owner'] : [];
 Route::get('/', [SiteServerController::class, 'serveSiteResource'])
     ->name($routePrefix.'home')
     ->middleware($owner_only_capable)
-    ->middleware('single_site_id');
+    ->middleware('single_site_id')
+    ->middleware('throttle:high_rate');
 
 Route::get('/{res_id?}', [SiteServerController::class, 'serveSiteResource'])
     ->where('res_id', '(.*)')->name($routePrefix.'site')
     ->middleware($owner_only_capable)
-    ->middleware('single_site_id');
+    ->middleware('single_site_id')
+    ->middleware('throttle:high_rate');

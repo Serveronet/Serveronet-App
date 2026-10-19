@@ -36,12 +36,13 @@ Route::get('livewire/livewire.js', [FrontendAssets::class, 'returnJavaScriptAsFi
 Route::get('livewire/livewire.min.js', [FrontendAssets::class, 'returnJavaScriptAsFile']);
 
 Route::get('first_run_setup', [FirstRunController::class, 'onFirstRunNotCompleted'])
-    ->name('first_run_setup');
+    ->name('first_run_setup')->middleware('throttle:low_rate');
 
-Route::post('complete_first_run', [FirstRunController::class, 'completeFirstRun']);
+Route::post('complete_first_run', [FirstRunController::class, 'completeFirstRun'])
+    ->middleware('throttle:low_rate');
 
 Route::get('documentation/{doc_tag?}', [DocumentationController::class, 'getDoc'])
-    ->name('documentation');
+    ->name('documentation')->middleware('throttle:medium_rate');
 
 if (! H::isServeronetWelcomeSite())
 Route::get('/', function () {
@@ -49,4 +50,4 @@ Route::get('/', function () {
     $message = '';
 
     return view('first_run_issues', compact('issueType', 'message'));
-})->name('ui_fallback');
+})->name('ui_fallback')->middleware('throttle:medium_rate');

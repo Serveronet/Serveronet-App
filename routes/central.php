@@ -11,7 +11,8 @@ if (H::isServeronetWelcomeSite()) {
 
     $domainRouteNamePrefix = '';
 
-    Route::get('/', [LandingController::class, 'showLanding'])->name($domainRouteNamePrefix.'home');
+    Route::get('/', [LandingController::class, 'showLanding'])->name($domainRouteNamePrefix.'home')
+    ->middleware('throttle:medium_rate');
 
     Route::get('favicon.ico', [UtilsController::class, 'getFavicon'])
         ->name($domainRouteNamePrefix.'favicon')->middleware('throttle:high_rate');
@@ -62,6 +63,7 @@ if (H::isServeronetWelcomeSite()) {
 
     /* Admin auth required */
     Route::get('admin/update_client_from_central', [UpdaterController::class, 'checkAndUpdateClientFromCentral'])
-        ->middleware(['auth_admin:admin'])->name($domainRouteNamePrefix.'update_client_from_central');
+        ->middleware(['auth_admin:admin'])->middleware('throttle:low_rate')
+        ->name($domainRouteNamePrefix.'update_client_from_central');
 
 }

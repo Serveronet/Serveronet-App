@@ -91,7 +91,8 @@ if (! H::isServeronetWelcomeSite()) {
                     ->name($domainRouteNamePrefix.'advanced_control_panel')
                     ->middleware('throttle:high_rate');
 
-                Route::get('admin/manage_log', [AdminController::class, 'manageLog'])->name($domainRouteNamePrefix.'manage_log');
+                Route::get('admin/manage_log', [AdminController::class, 'manageLog'])
+                    ->name($domainRouteNamePrefix.'manage_log')->middleware('throttle:high_rate');
 
                 Route::post('admin/debug_download_log', [AdminUiService::class, 'downloadLog'])
                     ->name($domainRouteNamePrefix.'debug_download_log')
@@ -237,7 +238,7 @@ if (! H::isServeronetWelcomeSite()) {
                     ->name($domainRouteNamePrefix.'update_public_address')->middleware('throttle:high_rate');
 
                 Route::get('admin/update_client_from_central', [UpdaterController::class, 'checkAndUpdateClientFromCentral'])
-                    ->name($domainRouteNamePrefix.'update_client_from_central');
+                    ->name($domainRouteNamePrefix.'update_client_from_central')->middleware('throttle:low_rate');
 
                 /* Site development */
                 Route::post('admin/prepare_sites_database', [PublishSitesController::class, 'prepareSitesDatabase'])
