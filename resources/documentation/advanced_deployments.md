@@ -56,7 +56,7 @@ sudo apt install apache2 php libapache2-mod-php php-sqlite3 php-gmp php-curl php
 
 - Navigate to http://localhost/ (or proper host) to complete the First Run
 
-?
+ 
 
 ## As a Tor hidden service
 Follow the **manual installation** steps and apply these adjustments
@@ -86,7 +86,7 @@ References:
 
 https://community.torproject.org/onion-services/setup/
 
-?
+ 
 
 # Docker
 - Create an empty volume - required to access the developed sites directory
@@ -126,7 +126,7 @@ https://community.torproject.org/onion-services/setup/
   ```
 - Browse to https://snet.localhost:15443 to complete the First Run
 
-?
+ 
 
 # Termux and Android Terminal (and Termux docker)
 
@@ -135,7 +135,7 @@ https://community.torproject.org/onion-services/setup/
   ```docker run -p 15080:15080 -p 15443:15443 -it termux/termux-docker:latest```
 
   
-- **docker only:** Enable root shell  -  [??termux-docker](https://github.com/termux/termux-docker)
+- **docker only:** Enable root shell  -  [🔗termux-docker](https://github.com/termux/termux-docker)
 
   ```/entrypoint.sh```
 - Connect to the shell and execute the following:
@@ -150,7 +150,7 @@ https://community.torproject.org/onion-services/setup/
   
 - Browse to http://snet.localhost:15080/
 
-?
+ 
 
 # Tor Setup
 

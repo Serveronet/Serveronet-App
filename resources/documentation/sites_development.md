@@ -7,7 +7,7 @@ To access the Site API documentation, browse to this path while on a Site
 
 ```/sn_client_resources/site_api_docs/index.html```
 
-[Site API Documentation ?](http://visitor-control-panel.snet.localhost:15080/sn_client_resources/site_api_docs/index.html)
+[Site API Documentation ▶](http://visitor-control-panel.snet.localhost:15080/sn_client_resources/site_api_docs/index.html)
 
 Values from the database can be queried with Site API backend using query parameters.  
 Pass `query_parameters` as a JSON object (or a JSON string) in the request body.  
@@ -149,7 +149,7 @@ The following data types are currently supported:
   
 They can be nullable or not.  
 You can define default values.  
-Table and column names must match ^[a-zA-Z_][a-zA-Z0-9_]*$ and be ? 64
+Table and column names must match ^[a-zA-Z_][a-zA-Z0-9_]*$ and be > 64
 
 #### show_Adults_Only_Gate
 A Site optionally can show the Adults Only gate. Age Check compliant. Boolean.
@@ -222,7 +222,7 @@ dig snetdnslink.example.com -t TXT
 ;; ANSWER SECTION:
 snetdnslink.example.com. 3600 IN    TXT     "snetdnslink=gjdg45..."
 ```
-OpenNIC servers ([OpenNIC ?](https://www.opennic.org/)) are used to get DNS records pointing to the site address.
+OpenNIC servers ([OpenNIC ▶](https://www.opennic.org/)) are used to get DNS records pointing to the site address.
 
 ## Allow remote access to SN backend
 When developing a compiled SPA site you might need to access the Site API Backend from the app.  

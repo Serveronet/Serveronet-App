@@ -1,7 +1,7 @@
 # Serveronet = P2P Websites
 ##### Free and uncensorable
 ##### Decentralized, Cryptographic Peer 2 Peer Network of Sites
-?
+ 
 ## P2P Websites
 `Free and uncensorable`
 
@@ -11,7 +11,7 @@ Serveronet revolutionizes web hosting by eliminating the reliance on central ser
 ## Uncensorable
 `No central server. No domains.`
 
-The platform?s core strength lies in its lack of mandatory centralized infrastructure. Unlike conventional web services that require registered domains (which can be seized or blocked), Serveronet's approach is entirely decentralized. While optional OpenNIC domains allow users to maintain a clear-net DNS fallback, the primary existence of the site relies solely on peer connectivity, making it extremely difficult for any single entity to deplatform or take away your domain authority.
+The platform's core strength lies in its lack of mandatory centralized infrastructure. Unlike conventional web services that require registered domains (which can be seized or blocked), Serveronet's approach is entirely decentralized. While optional OpenNIC domains allow users to maintain a clear-net DNS fallback, the primary existence of the site relies solely on peer connectivity, making it extremely difficult for any single entity to deplatform or take away your domain authority.
 
 ## Free and Open Source
 `Hosted by peers`
@@ -31,7 +31,7 @@ User identity and communication on Serveronet are secured through cutting-edge c
 ## SEO Friendly
 `Lives in clearnet`
 
-A significant differentiator for Serveronet is its ability to operate seamlessly within conventional internet visibility. Unlike purely Darknet P2P networks, Serveronet sites are designed to behave like regular, legitimate websites. This compatibility means that standard web tools?including Ads, CDNs (Content Delivery Networks), and traditional search engine crawlers?are fully supported, ensuring high discoverability and integration with the established clearnet ecosystem.
+A significant differentiator for Serveronet is its ability to operate seamlessly within conventional internet visibility. Unlike purely Darknet P2P networks, Serveronet sites are designed to behave like regular, legitimate websites. This compatibility means that standard web tools including Ads, CDNs (Content Delivery Networks), and traditional search engine crawlers are fully supported, ensuring high discoverability and integration with the established clearnet ecosystem.
 
 ## Developer friendly
 `P2P Site Development made easy`

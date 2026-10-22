@@ -13,18 +13,18 @@
 
 - Download client bundle: 
   
-  [Serveronet Windows Client https://serveronet.org/windows_client_bundle.zip ?](https://serveronet.org/windows_client_bundle.zip)
+  [Serveronet Windows Client https://serveronet.org/windows_client_bundle.zip ▶](https://serveronet.org/windows_client_bundle.zip)
 
 - Unzip the downloaded zip
   
 - Run Serveronet_Start.bat
-- Go to [http://snet.localhost:15080 ?](http://snet.localhost:15080/)
+- Go to [http://snet.localhost:15080 ▶](http://snet.localhost:15080/)
 - Perform First Run setup
 - Optionally: Start Tor Browser and the IPFS Client and configure them in settings
-- Done ?
+- Done ✅
 
  
-?
+
 <a name="linux"></a>
 
 ### Linux and MacOS
@@ -42,7 +42,7 @@
   
 - Optionally: Start Tor Browser and the IPFS Client and configure them in settings
   
-- Done ?
+- Done ✅
 
 
   
@@ -53,9 +53,9 @@
 
 ### Web Server
   
-- Check [Requirements ?](https://laravel.com/docs/13.x/deployment#server-requirements)
+- Check [Requirements ▶](https://laravel.com/docs/13.x/deployment#server-requirements)
   
-- Obtain [Server Bundle ?](https://serveronet.org/server_bundle.zip) (not a client bundle!)
+- Obtain [Server Bundle ▶](https://serveronet.org/server_bundle.zip) (not a client bundle!)
   
 - Upload and unzip to your server to the **non-public** directory
   
@@ -65,5 +65,5 @@
   
 - Browse to your server to perform First Run setup
   
-- Done ?
+- Done ✅
 
