@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="px-4 text-sm text-gray-500  border-gray-400 tracking-wider">
-                    Serveronet Client -> <a class="underline" href="{{domainRoute('ui_fallback')}}">home</a> 
+                    Serveronet Client -> <a class="underline" href="/">home</a> 
                 </div>
             </div>
         </div>
