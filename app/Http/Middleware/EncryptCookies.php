@@ -17,5 +17,6 @@ class EncryptCookies extends Middleware
         'ui_addresses_json',
         'site_id',
         'recent_visitor_ids',
+        'recommended_sites_collapsed',
     ];
 }

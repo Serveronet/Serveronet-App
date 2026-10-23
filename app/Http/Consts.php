@@ -107,6 +107,24 @@ class Consts
         ],
     ];
 
+    const recommendedSites = [
+        [
+            'title' => 'SN Social',
+            'description' => 'Social Media Site - Allows visitors to create and publish their posts. Also allows visitors to comment on and like other visitors\' posts.',
+            'site_id' => 'xkuyjxyjn74l2uikred2prikklbh33ajcxo7ixn4gg4eem7xn7mq',
+        ],
+        [
+            'title' => 'Distributed Denial of Secrets',
+            'description' => 'Mirror of a popular Leaks Site implemented with Serveronet technology. Distributed Denial of Secrets.',
+            'site_id' => 'nldd446sazrflxsmxkgtudwnwykhlvr5dolge3klp3mqfsrycfxa',
+        ],
+        [
+            'title' => 'Gratitude Points',
+            'description' => 'Site where visitors can reward valuable sites. Then check which is the most popular.',
+            'site_id' => 'tbd',
+        ],
+    ];
+
     const symlinkRequiredPhrase = 'Yes. I understand security concerns.';
 
     const allowedVersionSignersVerificationKeysBase64 = [

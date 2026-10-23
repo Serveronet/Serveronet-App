@@ -5,5 +5,7 @@
 
     <livewire:sites-query-table />
 
+    @include('recommended_site')
+
     <a href="{{ domainRoute('guest_sites') . '#top' }}" class="ml-1 underline">Top</a>
 @endsection

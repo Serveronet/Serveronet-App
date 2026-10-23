@@ -175,6 +175,11 @@ class CentralController extends Controller
         return view('central.demos', compact('demos'));
     }
 
+    public function contact()
+    {
+        return view('central.contact');
+    }
+
     public function allDownloadsListing(Request $request)
     {
         $request->merge(['with_dev' => $request->with_dev]);

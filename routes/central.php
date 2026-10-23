@@ -23,6 +23,9 @@ if (H::isServeronetWelcomeSite()) {
     Route::get('/demos', [CentralController::class, 'demos'])
         ->name($domainRouteNamePrefix.'demos')->middleware('throttle:high_rate');
 
+    Route::get('/contact', [CentralController::class, 'contact'])
+        ->name($domainRouteNamePrefix.'contact')->middleware('throttle:high_rate');
+
     Route::get('/all_downloads_listing/{with_dev?}', [CentralController::class, 'allDownloadsListing'])
         ->name($domainRouteNamePrefix.'all_downloads_listing')->middleware('throttle:high_rate');
 

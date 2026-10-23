@@ -113,6 +113,13 @@ class ListingsController extends Controller
 
     public function guestGridOfSites()
     {
-        return view('guest_sites');
+        $known_site_ids = Site::where('visible_in_ui', true)->pluck('site_id')->all();
+
+        $recommended_sites = collect(Consts::recommendedSites)
+            ->reject(fn ($site) => in_array($site['site_id'], $known_site_ids));
+
+        return view('guest_sites', compact('recommended_sites'));
     }
+
+    
 }
