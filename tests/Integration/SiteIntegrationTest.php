@@ -129,7 +129,7 @@ test('retrieve TD Site on Peer Node', function () {
     retry(10, function () use (&$page) {
         $page->navigate("http://{$GLOBALS['site_id']}.{$GLOBALS['domain']}:19082/");
         $page->assertSee('This is a sample web site showing how Sites behave in the Serveronet');
-    }, 2000);
+    }, 3000);
 
 })->group('Integration');
 

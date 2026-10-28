@@ -407,6 +407,8 @@ class QueryController extends Controller
             $options['timeout'] = H::timeoutAdjust(H::isTorAddress($url), 10);
             $options['form_params'] = $form_params;
 
+            H::prepareOptions($options, $url);
+
             try {
                 /* Request for page 1 to get total count */
                 $response = $client->post($url, $options);
@@ -457,6 +459,7 @@ class QueryController extends Controller
                 }
 
             } catch (Throwable $th) {
+                info($th->getMessage().' '.$th->getFile().' '.$th->getLine());
                 info('handleCrowdQueryOrder catch: '.$client_address);
 
                 return;

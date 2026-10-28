@@ -7,7 +7,7 @@
 <div class="h4 mt-3">Demo Client</div>
 
 <a class="btn btn-outline-primary btn-sm shadow-sm rounded-1 mb-3" target="_blank"
- href="http://client.serveronet.org/">Try on a Demo client ?</a>
+ href="http://client.serveronet.org/">Try on a Demo client ▶</a>
 <hr>
 
 <div class="h4 mt-4">Example Sites</div>
