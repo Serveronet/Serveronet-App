@@ -1192,7 +1192,7 @@ class H
             return $ip;
         } else {
 
-            $ip = Cache::remember(CachePrefixes::ip_for_host_.md5($host), 86400, function () use ($host) {
+            $ip = Cache::remember(CachePrefixes::ip_for_host_.md5($host), 60, function () use ($host) {
                 $resolvedIp = null;
                 if (
                     in_array($host, ['localhost', 'ip6-localhost']) ||

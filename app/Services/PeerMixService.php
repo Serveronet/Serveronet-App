@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Dicts\CachePrefixes;
 use App\Dicts\DataTypes;
+use App\Dicts\RecordStates;
 use App\Dicts\SettingIds;
 use App\Http\H;
 use App\Http\Controllers\AdminController;
@@ -126,9 +127,18 @@ class PeerMixService extends Controller
         if (H::getSettVal(SettingIds::use_source_trackers) ) {
             $site = Site::whereSiteId($site_id)->first();
             if ($site) {
-                $trackerPeersRC = (new TorrentService)->getUpdatedTrackerSitePeers($site_id);
-                $trackerPeers = $trackerPeersRC->data;
-                $trackerPeersMetadata = $trackerPeersRC->metadata;
+                for ($i=0; $i < 15; $i++) { 
+                    $trackerSitePeersResult = (new TorrentService)->getUpdatedTrackerSitePeers($site_id);
+                    if (! $trackerSitePeersResult->operation_successful 
+                    && $trackerSitePeersResult->error_message == RecordStates::refesh_in_progress) {
+                        sleep(1);
+                    } else {
+                        break;
+                    }
+                }
+
+                $trackerPeers = $trackerSitePeersResult->data;
+                $trackerPeersMetadata = $trackerSitePeersResult->metadata;
             }
          
             $trackerHostingPeers = collect($trackerPeers['hosting'] ?? [])->take(10);

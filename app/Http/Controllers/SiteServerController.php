@@ -17,6 +17,7 @@ use App\Models\ListProviderEntry;
 use App\Models\ResultContainer;
 use App\Models\Site;
 use App\Models\SiteDefinition;
+use App\Models\SitePeer;
 use App\Models\Tracker;
 use App\Models\Visitor;
 use App\Services\ChunkService;
@@ -28,7 +29,6 @@ use App\Support\ContentTypeResolver;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
@@ -65,8 +65,9 @@ class SiteServerController extends Controller
             // info('is_to_be_hosted_override: '.$is_to_be_hosted_override);
         }
 
-        if ($request->site_id === Consts::visitorControlPanelAddress)
-        return redirect(domainRoute('visitor_control_panel', ['site_id' => Consts::visitorControlPanelAddress]));
+        if ($request->site_id === Consts::visitorControlPanelAddress) {
+            return redirect(domainRoute('visitor_control_panel', ['site_id' => Consts::visitorControlPanelAddress]));
+        }
 
         $target = $request->url();
         $statesOnly = $request->states_only;
@@ -76,8 +77,9 @@ class SiteServerController extends Controller
 
         $target_site_id = $site_id;
 
-        if (! $request)
-        $request = new Request;
+        if (! $request) {
+            $request = new Request;
+        }
 
         try {
             $request->merge(['target_site_id' => $target_site_id]);
@@ -129,7 +131,7 @@ class SiteServerController extends Controller
                     'site_id' => $site_id]), status: $status_code);
             }
 
-            $site = new Site();
+            $site = new Site;
             $site->site_id = $site_id;
             $site->is_published = true;
 
@@ -150,11 +152,7 @@ class SiteServerController extends Controller
 
         if (! $siteDefinition) {
 
-            $trackerSitePeers = (new TorrentService)->getUpdatedTrackerSitePeers($site_id);
-
             if ($statesOnly) {
-                $trackersCount = Tracker::inRandomOrder()->take(5)->count();
-                $hostingPeers = (new PeerMixService)->getPeerMix(site_id: $site_id);
 
                 if ($siteHadToBeCreated) {
                     $stateForVisitor = 'Site not known therefore was registered. Site Definition is missing.';
@@ -169,10 +167,8 @@ class SiteServerController extends Controller
                         'res_id' => $res_id,
                         'continue' => false,
                     ],
-                    debug_data: ' | Peers Trackers: '.$trackerSitePeers->data->count().' | Trackers: '.$trackersCount
-                    .' | Peers PeerMix: '.json_encode($hostingPeers->pluck('client_address'))
-                    .' | trackerSitePeers: '.json_encode($trackerSitePeers->debug_data)
-                    .' | metadata: '.json_encode($trackerSitePeers->metadata),
+                    debug_data: self::debugData($site_id),
+                 
                 );
             }
 
@@ -185,6 +181,17 @@ class SiteServerController extends Controller
                     'missing' => DataTypes::site_definitions,
                     'res_id' => $res_id], $status = 307, subdomainLevelOverride: 1)); /* Temporary redirect */
             } else {
+
+                for ($i = 0; $i < 20; $i++) {
+                    $trackerSitePeersResult = (new TorrentService)->getUpdatedTrackerSitePeers($site_id);
+                    if (! $trackerSitePeersResult->operation_successful
+                    && $trackerSitePeersResult->error_message == RecordStates::refesh_in_progress) {
+                        sleep(1);
+                    } else {
+                        break;
+                    }
+                }
+
                 $rcResult = (new SiteServerController)->handleMissingState(
                     request: $request,
                     site_id: $site_id,
@@ -264,7 +271,7 @@ class SiteServerController extends Controller
                     'res_id' => $res_id,
                     'continue' => true,
                 ],
-                debug_data: 'N/A',
+                debug_data: self::debugData($site_id),
             );
         }
 
@@ -338,7 +345,7 @@ class SiteServerController extends Controller
             $cachedResource->save();
 
             return (new SiteServerController($request))->serveResourceFile(
-                request: $request, 
+                request: $request,
                 fileName: $cachedResource->file_name,
                 mime_type: $flFile->mime_type ?? 'text/html',
                 site_id: $site_id,
@@ -558,8 +565,8 @@ class SiteServerController extends Controller
     }
 
     public function serveResourceFile(
-        $request, $fileName, $mime_type, $site_id, $domain, $etag, 
-        $siteConfig, $debug_data = null, $isVisitors, $originalFileName)
+        $request, $fileName, $mime_type, $site_id, $domain, $etag,
+        $siteConfig, $debug_data, $isVisitors, $originalFileName)
     {
         if (! Storage::disk('cached_resources')->exists($fileName)) {
             $message = 'Resource file not found. Client Error. Perform resource maintenance.';
@@ -570,7 +577,7 @@ class SiteServerController extends Controller
 
         $headersInitial = [];
         if ($isVisitors) {
-            $resolver = new ContentTypeResolver();
+            $resolver = new ContentTypeResolver;
             $contentType = $resolver->resolve(Storage::disk('cached_resources')->path($fileName), $originalFileName);
             $headersInitial['Content-Type'] = $contentType;
         } else {
@@ -712,5 +719,16 @@ class SiteServerController extends Controller
         );
 
         return $a;
+    }
+
+    public static function debugData($site_id): string
+    {
+        $sitePeers = SitePeer::whereSiteId($site_id)
+            ->select('client_address', 'source')
+            ->get()->toJson();
+        $trackersSitePeersRefreshInProgressKey = CachePrefixes::trackers_site_peers_refresh_in_progress_.$site_id;
+        $trackersSitePeersRefreshInProgress = Cache::has($trackersSitePeersRefreshInProgressKey);
+        return 'Trackers Site Peers Refresh In Progress: '.tfyn($trackersSitePeersRefreshInProgress). ' | SitePeers: ' .$sitePeers;
+
     }
 }

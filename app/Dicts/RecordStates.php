@@ -23,4 +23,6 @@ class RecordStates
     const query_completed = 'completed';
     const query_consumed = 'consumed';
     const query_failed = 'failed';
+    
+    const refesh_in_progress = 'in_progress';
 }

@@ -121,8 +121,9 @@ class SitesVisitorController extends Controller
         /* Currently: 116.203.98.109  */
         $opennicApiAddressIp = H::getSettVal(SettingIds::opennic_api_address_ip);
 
-        $host = (Url::fromString(H::a($url)))->getHost(); 
-        /* Won't work on termux */
+        $host = (Url::fromString(H::a($url)))->getHost();
+
+        /* Won't work on termux and mobile app */
         $ip = gethostbyname($host);
         
         if ($ip === $host)
@@ -206,8 +207,10 @@ class SitesVisitorController extends Controller
         $retries = 4;
 
         if ($retries > 1) {
+            $ons = OpennicNameServer::where('reputation', OpennicNameServer::max('reputation'))
+                ->inRandomOrder()->first();
+            $onsAddress = $ons->server_address;
             try {
-                $onsAddress = OpennicNameServer::inRandomOrder()->first()->server_address;
                 $r = new \NetDNS2\Resolver(['nameservers' => [$onsAddress]]);
                 $result = $r->query('snetdnslink.'.$dnsDomain, 'txt');
 
@@ -229,12 +232,13 @@ class SitesVisitorController extends Controller
                 } else {
                     return false;
                 }
-            } catch (\NetDNS2\Exception $e) {
-                return false;
             } catch (\Throwable $th) {
+                self::increaseOpennicFailureCount();
+                $ons->reputation--;
+                $ons->save();
                 sleep(1);
                 $retries--;
-                self::getDnsLinkAddress($domain, $retries);
+                return self::getDnsLinkAddress($domain, $retries);
             }
         } else {
             return false;
@@ -242,12 +246,8 @@ class SitesVisitorController extends Controller
         return false;
     }
 
-    public static function getDnsAAddressFromOpennic($domain, $retries = 3)
+    public static function getDnsAAddressFromOpennic($domain, $retries = 3): string|bool
     {
-        $olderServers = OpennicNameServer::where('created_at', '<', now()->subDays(2)->toDateTimeString())->get();
-        foreach ($olderServers as $key => $server) {
-            $server->delete();
-        }
         if (! OpennicNameServer::exists()) {
             info('getDnsAAddressFromOpennic NE 1');
             self::getOpennicNameServers();
@@ -258,9 +258,14 @@ class SitesVisitorController extends Controller
         }
 
         if ($retries > 0) {
+            
+            $ons = OpennicNameServer::where('reputation', OpennicNameServer::max('reputation'))
+                ->inRandomOrder()->first();
+            $onsAddress = $ons->server_address;
+            info('$retries '.$retries.' '.$onsAddress);
             try {
-                $onsAddress = OpennicNameServer::inRandomOrder()->first()->server_address;
-                $r = new \NetDNS2\Resolver(['nameservers' => [$onsAddress], 'timeout' => 3]);
+                
+                $r = new \NetDNS2\Resolver(['nameservers' => [$onsAddress], 'timeout' => 2]);
                 $result = $r->query($domain);
 
                 if (! $result->answer) 
@@ -269,26 +274,31 @@ class SitesVisitorController extends Controller
                 $resultAddress = $result->answer[0]->address;
 
                 if ($resultAddress !== null) {
+                    H::setSettingValue(SettingIds::opennic_failure_count, 0);
                     return $resultAddress;
                 } else {
                     return false;
                 }
-            } catch (\NetDNS2\Exception $e) {
-                $opennicFailureCount = H::getSettVal(SettingIds::opennic_failure_count);
-                $opennicFailureCount++;
-                H::setSettingValue(SettingIds::opennic_failure_count, $opennicFailureCount);
-                info('Net_DNS2_Exception '.$e->getMessage().' '.$opennicFailureCount);
-                info('Net_DNS2_Exception '.$e->getMessage().' '.H::getSettVal(SettingIds::opennic_failure_count));
-                return false;
             } catch (\Throwable $th) {
+                self::increaseOpennicFailureCount();
+                $ons->reputation--;
+                $ons->save();
                 info('Net_DNS2_Exception Throwable | $retries: '.$retries.' '.$th->getMessage());
                 sleep(1);
                 $retries--;
-                self::getDnsAAddressFromOpennic($domain, $retries);
+                return self::getDnsAAddressFromOpennic($domain, $retries);
             }
         } else {
             return false;
         }
+    }
+
+    public static function increaseOpennicFailureCount(): void 
+    {
+        $opennicFailureCount = H::getSettVal(SettingIds::opennic_failure_count);
+        $opennicFailureCount++;
+        H::setSettingValue(SettingIds::opennic_failure_count, $opennicFailureCount);
+        
     }
 
     function getSiteIdForSnetDomains($domain): string|null|bool 

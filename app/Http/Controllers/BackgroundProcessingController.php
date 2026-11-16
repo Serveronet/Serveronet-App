@@ -14,6 +14,7 @@ use App\Models\CachedDomain;
 use App\Models\CachedResource;
 use App\Models\ContentRetrieval;
 use App\Models\InternalRequest;
+use App\Models\OpennicNameServer;
 use App\Models\P2pMessage;
 use App\Models\Peer;
 use App\Models\PendingAction;
@@ -1105,6 +1106,16 @@ class BackgroundProcessingController extends Controller
         InternalRequest::where([
             ['created_at', '<', now()->subHours(24)],
         ])->delete();
+
+        $olderServers = OpennicNameServer::where('created_at', '<', now()->subDays(2)->toDateTimeString())->get();
+        foreach ($olderServers as $key => $server) {
+            $server->delete();
+        }
+
+        $lowReputationServers = OpennicNameServer::where('reputation', '<', -20)->get();
+        foreach ($lowReputationServers as $key => $server) {
+            $server->delete();
+        }
 
         // Maybe as well:
         // - peers

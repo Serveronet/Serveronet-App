@@ -361,7 +361,7 @@ class SettingsController extends Controller
                 return 'Last time when external Port was updated.';
             break;
             case SettingIds::opennic_failure_count: 
-                return 'Opennic failure count for retries.';
+                return 'Cross app Opennic failure count for retries.';
             break;
             case SettingIds::opennic_api_address_ip: 
                 return 'Static IP for api.opennicproject.org when regular DNS is not available.';

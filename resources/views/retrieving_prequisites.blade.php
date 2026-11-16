@@ -25,7 +25,7 @@
                 @{{ state }}
             </span>
         </div>
-        <div class="h6 text-dark bg-warning shadow me-1 mb-2 p-1" v-show="retriesCount == maxRetries">@{{ error_state }}</div>
+        <div class="h4 text-dark alert alert-warning shadow me-1 mb-2 p-1" v-show="retriesCount == maxRetries">@{{ error_state }}</div>
         <div><a class="btn btn-lg btn-outline-success mt-3" href="{{ $target }}">Retry Now</a></div>
         <br>
         <br>

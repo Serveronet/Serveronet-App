@@ -47,4 +47,7 @@ class CachePrefixes
     const internal_closure_ = 'internal_closure_';
 
     const central_mostRecent_versions = 'central_mostRecent_versions';
+    
+    const trackers_site_peers_refresh_in_progress_ = 'trackers_site_peers_refresh_in_progress_';
+
 }

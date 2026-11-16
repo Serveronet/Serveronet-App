@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Dicts\CachePrefixes;
 use App\Dicts\KnownResponses;
+use App\Dicts\RecordStates;
 use App\Http\Consts;
 use App\Http\Controllers\BackgroundProcessingController;
 use App\Http\Controllers\ClientController;
@@ -19,6 +20,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Spatie\Url\Url;
+use Illuminate\Support\Facades\Cache;
 
 class TorrentService extends Controller
 {
@@ -102,8 +104,19 @@ class TorrentService extends Controller
 
     public function getUpdatedTrackerSitePeers(string $site_id): ResultContainer
     {
+        info('getUpdatedTrackerSitePeers');
         $rc = new ResultContainer;
         $rc->operation_successful = true;
+
+        $trackersSitePeersRefreshInProgressKey = CachePrefixes::trackers_site_peers_refresh_in_progress_.$site_id;
+        $trackersSitePeersRefreshInProgress = Cache::has($trackersSitePeersRefreshInProgressKey);
+
+        if ($trackersSitePeersRefreshInProgress) {
+            info('getUpdatedTrackerSitePeers trackersSitePeersRefreshInProgress');
+            $rc->operation_successful = false;
+            $rc->error_message = RecordStates::refesh_in_progress;
+            return $rc;
+        }
 
         $site = H::getCached(CachePrefixes::site_.$site_id, Site::whereSiteId($site_id));
 
@@ -116,6 +129,8 @@ class TorrentService extends Controller
         /* Aggresive Tracker querying when little peers */
         if ($sitePeerslifeLength > $trackersAnnounceInterval || ($sitePeerslifeLength > 60 && $site->trackers_site_peers_count <= 2)) {
             info('getUpdatedTrackerSitePeers - Updating as cache expired');
+
+            Cache::put($trackersSitePeersRefreshInProgressKey, true, 60);
             
             $trackerSitePeers = (new TorrentTrackersController)->announceOrGetPeers($site_id, is_hosting: $site->is_hosted, returnPeersAsap: true);
             $trackerSitePeers = $trackerSitePeers['hosting'];
@@ -188,6 +203,10 @@ class TorrentService extends Controller
                     $peer->save();
                 }
             }
+
+            info('getUpdatedTrackerSitePeers - Tracker Site Peers updated');
+            
+            Cache::forget($trackersSitePeersRefreshInProgressKey);
 
             $metadata = 'Pulled fresh peers from trackers';
         } else {
