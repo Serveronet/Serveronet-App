@@ -1182,6 +1182,7 @@ class H
 
     public static function obtainIpForUrl(string $url): ?string
     {
+        info('obtainIpForUrl '.$url);
         $ip = null;
         $host = (Url::fromString(H::a($url)))->getHost();
         $hostIsIp = filter_var($host, FILTER_VALIDATE_IP);

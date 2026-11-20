@@ -349,7 +349,7 @@ class AdminController extends Controller
 
         try {
             $client = H::setupClient(is_tor_address: true, forceTorClient: true);
-            $options = ['timeout' => 20];
+            $options = ['timeout' => 20, 'prepare_ip' => true,];
             H::prepareOptions($options, $url);
             $response = $client->request('GET', $url, $options);
             $body = (string) $response->getBody();
@@ -400,7 +400,7 @@ class AdminController extends Controller
 
         try {
             $client = H::setupClient(is_tor_address: false);
-            $options = ['timeout' => 20];
+            $options = ['timeout' => 20, 'prepare_ip' => true,];
             H::prepareOptions($options, $url);
             $response = $client->request('GET', $url, $options);
             $proxyIp = trim((string) $response->getBody());

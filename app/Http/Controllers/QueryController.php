@@ -406,6 +406,7 @@ class QueryController extends Controller
             ];
             $options['timeout'] = H::timeoutAdjust(H::isTorAddress($url), 10);
             $options['form_params'] = $form_params;
+            $options['prepare_ip'] = true;
 
             H::prepareOptions($options, $url);
 

@@ -248,6 +248,7 @@ class SitesVisitorController extends Controller
 
     public static function getDnsAAddressFromOpennic($domain, $retries = 3): string|bool
     {
+        info('getDnsAAddressFromOpennic '.$domain);
         if (! OpennicNameServer::exists()) {
             info('getDnsAAddressFromOpennic NE 1');
             self::getOpennicNameServers();

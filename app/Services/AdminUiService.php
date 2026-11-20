@@ -195,6 +195,7 @@ class AdminUiService extends Controller
                 'timeout' => H::timeoutAdjust(H::isTorAddress($internalTestAddress), 10),
                 'form_params' => ['requestConfigSet' => encrypt(json_encode($requestConfigSet)) ],
             ];
+            $options['prepare_ip'] = true;
             H::prepareOptions($options, $url);
             $response = $client->post($url, $options);
     

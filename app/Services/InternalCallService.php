@@ -101,6 +101,7 @@ class InternalCallService extends Controller
                 'connect_timeout' => 1,
                 'form_params' => ['requestConfigSet' => encrypt(json_encode($requestConfigSet))],
             ];
+            $options['prepare_ip'] = true;
             H::prepareOptions($options, $internalUrl);
 
             $client->post($internalUrl, $options);
