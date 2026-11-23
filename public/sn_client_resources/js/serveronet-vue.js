@@ -276,7 +276,7 @@ createApp({
 createApp({
   data() {
     return {
-      maxRetries: 7,
+      maxRetries: 14,
       retriesCount: 0,
       isSpinning: true,
       state: 'Checking...',
