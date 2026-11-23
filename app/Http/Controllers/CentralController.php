@@ -113,9 +113,10 @@ class CentralController extends Controller
         $linux_and_mac_client_bundle = $mostRecentVersions->where("type", PublishedVersionsTypes::linux_and_mac_client_bundle)->first();
         $server_bundle = $mostRecentVersions->where("type", PublishedVersionsTypes::server_bundle)->first();
         $client_update = $mostRecentVersions->where("type", PublishedVersionsTypes::client_update)->first();
+        $android_apk = $mostRecentVersions->where("type", PublishedVersionsTypes::android_apk)->first();
 
         return view('central.downloads', 
-        compact('windows_client_bundle_version', 'linux_and_mac_client_bundle', 'server_bundle', 'client_update'));
+        compact('windows_client_bundle_version', 'linux_and_mac_client_bundle', 'android_apk', 'server_bundle', 'client_update'));
     }
 
     public function demos()
@@ -203,6 +204,11 @@ class CentralController extends Controller
     public function downloadMostRecentVersion_linux_and_mac_client_bundle(Request $request)
     {
         return $this->downloadMostRecentVersion($request->merge(['type' => PublishedVersionsTypes::linux_and_mac_client_bundle]));
+    }
+
+    public function downloadMostRecentVersion_android_apk(Request $request)
+    {
+        return $this->downloadMostRecentVersion($request->merge(['type' => PublishedVersionsTypes::android_apk]));
     }
 
     public function downloadMostRecentVersion_server_bundle(Request $request)

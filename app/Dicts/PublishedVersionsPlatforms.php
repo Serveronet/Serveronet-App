@@ -7,6 +7,8 @@ class PublishedVersionsPlatforms
     public const linux_and_mac = 'linux_and_mac';
 
     public const windows = 'windows';
+
+    public const android = 'android';
     
     public static function getConstants()
     {

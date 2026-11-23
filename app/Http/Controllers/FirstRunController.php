@@ -437,7 +437,11 @@ class FirstRunController extends Controller
         Artisan::call('cache:clear');
         Artisan::call('route:clear');
 
-        Artisan::call('optimize');
+        try {
+            Artisan::call('optimize');
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
 
         H::pfm('Updating external IP', log: true);
         if (! $is_off_network_node) {

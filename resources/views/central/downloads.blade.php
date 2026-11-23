@@ -40,7 +40,18 @@
             <div>For Linux (Ubuntu, Debian, Raspbian)</div>
 
         </div>
+        <br>
+        <div class="m-1">
 
+            <a class="btn btn-outline-success" style="width:12em;" href="{{ route('sn_android.apk') }}">
+                Android (APK)
+                <br>
+                <img style="width:6em;" src="{{ asset('sn_client_resources/img/android_100dp_1F1F1F_FILL0_wght100_GRAD0_opsz48.svg', request()->isSecure()) }}"
+                    alt="Android" srcset="">
+            </a>
+            <div>For Android</div>
+
+        </div>
     </div>
     <hr>
     <br>
@@ -56,13 +67,20 @@
     <br>
     <hr>
     <div class="text-secondary small overflow-auto"><code>{{ $windows_client_bundle_version->label ?? '' }} - Ver:
-            {{ $windows_client_bundle_version->version ?? '' }} | SHA256: {{ $windows_client_bundle_version->sha256 ?? '' }}</code>
+        {{ $windows_client_bundle_version->version ?? '' }} | SHA256: {{ $windows_client_bundle_version->sha256 ?? '' }}</code>
     </div>
+
     <div class="text-secondary small overflow-auto"><code>{{ $linux_and_mac_client_bundle->label ?? '' }} - Ver:
-            {{ $linux_and_mac_client_bundle->version ?? '' }} | SHA256: {{ $linux_and_mac_client_bundle->sha256 ?? '' }}</code></div>
+        {{ $linux_and_mac_client_bundle->version ?? '' }} | SHA256: {{ $linux_and_mac_client_bundle->sha256 ?? '' }}</code></div>
+
+    <div class="text-secondary small overflow-auto"><code>{{ $android_apk->label ??'' }} - Ver:
+        {{ $android_apk->version ?? '' }} | SHA256: {{ $android_apk->sha256 ??'' }}</code></div>
+
     <div class="text-secondary small overflow-auto"><code>{{ $server_bundle->label ?? '' }} - Ver:
-            {{ $server_bundle->version ?? '' }} | SHA256: {{ $server_bundle->sha256 ??'' }}</code></div>
+        {{ $server_bundle->version ?? '' }} | SHA256: {{ $server_bundle->sha256 ??'' }}</code></div>
+
     <div class="text-secondary small overflow-auto"><code>{{ $client_update->label ??'' }} - Ver:
-            {{ $client_update->version ?? '' }} | SHA256: {{ $client_update->sha256 ??'' }}</code></div>
+        {{ $client_update->version ?? '' }} | SHA256: {{ $client_update->sha256 ??'' }}</code></div>
+
     <br>
 @endsection

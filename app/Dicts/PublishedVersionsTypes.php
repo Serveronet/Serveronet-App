@@ -10,7 +10,9 @@ class PublishedVersionsTypes
 
     public const linux_and_mac_client_bundle = 'linux_and_mac_client_bundle';
 
-    public const server_bundle = 'server_bundle';   
+    public const server_bundle = 'server_bundle';
+
+    public const android_apk = 'android_apk';   
     
     public static function getConstants()
     {

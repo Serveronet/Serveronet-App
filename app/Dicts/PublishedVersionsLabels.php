@@ -13,6 +13,8 @@ class PublishedVersionsLabels
         PublishedVersionsTypes::linux_and_mac_client_bundle => 'Linux/Mac Client Bundle',
 
         PublishedVersionsTypes::server_bundle => 'Server Bundle',
+
+        PublishedVersionsTypes::android_apk => 'Android APK',
         
     ];
 }

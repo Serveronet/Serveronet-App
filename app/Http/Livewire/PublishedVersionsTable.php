@@ -88,7 +88,7 @@ final class PublishedVersionsTable extends PowerGridComponent
                 $route = 'download_version_file';
 
                 return '<a class="btn btn-outline-primary btn-sm" download href="'
-                .domainRoute($route, ['file_name' => e($model->file_name), 'api_token' => 'your_admin_api_token']).'">🔽</a>';
+                .route($route, ['file_name' => e($model->file_name), 'api_token' => 'your_admin_api_token']).'">🔽</a>';
             });
     }
 

@@ -51,6 +51,10 @@ if (H::isServeronetWelcomeSite()) {
         ->name($domainRouteNamePrefix.'linux_and_mac_client_bundle.zip')->middleware('throttle:low_rate')
         ->middleware($middleware);
 
+    Route::get('/sn_android.apk', [CentralController::class, 'downloadMostRecentVersion_android_apk'])
+        ->name($domainRouteNamePrefix.'sn_android.apk')->middleware('throttle:low_rate')
+        ->middleware($middleware);
+
     Route::get('/server_bundle.zip', [CentralController::class, 'downloadMostRecentVersion_server_bundle'])
         ->name($domainRouteNamePrefix.'server_bundle.zip')->middleware('throttle:low_rate')
         ->middleware($middleware);
